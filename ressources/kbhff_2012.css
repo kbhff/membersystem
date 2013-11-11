@@ -1,0 +1,664 @@
+/*
+Theme Name:     medlem.kbhff theme
+Description:    Child theme of twenty eleven 
+Author:         Sofie Hauge Katan, Morten Winther & Mia Stigsnæs
+Template:       TwentyEleven
+
+(optional values you can add: Theme URI, Author URI, Version)
+*/
+
+/* =Reset default browser CSS. Based on work by Eric Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+-------------------------------------------------------------- */
+
+@font-face {
+    font-family: 'DIN';
+    src: url('font/voresfont.eot');
+    src: url('font/voresfont.eot?#iefix') format('embedded-opentype'),
+         url('font/voresfont.woff') format('woff'),
+         url('font/voresfont.ttf') format('truetype'),
+         url('font/voresfont.svg#voresfont') format('svg');
+    font-weight: normal;
+    font-style: normal;
+	}
+
+html, body {
+	margin-top: 0px;
+	padding:0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #000;
+    text-align: center;
+	}
+	
+body {
+	background: #fff;
+	}
+	
+#container {
+	width: 1000px;
+	margin: 0 auto;
+	text-align: left;
+	background: #fff;
+	padding: 10px;
+	}
+
+
+
+/* ****************************************************** */
+/* Misk*/	
+h1 {
+	font-size: 33px!important;
+	font-family: 'DIN', helvetica, arial!important;
+	font-weight: 300!important;
+	text-transform:uppercase;
+	border-bottom: 5px solid;
+	line-height: 30px
+	}
+
+.header h1 a, .header h1 a:visited {
+	font-size: 28px!important;
+	line-height: 40px!important;
+	font-family: 'DIN', helvetica, arial!important;
+	font-weight: 300!important;
+	text-transform:uppercase;
+	text-decoration:none;
+	color: #000;
+	}
+	
+.header h1 a span, .header h1 a:hover {
+	color: #3E8E17;
+	}
+
+
+h2 {
+	font-size: 20px!important;
+	font-family: 'DIN', helvetica, arial!important;
+	font-weight: 900;
+	text-transform:uppercase;
+	}
+	
+h3 {
+	font-size: 16px!important;
+	font-family: 'DIN', helvetica, arial!important;
+	font-weight: 300;
+	text-transform:uppercase;
+	
+	}
+
+h4 {
+	font-size: 16px!important;
+	font-weight:600!important;
+	
+	}
+	
+h5 {
+	font-size: 14px!important;
+	font-family: 'DIN', helvetica, arial!important;
+	font-weight: normal;	
+	}
+
+
+/* =Global
+----------------------------------------------- */
+
+/*
+body, input, textarea {
+	color: #373737;
+	font: 15px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	line-height: 1.625;
+}
+*/
+body {
+	background:;
+}
+#page {
+	background: #fff;
+}
+
+/* Headings */
+h1,h2,h3,h4,h5,h6 {
+	clear: both;
+}
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+	margin-bottom: 1.625em;
+}
+
+/* Text elements */
+p {
+	margin-bottom: 1.625em;
+}
+ul, ol {
+	margin: 0 0 1.625em 2.5em;
+}
+ul {
+	list-style: square;
+}
+ol {
+	list-style-type: decimal;
+}
+ol ol {
+	list-style: upper-alpha;
+}
+ol ol ol {
+	list-style: lower-roman;
+}
+ol ol ol ol {
+	list-style: lower-alpha;
+}
+ul ul, ol ol, ul ol, ol ul {
+	margin-bottom: 0;
+}
+dl {
+	margin: 0 1.625em;
+}
+dt {
+	font-weight: bold;
+}
+dd {
+	margin-bottom: 1.625em;
+}
+strong {
+	font-weight: bold;
+}
+cite, em, i {
+	font-style: italic;
+}
+blockquote {
+	font-family: Georgia, "Bitstream Charter", serif;
+	font-style: italic;
+	font-weight: normal;
+	margin: 0 3em;
+}
+blockquote em, blockquote i, blockquote cite {
+	font-style: normal;
+}
+blockquote cite {
+	color: #666;
+	font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+pre {
+	background: #f4f4f4;
+	font: 13px "Courier 10 Pitch", Courier, monospace;
+	line-height: 1.5;
+	margin-bottom: 1.625em;
+	overflow: auto;
+	padding: 0.75em 1.625em;
+}
+code, kbd {
+	font: 13px Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+}
+abbr, acronym, dfn {
+	border-bottom: 1px dotted #666;
+	cursor: help;
+}
+address {
+	display: block;
+	margin: 0 0 1.625em;
+}
+ins {
+	background: #fff9c0;
+	text-decoration: none;
+}
+sup,
+sub {
+	font-size: 10px;
+	height: 0;
+	line-height: 1;
+	position: relative;
+	vertical-align: baseline;
+}
+sup {
+	bottom: 1ex;
+}
+sub {
+	top: .5ex;
+}
+
+/* Forms */
+input[type=text],
+textarea {
+	background: #fafafa;
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+	border: 1px solid Black;
+//	color: #888;
+}
+input[type=text]:focus,
+textarea:focus {
+//	color: #373737;
+}
+textarea {
+	padding-left: 3px;
+	width: 98%;
+}
+input[type=text] {
+	padding: 1px;
+}
+input#s {
+	background: url(images/search.png) no-repeat 5px 6px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	font-size: 14px;
+	height: 22px;
+	line-height: 1.2em;
+	padding: 4px 10px 4px 28px;
+}
+input#searchsubmit {
+	display: none;
+}
+
+/* Links */
+a {
+	color: #3E8E17;
+	text-decoration: none;
+}
+a:focus,
+a:active,
+a:hover {
+	color: #000;
+}
+
+
+
+/* ****************************************************** */
+/* medlem specific */	
+
+input[type="button"]
+ {
+ width:120px;
+ margin-left:35px;
+ display:block;
+	cursor:pointer;cursor:hand
+ }
+
+
+
+#tt {
+	background-color: White;
+	font-weight: normal;
+	width: 800px;
+ 	overflow: auto;
+	padding: 0px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+    text-align: left;
+}
+
+#bottomhr {
+	color: Black; 
+	width:800px; 
+	border: 0;
+	height: 1px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.note, .note A, span .note A {
+	color: #3E8E17 ;
+	font-size: 11px;
+	line-height: 1.2;
+}
+
+.note A:hover {
+	color: Blue;
+	line-height: 1.2;
+}
+.note A:visited {
+	color: #3E8E17;
+}
+.note A:active {
+	color: #3E8E17;
+}
+
+.c1 {
+	margin-bottom: 8px;
+}
+
+.c2 {
+	float: right;
+	width: 650px;
+}
+
+.c2 input {
+	background-color: White;
+}
+
+#rightcol
+{
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+line-height: 1.625 em;
+background-color: #ededed;
+float: right; 
+width: 200px;
+font-size: 70%;
+padding: 6px;
+}
+
+#inputArea
+{
+	//    padding: 10px;
+	//    width:500px;
+}
+#inputArea input, #inputArea textarea
+{
+	margin-bottom: 5px;
+}
+
+.activeField
+{
+}
+.submit_button .activeField:focus {
+	background: #3E8E17;
+	cursor:pointer;cursor:hand
+}
+
+
+
+.idle
+{
+//	background: #3E8E17;
+}
+
+#NoWay
+{
+	background-color: #ffa500;
+}
+
+
+.picuplist TD {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.625 em;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.theader TD {
+	font-size: 10pt;
+	font-weight: bold;
+	text-align: left;
+	background-color:#ededed;
+	vertical-align: top;
+	padding-right:20px;
+}
+
+.picuplist {
+	margin-top: 8px;
+	border: solid 1px #347E63;
+	border-collapse: collapse;
+	padding: 8px 15px 8px 8px;
+}
+
+.picuplist TD {
+	border-bottom: 1px solid Black;
+	border-collapse: collapse;
+}
+
+.picuplist TD.rjustify{
+	text-align: right;
+	padding-right:20px;
+}
+
+
+.picuplist TD .disabled{
+	color: Grey;
+}
+#nofield{
+	background: White;
+	-moz-box-shadow: inset 0 0px 0px rgba(0,0,0,0.1);
+	-webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.1);
+	box-shadow: inset 0 0px 0px rgba(0,0,0,0.1);
+	border: solid 0px White;
+	font-weight: bold;
+	margin-bottom: 0px;
+	padding: 0px;
+	color: Black;
+	font-size: 15pt;
+}
+
+input:hover, textarea:hover {
+//	border: solid 1px #3E8E17;
+//	color: #3E8E17;
+}
+
+input, textarea { border: solid 1px; }
+
+#menu {	padding:0; margin:0 }
+
+#menu ul { padding:0; margin-left:0; margin-top:20px; margin-bottom: 20px; }
+
+#menu ul li,  .form_button, .login_button, .submit_button
+{
+	background: #000;
+	color: #fff;
+	font-family: 'DIN', Helvetica, Arial;
+	font-size: 15px;
+	text-transform: UPPERCASE;
+	text-decoration: none;
+	display: inline;
+	margin: 0px 2px 0px 2px;
+	padding: 8px 0px;
+	border:0px;
+	border-style:solid;
+	font-weight: bold;
+	cursor:pointer;
+}	
+
+.form_button, .login_button, .submit_button
+{
+	margin: 0px 2px 0px 2px;
+	padding: 8px 8px;
+}	
+
+
+#menu ul li a,  .form_button a, .login_button a
+{
+	color: #fff !important;
+	text-decoration:none;
+	padding: 8px 12px;
+	cursor:pointer;
+}	
+
+
+#menu ul li a:hover { 
+	background: #3E8E17;
+}
+
+#menu a:active { 
+//	color: #fff  !important;
+}
+
+#menu a { 
+	text-decoration:none; 
+}
+
+#message
+{
+	color:Black;
+	margin:0 0 0 5px;
+	font-weight:bold;
+	font-size:14px;
+	top:0;
+	line-height:22px;
+}
+
+#form_errors p
+{
+	margin:0;
+}
+
+#form_errors 
+{
+	padding:0 0 16px 0;
+	margin-left:5px;
+	line-height:22px;
+	color:#f00;
+	font-weight:bold;
+}
+
+#form_remarks 
+{
+	padding-top:0;
+	font-size:11px;
+	color:#333;
+	margin-left:5px;
+}
+
+input[type="radio"]
+{
+	border: 0;
+	padding:0;
+	padding-right:5px;
+}
+
+.balance
+{
+	width:580px;
+}
+
+#saldo
+{
+	font-size:24px;
+	font-weight:bold;
+	text-decoration:underline;
+	border:0px;
+	border-bottom:1px;
+	border-style:solid;
+	border-color:#3E8E17;
+	color:#3E8E17;
+	float:left;
+	margin-top:10px;
+	margin-bottom:18px;
+}
+
+.posts 
+{ 
+	clear:both; 
+	font-size:12px; 
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.625 em;
+}
+
+.even { background-color:#eee; }
+
+.odd  { background-color:#ccc; }
+
+fieldset 
+{
+	padding:10px;
+	padding-top:0;
+	margin-bottom:10px;
+	width:500px;
+	border-color:#3E8E17;
+	border-width:3px;
+	border-style:solid;
+}
+
+legend 
+{
+	padding:0 5px 4px 4px;
+	font-weight:bold;
+	color:#000;
+}
+
+input, select
+{
+	font-size:14px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.625 em;
+}
+
+.pw {
+	font-size:14px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.625 em;
+}
+
+.memberform_select { width:100px; }
+
+.memberform_input_field { width:200px; }
+
+
+
+.fc_form label 
+{
+	display:inline-block;
+	line-height:1.8;
+	vertical-align:top;
+}
+
+.fc_form fieldset ol {
+	margin:0;
+	padding:0;
+}
+
+.fc_form fieldset li {
+	list-style:none;
+	padding:5px;
+	margin:0;
+}
+
+.fc_form em {
+	font-weight:bold;
+	font-style:normal;
+	color:#f00;
+}
+
+.fc_form label { 
+	width:130px; /* Width of labels */ 
+}
+
+.fc_form fieldset fieldset label { 
+	margin-left:113px; /* Width plus 3 (html space) */ 
+}
+#title {
+	font-family: 'DIN', helvetica, arial!important;
+	font-weight: 900;
+	text-transform:uppercase;
+	color: Black;
+	font-size: 22pt;
+	line-height: 28pt;
+	cursor:pointer;cursor:hand
+}
+#green {
+	color:#3E8E17;
+}
+
+.mypagenote {
+	color: #3E8E17 ;
+	font-size: 12pt;
+}
+
+.mypagenews {
+	padding-left: 7px;
+	padding-right: 7px;
+}
+
+.mypagenews, .mypagenews A {
+	color: White;
+	font-size: 9pt;
+	background-color: #969696;
+}
+
+.mypagenews A I {
+	text-decoration:underline;
+}
+.mypagenewshr {
+	text-align: left;
+	margin-left: 0;
+	margin-top: 0px;
+	margin-bottom: 8px;
+	border:0;
+	color: White;
+	padding:0;
+	width: 80%;
+	height: 5px;
+	align:left;
+}

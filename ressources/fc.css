@@ -1,0 +1,185 @@
+body
+{
+	font-size:14px;
+	font-family: Georgia;
+	background-color:#fcfcfc;
+}
+
+a { color:#000; }
+
+input:hover, textarea:hover {
+	border: solid 1px #98261F;
+	color: #98261F;
+}
+
+input, textarea { border: solid 1px; }
+
+#menu {	margin:0; }
+
+#menu ul { padding:0; }
+
+#menu li, .form_button, .login_button
+{
+	font-size:14px;
+	display:inline;
+	margin:0 6px 0 5px;
+	border:1px;
+	border-style:solid;
+	padding:6px 12px 6px 12px;
+	font-weight:bold;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	line-height:28px;
+}	
+
+#menu li
+{
+	font-size:12px;
+	padding: 3px;
+}
+
+#menu a:hover { color:#bbb; }
+
+#menu a:active { color:#eee;}
+
+#menu a { text-decoration:none; }
+
+#message
+{
+	color:#0d0;
+	margin:0 0 0 5px;
+	font-weight:bold;
+	font-size:14px;
+	top:0;
+	line-height:22px;
+}
+
+#form_errors p
+{
+	margin:0;
+}
+
+#form_errors 
+{
+	padding:0 0 16px 0;
+	margin-left:5px;
+	line-height:22px;
+	color:#f00;
+	font-weight:bold;
+}
+
+#form_remarks 
+{
+	padding-top:0;
+	font-size:11px;
+	color:#333;
+	margin-left:5px;
+}
+
+input[type="radio"]
+{
+	border: 0;
+	padding:0;
+	padding-right:5px;
+}
+
+.balance
+{
+	width:1000px;
+}
+
+#saldo
+{
+	font-size:24px;
+	font-weight:bold;
+	text-decoration:underline;
+	border:0px;
+	border-bottom:1px;
+	border-style:solid;
+	border-color:#0b0;
+	color:#0b0;
+	float:left;
+	margin-top:10px;
+	margin-bottom:18px;
+}
+
+.posts 
+{ 
+	clear:both; 
+	font-size:12px; 
+	font-family:verdana;
+}
+
+.even { background-color:#eee; }
+
+.odd  { background-color:#ccc; }
+
+fieldset 
+{
+	padding:10px;
+	padding-top:0;
+	margin-bottom:10px;
+	width:600px;
+	border-color:#ccc;
+	border-width:3px;
+	border-style:solid;
+	-moz-border-radius:7px;
+	-webkit-border-radius:7px;
+	border-radius:7px;
+}
+
+legend 
+{
+	padding:0 5px 4px 4px;
+	font-weight:bold;
+	color:#000;
+}
+
+input, select
+{
+	font-size:14px;
+	font-family:Georgia;
+}
+
+.memberform_select { width:100px; }
+
+.memberform_input_field { width:200px; }
+
+.form_button, .login_button
+{
+	margin:0;
+	background-color:#fcfcfc;
+}
+
+.login_button
+{
+	margin:10px 0 8px 0;
+}
+
+.fc_form label 
+{
+	display:inline-block;
+	line-height:1.8;
+	vertical-align:top;
+}
+
+.fc_form fieldset ol {
+	margin:0;
+	padding:0;
+}
+
+.fc_form fieldset li {
+	list-style:none;
+	padding:5px;
+	margin:0;
+}
+
+.fc_form em {
+	font-weight:bold;
+	font-style:normal;
+	color:#f00;
+}
+.fc_form label { width:130px; /* Width of labels */ }
+
+.fc_form fieldset fieldset label { margin-left:113px; /* Width plus 3 (html space) */ }
