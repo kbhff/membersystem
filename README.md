@@ -3,6 +3,8 @@ membersystem
 
 KBHFF member system
 
+## Installation
+
 ### Clone the repo
 
 ```
@@ -19,3 +21,7 @@ git clone https://github.com/kbhff/membersystem.git
 /CodeIgniter_2.0.2/controllers/mail.php -> SMTPUSERNAME, SMTPPASSWORD
 /CodeIgniter_2.0.2/controllers/mailtest.php -> SMTPUSERNAME, SMTPPASSWORD
 ```
+
+## Git Workflow
+
+TBA
