@@ -1,0 +1,144 @@
+
+ body {
+ 	background-color: #fff;
+ 	border: 0;
+ 	margin: 40px;
+ 	font-family: Lucida Grande, Verdana, Sans-serif;
+ 	font-size: 14px;
+ 	color: #4F5155;
+ }
+
+ a {
+ 	color: #003399;
+ 	background-color: transparent;
+ 	font-weight: normal;
+ }
+
+ #tt {
+ 	background-color: #C1EBC1;
+ 	font-weight: normal;
+ 	width: 600px;
+
+ 	padding: 20px;
+ 	display: block;
+ }
+
+
+ h1 {
+ 	color: #444;
+ 	background-color: transparent;
+ 	border-bottom: 1px solid Black;
+ 	font-size: 16px;
+ 	font-weight: bold;
+ 	margin: 24px 0 2px 0;
+ 	padding: 5px 0 0px 0;
+ }
+
+
+
+
+
+
+
+ .note, .note A {
+ 	font-size: 11px;
+ }
+ 
+ .note A:hover {
+	color: Blue;
+ }
+ .note A:visited {
+	color: Black;
+ }
+ .note A:active {
+	color: Red;
+ }
+
+ .c1 {
+	margin-bottom: 8px;
+ }
+
+ .c2 {
+	float: right; 
+	width: 470px;
+ }
+
+.c2 input {
+ 	background-color: White;
+}
+
+
+
+
+
+
+
+
+
+
+#inputArea
+{
+//    padding: 10px;
+//    width:500px;
+}
+#inputArea input, #inputArea textarea
+{
+	margin-bottom: 5px;
+}
+
+.activeField
+{
+	background-image: none;
+	background-color: #ffffff;
+	border: solid 1px #33677F;
+}
+.idle
+{
+	border: solid 1px #198F19;
+	background-image: url( '/images/green_bg.png' );
+	background-repeat: repeat-x;
+	background-position: top;
+}
+
+#NoLogin
+{
+	background-color: #ffa500;
+}
+
+.picuplist TD {
+	font-family: Lucida Grande, Verdana, Sans-serif;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.theader TD {
+	font-size: 10pt;
+	font-weight: bold;
+	text-align: left;
+	background-color:#A2E4A2;
+	vertical-align: top;
+	padding-right:20px;
+}
+
+.picuplist {
+	margin-top: 8px;
+	border: solid 1px #347E63;
+	border-collapse: collapse;
+	padding: 8px 15px 8px 8px;
+}
+
+.picuplist TD {
+	border-bottom: 1px solid Black;
+	border-collapse: collapse;
+	padding-right:20px;
+}
+
+.picuplist TD.rjustify{
+	text-align: right;
+	padding-right:20px;
+}
+
+
+.picuplist TD .disabled{
+	color: Grey;
+}
