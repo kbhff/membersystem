@@ -56,7 +56,7 @@ if (defined('ENVIRONMENT'))
  * as this file.
  *
  */
-	$system_path = '/www/medlem.kbhff.dk/CodeIgniter_2.0.2/system';
+	$system_path = 'CodeIgniter_2.0.2/system';
 
 /*
  *---------------------------------------------------------------
@@ -72,7 +72,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = '/www/medlem.kbhff.dk/CodeIgniter_2.0.2/application';
+	$application_folder = 'CodeIgniter_2.0.2/application';
 
 /*
  * --------------------------------------------------------------------
