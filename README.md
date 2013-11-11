@@ -8,7 +8,7 @@ KBHFF member system
 ### Clone the repo
 
 ```
-git clone https://github.com/kbhff/membersystem.git
+git clone git@github.com:kbhff/membersystem.git
 ```
 
 ### Replace credentials in the following files
