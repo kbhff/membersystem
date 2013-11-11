@@ -481,7 +481,7 @@ CREATE TABLE IF NOT EXISTS `ff_sessions` (
   `ip_address` varchar(16) collate latin1_danish_ci NOT NULL default '0',
   `user_agent` varchar(50) collate latin1_danish_ci NOT NULL,
   `last_activity` int(10) unsigned NOT NULL default '0',
-  `user_data` text collate latin1_danish_ci NOT NULL,
+  `user_data` text collate latin1_danish_ci DEFAULT NULL,
   PRIMARY KEY  (`session_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
