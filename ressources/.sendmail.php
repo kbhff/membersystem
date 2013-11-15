@@ -1,4 +1,5 @@
 <?
+  require('../global_config.php');
 	include("class.phpmailer.php");
 
 function sendenkeltmail ($subject,$text,$email, $from = 'robot@medlem.kbhff.dk', $recipientname = '', $html = '', $file = '')
@@ -42,11 +43,11 @@ function sendenkeltmail ($subject,$text,$email, $from = 'robot@medlem.kbhff.dk',
 	$mail->IsSMTP();
 	$mail->SMTPAuth   = true;                  // enable SMTP authentication
 	$mail->SMTPSecure = "ssl";                 // sets the prefix to the servier
-	$mail->Host       = "mail.friday.dk";      // sets GMAIL as the SMTP server
+	$mail->Host       = GLOBAL_SMTP_HOST;      // sets GMAIL as the SMTP server
 	$mail->Port       = 465;                   // set the SMTP port for the GMAIL server
 
-	$mail->Username   = "SMTPUSERNAME";  // GMAIL username
-	$mail->Password   = "SMTPPASSWORD";            // GMAIL password
+	$mail->Username   = GLOBAL_SMTP_USER;  // GMAIL username
+	$mail->Password   = GLOBAL_SMTP_PASS;            // GMAIL password
 	$mail->AddEmbeddedImage('/www/medlem.kbhff.dk/images/kbhfflogo.png', 'logoimg', 'logo.png');
 
 	$mail->AddReplyTo("$from","KBHFF Medlem");

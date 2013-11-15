@@ -1,12 +1,13 @@
 <?
+require('../global_config.php');
 setlocale(LC_CTYPE, 'da_DK');
 
-if (!$db_conn = @mysql_connect("HOSTNAME", "DBUSER", "DBPASSWORD"))
+if (!$db_conn = @mysql_connect(GLOBAL_DB_HOST, GLOBAL_DB_USER, GLOBAL_DB_PASS))
 {
 	echo "Kunne ikke tilsluttes databasen<br>";
 	exit;
 };
-@mysql_select_db("DBNAME");
+@mysql_select_db(GLOBAL_DB_NAME);
 
 
 // error_reporting  (E_ERROR | E_WARNING | E_PARSE);
