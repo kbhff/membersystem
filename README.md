@@ -15,7 +15,7 @@ git clone git@github.com:kbhff/membersystem.git
 
 ```
 echo "create database membersystem" | mysql -u root -p
-mysmysql -u root -p membersystem < kbhff.sql
+mysql -u root -p membersystem < kbhff.sql
 ```
 
 ### Copy config file sample (and edit as needed)
