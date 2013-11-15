@@ -78,13 +78,13 @@ class Mail extends CI_Controller {
 $this->load->library('email');
 
 $config['protocol'] = 'smtp';
-$config['smtp_user'] = 'SMTPUSERNAME';
-$config['smtp_pass'] = 'SMTPPASSWORD';
+$config['smtp_user'] = GLOBAL_SMTP_USER;
+$config['smtp_pass'] = GLOBAL_SMTP_PASS;
 $config['smtp_port'] = '465';
 $config['crlf'] = '\r\n';
 $config['newline'] = '\r\n';
 $config['mailtype'] = 'html';
-$config['smtp_host'] = 'ssl://mail.friday.dk';
+$config['smtp_host'] = 'ssl://' + GLOBAL_SMTP_HOST;
 $config['bcc_batch_mode'] = TRUE;
 $config['bcc_batch_size'] = 80;
 $this->email->initialize($config);
