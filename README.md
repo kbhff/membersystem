@@ -22,6 +22,15 @@ git clone git@github.com:kbhff/membersystem.git
 /CodeIgniter_2.0.2/controllers/mailtest.php -> SMTPUSERNAME, SMTPPASSWORD
 ```
 
+### Create and import database
+
+```
+echo "create database membersystem" | mysql -u root -p
+mysmysql -u root -p membersystem < kbhff.sql
+```
+
+
+
 ## Git Workflow
 
 TBA
