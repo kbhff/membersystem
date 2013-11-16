@@ -41,10 +41,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'HOSTNAME';
-$db['default']['username'] = 'DBUSER';
-$db['default']['password'] = 'DBPASSWORD';
-$db['default']['database'] = 'DBNAME';
+$db['default']['hostname'] = GLOBAL_DB_HOST;
+$db['default']['username'] = GLOBAL_DB_USER;
+$db['default']['password'] = GLOBAL_DB_PASS;
+$db['default']['database'] = GLOBAL_DB_NAME;
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = 'ff_';
 $db['default']['pconnect'] = TRUE;
