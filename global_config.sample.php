@@ -14,4 +14,8 @@
   define('GLOBAL_SMS_SENDER', '');
   define('GLOBAL_SMS_USER', '');
   define('GLOBAL_SMS_PASSWORD', '');
+
+  // URL config
+ define('GLOBAL_BASE_URL', 'http://membersystem.mydomain.dk');
+
 ?>
