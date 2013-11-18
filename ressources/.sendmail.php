@@ -1,5 +1,4 @@
 <?
-  require('../global_config.php');
 	include("class.phpmailer.php");
 
 function sendenkeltmail ($subject,$text,$email, $from = 'robot@medlem.kbhff.dk', $recipientname = '', $html = '', $file = '')
