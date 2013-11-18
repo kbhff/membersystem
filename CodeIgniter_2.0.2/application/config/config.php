@@ -12,6 +12,8 @@ define('FF_GROCERYBAG', 47);
 define('FF_MEMBERSHIP', 48);
 define('FF_FRUITBAG', 50);
 
+require('global_config.php');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +29,7 @@ define('FF_FRUITBAG', 50);
 | path to your installation.
 |
 */
-$config['base_url']	= 'https://medlem.kbhff.dk/';
-
+$config['base_url']	= GLOBAL_BASE_URL; 
 /*
 |--------------------------------------------------------------------------
 | Index File
