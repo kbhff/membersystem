@@ -32,9 +32,6 @@ cp global_config.sample.php global_config.php
 apt-get install libphp-phpmailer
 ## You may need:  ln -s  /usr/share/php/libphp-phpmailer/class.phpmailer.php /usr/share/php/class.phpmailer.php
 
-## Create on-tracked directory manually
-mkdir CodeIgniter_2.0.2/application/logs/
-
 ## Git Workflow
 
 TBA
