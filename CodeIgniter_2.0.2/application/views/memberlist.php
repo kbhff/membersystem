@@ -1,15 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xml:lang="da"
-    lang="da"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:media="http://search.yahoo.com/mrss/"> 
-	<head> 
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="<?php echo base_url(); ?>ressources/fc.css" type="text/css" media="screen" />
-		<script type="text/javascript" src="<?php echo base_url(); ?>ressources/mootools-core-1.3.js"></script>
-		<title>KBHFF - medlemmer</title> 
+<html lang="da">
+<head> 
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>ressources/fc.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo base_url(); ?>ressources/mootools-core-1.3.js"></script>
+<title>KBHFF - medlemmer</title> 
 		<script type="text/javascript">
 		window.addEvent('domready', function(){
 			$('checkall').addEvent('click',function (e) {

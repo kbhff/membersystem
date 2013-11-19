@@ -1,5 +1,5 @@
-<?php
-//Author: Frederik Dam Sunne (frederiksunne@gmail.com)
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 class Logud extends CI_Controller {
 
 

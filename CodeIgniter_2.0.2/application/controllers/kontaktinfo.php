@@ -1,5 +1,4 @@
-<?php
-//Author: Frederik Dam Sunne (frederiksunne@gmail.com)
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Kontaktinfo extends CI_Controller {
 

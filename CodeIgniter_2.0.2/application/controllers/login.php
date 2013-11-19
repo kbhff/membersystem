@@ -16,8 +16,6 @@ class Login extends CI_Controller {
         $data = array();
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$this->load->view('v_login', $data);
@@ -28,8 +26,6 @@ class Login extends CI_Controller {
         $data = array();
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$this->load->view('v_glemtpassword', $data);
@@ -85,8 +81,6 @@ class Login extends CI_Controller {
           );
 		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$this->load->view('page', $data);
@@ -102,8 +96,6 @@ class Login extends CI_Controller {
 	          );
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$this->load->view('v_resetpassword', $data);
@@ -114,8 +106,6 @@ class Login extends CI_Controller {
     function savepassword() {
 	
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$pw1 = $this->input->post('pw1');

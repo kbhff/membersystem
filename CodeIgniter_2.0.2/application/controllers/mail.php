@@ -14,8 +14,6 @@ class Mail extends CI_Controller {
 
     function index() {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -57,8 +55,6 @@ class Mail extends CI_Controller {
 
     function send() {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$noprivacy = $this->input->post('noprivacy');

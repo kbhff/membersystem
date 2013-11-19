@@ -2,10 +2,10 @@
 
 <html>
 <?
-	include("/www/medlem.kbhff.dk/ressources/.mysql_common.php");
-	include("/www/medlem.kbhff.dk/ressources/.library.php");
-	include("/www/medlem.kbhff.dk/ressources/.kvittering.php");
-	include("/www/medlem.kbhff.dk/ressources/.sendmail.php");
+	include("ressources/.mysql_common.php");
+	include("ressources/.library.php");
+	include("ressources/.kvittering.php");
+	include("ressources/.sendmail.php");
 ?>
 <head>
 		<meta http-equiv="content-type" content="text/html;charset=iso-8859-1">

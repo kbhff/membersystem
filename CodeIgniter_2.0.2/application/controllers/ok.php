@@ -1,4 +1,3 @@
-<? # $Id: ok.php 131 2010-04-16 10:33:55Z torsten $ ?>
 <?
 // Date in the past
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -17,10 +16,10 @@ header("Pragma: no-cache");
 
 <html>
 <?
-	include("/www/medlem.kbhff.dk/ressources/.mysql_common.php");
-	include("/www/medlem.kbhff.dk/ressources/.library.php");
-	include("/www/medlem.kbhff.dk/ressources/.kvittering.php");
-	include("/www/medlem.kbhff.dk/ressources/.sendmail.php");
+	include("ressources/.mysql_common.php");
+	include("ressources/.library.php");
+	include("ressources/.kvittering.php");
+	include("ressources/.sendmail.php");
 
 ?>
 	<head>
@@ -65,9 +64,3 @@ if (getreceiptstatus($OrderID))
 	</table>
 </body>
 </html>
-
-<?
-
-
-
-?>
