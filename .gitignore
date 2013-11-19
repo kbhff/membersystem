@@ -1,2 +1,2 @@
-CodeIgniter_2.0.2/application/logs/
+CodeIgniter_2.0.2/application/logs/*.php
 global_config.php
