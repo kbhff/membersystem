@@ -1,5 +1,4 @@
-<?php
-//Author: Frederik Dam Sunne (frederiksunne@gmail.com)
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class medlemmer extends CI_Controller {
 
@@ -286,14 +285,14 @@ $this->javascript->compile();
 					}
 					else
 					{
-						$this->viewdata['errors'] = 'Debit-belÃ¸bet er negativt. Det skal vÃ¦re positivt. Intet foretaget.';
+						$this->viewdata['errors'] = 'Debit-beløbet er negativt. Det skal være positivt. Intet foretaget.';
 						return;
 					}
 				}
 			}
 		}
 		if ($debits == 0)
-			$this->viewdata['errors'] = 'Du skal vÃ¦lge mindst Ã©t medlem fra listen. Intet foretaget.';
+			$this->viewdata['errors'] = 'Du skal vælge mindst ét medlem fra listen. Intet foretaget.';
 			
 		return;		
 	}
@@ -317,14 +316,14 @@ $this->javascript->compile();
 					}
 					else
 					{
-						$this->viewdata['errors'] = 'Kredit-belÃ¸bet er negativt. Det skal vÃ¦re positivt. Intet foretaget.';
+						$this->viewdata['errors'] = 'Kredit-beløbet er negativt. Det skal være positivt. Intet foretaget.';
 						return;
 					}
 				}
 			}
 		}
 		if ($credits == 0)
-			$this->viewdata['errors'] = 'Du skal vÃ¦lge mindst Ã©t medlem fra listen. Intet foretaget.';
+			$this->viewdata['errors'] = 'Du skal vælge mindst ét medlem fra listen. Intet foretaget.';
 			
 		return;		
 	}

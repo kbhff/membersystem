@@ -1,5 +1,4 @@
-<?php
-//Author: Frederik Dam Sunne (frederiksunne@gmail.com)
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class kontantordrer extends CI_Controller {
 
@@ -126,7 +125,7 @@ class kontantordrer extends CI_Controller {
 			$this->viewdata['message'] .= 'Registreret ordre ' . $neworder['orderno'] . ', ' . $neworder['amount'] . ' kr. :';
 			$this->viewdata['message'] .= ' <a href="/kontantordrer/annuller/' . $neworder['orderno'] . '">Fortryd</a>';
 		} else {
-			$this->viewdata['errors'] = 'Du skal vÃ¦lge mindst Ã©t medlem fra listen med antal p&aring; mindst 1. Intet foretaget.';
+			$this->viewdata['errors'] = 'Du skal vælge mindst ét medlem fra listen med antal p&aring; mindst 1. Intet foretaget.';
 		}			
 		return;		
 	}
@@ -176,7 +175,7 @@ class kontantordrer extends CI_Controller {
 			$orders++;
 		}
 		if ($orders == 0)
-			$this->viewdata['errors'] = 'Du skal vÃ¦lge mindst Ã©t medlem fra listen med antal p&aring; mindst 1. Intet foretaget.';
+			$this->viewdata['errors'] = 'Du skal vælge mindst ét medlem fra listen med antal p&aring; mindst 1. Intet foretaget.';
 			
 		return;		
 	}

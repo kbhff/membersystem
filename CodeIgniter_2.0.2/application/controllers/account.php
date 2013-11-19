@@ -1,5 +1,5 @@
-<?php
-//Author: Frederik Dam Sunne (frederiksunne@gmail.com)
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 class Account extends CI_Model {
 
     function __construct()
@@ -48,7 +48,7 @@ class Account extends CI_Model {
 
 		UNION
 		
-		SELECT "KÃ¸b" AS type, trans_id, CONCAT(method, comment), "" AS authorized_by, "" AS comment, "" AS item, 
+		SELECT "Køb" AS type, trans_id, CONCAT(method, comment), "" AS authorized_by, "" AS comment, "" AS item, 
 		amount, UNIX_TIMESTAMP(created) AS created, WEEK(created) AS weeknumber
 		FROM (ff_transactions)
 		WHERE puid = '.$puid.'
@@ -70,7 +70,7 @@ class Account extends CI_Model {
 		
 		UNION
 		
-		SELECT "KÃ¸b" AS type, "" AS external_id, "" AS method, "" AS authorized_by, "" AS comment, 
+		SELECT "Køb" AS type, "" AS external_id, "" AS method, "" AS authorized_by, "" AS comment, 
 		(SELECT CONCAT(units, " ", measure, " ", fc_producttypes.explained)
 		FROM (fc_items, fc_producttypes) 
 		WHERE fc_items.id = item

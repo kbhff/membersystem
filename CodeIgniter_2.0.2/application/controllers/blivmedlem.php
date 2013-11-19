@@ -1,7 +1,4 @@
 <?php
-//Author: Frederik Dam Sunne (frederiksunne@gmail.com)
-
-
 
 class Blivmedlem extends CI_Controller {
 
@@ -119,7 +116,7 @@ class Blivmedlem extends CI_Controller {
 				$orderinfo = $this->_createorder($member_id, FF_MEMBERSHIP, $member_id, 1, 'now()', 'nets', $this->input->post('division'));
 				$viewdata['orderno'] = $orderinfo['orderno'];
 				$viewdata['orderkey'] = $orderinfo['orderkey'];
-				//Vi mÃ¥ hellere lave et redirect sÃ¥ man ikke kan submitte den samme form mange gange?
+				//Vi må hellere lave et redirect så man ikke kan submitte den samme form mange gange?
 				$this->load->view('v_becomememberpay', $viewdata);
 			}
 		}
@@ -160,7 +157,7 @@ class Blivmedlem extends CI_Controller {
 //		if ($password === 'd41d8cd98f00b204e9800998ecf8427e') // if it's MD5'ed
 		if ($password == '')
 		{
-			$this->form_validation->set_message('password_is_not_null', 'Kodeordet mÃ¥ ikke vÃ¦re tomt');
+			$this->form_validation->set_message('password_is_not_null', 'Kodeordet må ikke være tomt');
 			return FALSE;
 		}
 		else
@@ -210,7 +207,7 @@ class Blivmedlem extends CI_Controller {
 		{
 			if (strlen($streetname) < 2)
 			{
-				$this->form_validation->set_message('streetname_check', 'Hvis udfyldt, skal vejnavn indeholde mere end Ã©t bogstav');
+				$this->form_validation->set_message('streetname_check', 'Hvis udfyldt, skal vejnavn indeholde mere end ét bogstav');
 				return FALSE;			
 			}
 		}
@@ -227,7 +224,7 @@ class Blivmedlem extends CI_Controller {
 		{
 			if (strlen($city) < 2)
 			{
-				$this->form_validation->set_message('city_check', 'Hvis udfyldt, skal bynavn indeholde mere end Ã©t bogstav');
+				$this->form_validation->set_message('city_check', 'Hvis udfyldt, skal bynavn indeholde mere end ét bogstav');
 				return FALSE;			
 			}
 		}

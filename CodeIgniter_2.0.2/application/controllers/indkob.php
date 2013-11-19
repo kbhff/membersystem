@@ -16,8 +16,6 @@ class Indkob extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -51,8 +49,6 @@ class Indkob extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -96,8 +92,6 @@ class Indkob extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');

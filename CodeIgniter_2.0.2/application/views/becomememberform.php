@@ -1,17 +1,12 @@
 <?php error_reporting(0); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xml:lang="da"
-    lang="da"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:media="http://search.yahoo.com/mrss/"> 
-	<head> 
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="<?php echo base_url(); ?>ressources/fc.css" type="text/css" media="screen" />
-		<title>KBHFF - bliv medlem</title> 
-	</head>
-	<body>
+<html lang="da">
+<head> 
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>ressources/fc.css" type="text/css" media="screen" />
+<title>KBHFF - bliv medlem</title> 
+</head>
+<body>
 	
 	<form action="./blivmedlem" method="post" class="fc_form"> 
 		

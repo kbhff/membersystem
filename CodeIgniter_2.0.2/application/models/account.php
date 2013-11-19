@@ -1,5 +1,5 @@
 <?php
-//Author: Frederik Dam Sunne (frederiksunne@gmail.com)
+
 class Account extends CI_Model {
 
     function __construct()
@@ -33,7 +33,7 @@ class Account extends CI_Model {
 		
 		UNION
 
-		SELECT "Online kÃ¸b" AS type, "" AS external_id, "" AS method, CONCAT("Ordre: ", orderno) AS authorized_by, "" AS comment, 
+		SELECT "Online køb" AS type, "" AS external_id, "" AS method, CONCAT("Ordre: ", orderno) AS authorized_by, "" AS comment, 
 		(SELECT CONCAT(units, " ", measure, " ", ff_producttypes.explained)
 		FROM (ff_items, ff_producttypes) 
 		WHERE ff_items.id = item
@@ -46,7 +46,7 @@ class Account extends CI_Model {
 
 		UNION
 		
-		SELECT "Kontant kÃ¸b" AS type, "" AS external_id, "" AS method, CONCAT("Ordre: ", orderno) AS authorized_by, "" AS comment, 
+		SELECT "Kontant køb" AS type, "" AS external_id, "" AS method, CONCAT("Ordre: ", orderno) AS authorized_by, "" AS comment, 
 		(SELECT CONCAT(units, " ", measure, " ", ff_producttypes.explained)
 		FROM (ff_items, ff_producttypes) 
 		WHERE ff_items.id = item
@@ -72,7 +72,7 @@ class Account extends CI_Model {
 		
 		UNION
 		
-		SELECT "KÃ¸b" AS type, "" AS external_id, "" AS method, "" AS authorized_by, "" AS comment, 
+		SELECT "Køb" AS type, "" AS external_id, "" AS method, "" AS authorized_by, "" AS comment, 
 		(SELECT CONCAT(units, " ", measure, " ", fc_producttypes.explained)
 		FROM (fc_items, fc_producttypes) 
 		WHERE fc_items.id = item

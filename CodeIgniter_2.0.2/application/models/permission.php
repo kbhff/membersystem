@@ -1,4 +1,5 @@
 <?php
+
 class Permission extends CI_Model {
 
     function __construct()

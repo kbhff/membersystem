@@ -11,8 +11,6 @@ class Betingelser extends CI_Controller {
 
     function index() {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 $medlemsnummer = 1;
 		$this->load->model('Memberinfo');

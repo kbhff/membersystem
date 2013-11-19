@@ -19,8 +19,6 @@ class Minside extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 //		$medlemsnummer = $this->input->get_post('user');
 		$medlemsnummer = intval($this->session->userdata('uid'));
@@ -71,8 +69,6 @@ class Minside extends CI_Controller {
 
     function betingelser() {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 		$betingelser = $this->load->view('v_betingelser', '', true);
 		$data = array(
@@ -87,8 +83,6 @@ class Minside extends CI_Controller {
 
     function kontoinfo($id =0, $sort = 'stigende') {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 		$this->load->model('Account');
 		if ($id == 0)
@@ -134,8 +128,6 @@ class Minside extends CI_Controller {
 
     function mine_ordrer($id =0) {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 		$this->load->model('Account');
 		if ($id == 0)
@@ -188,8 +180,6 @@ class Minside extends CI_Controller {
 
     function kontaktinfo() {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 		$data = array(
                'title' => 'Kontoinformation',
