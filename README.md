@@ -43,15 +43,15 @@ If you're new to git, [Code School has a nice free (and fun) introduction to get
 
 The workflow is based on these rules:
 
-1. The master branch is "sacred", ie it should always be in working condition/deployable.
+1. The master branch is "sacred", ie it should never be committed to, pushed to or have a local version.
 2. All new work is done on branches
 3. Branches are merged into master via peer-reviewed pull requests on GitHub
 
 The basic workflow commands are: 
 
 ```bash
-git checkout master # move to local master branch
-git pull origin master # pull latest changes from master branch on "origin" (=GitHub)
+git fetch
+git checkout origin/master # move to origin master branch, this is the newest version
 git checkout -b my_new_feature # create and move to new local branch named "my_new_feature"
 git commit, git commit, git commit... # Work and do as many commits as you want
 git push origin my_new_feature # push finished branch to GitHub
