@@ -20,8 +20,6 @@ class Admin extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-// 		  $js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -76,20 +74,6 @@ class Admin extends CI_Controller {
 
 	function nyemedlemmer ()
 	{
-/*
-		if ($this->uri->segment(3) > 0)
-		{
-			$division = $this->uri->segment(3);
-		} else {
-			$division = $this->input->post('division');
-		}
-		if ($this->uri->segment(4) > 0)
-		{
-			$date = $this->uri->segment(4);
-		} else {
-			$date = $this->input->post('date');
-		}
-*/
 		$division = $this->input->get_post('division');
 		$date = $this->input->get_post('dato');
 		if ((int)$division > 0)
@@ -128,8 +112,6 @@ class Admin extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -205,8 +187,6 @@ class Admin extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -617,8 +597,6 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -684,8 +662,6 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 			$this->viewdata['name'] = '';
 		}
 		$this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//		$this->javascript->output($js);
 		$this->javascript->compile();
 		$this->viewdata['title'] = 'Rediger medlemmer';
 		$this->viewdata['heading'] = 'Rediger medlemmer';
@@ -975,8 +951,6 @@ $workbook->close();
 	function medlemsliste($division = 5) {
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		if ($division > 0)
@@ -1002,8 +976,6 @@ $workbook->close();
 	function initmedlem($division = 8) {
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-//		$js =$this->jquery->corner('#tt_del');
-//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		if ($division > 0)
