@@ -128,6 +128,8 @@ class Admin extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
+//		$js =$this->jquery->corner('#tt_del');
+//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -203,6 +205,8 @@ class Admin extends CI_Controller {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
+//		$js =$this->jquery->corner('#tt_del');
+//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -613,6 +617,8 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
+//		$js =$this->jquery->corner('#tt_del');
+//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
@@ -693,6 +699,16 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
 
+		// If admin is admin for more than one division
+		if ($this->input->post('division') > 0)
+		{
+			$division = $this->input->post('division');
+		}
+		if ($this->uri->segment(3) > 0)
+		{
+			$division = $this->uri->segment(3);
+		} 
+
 		$permissions = $this->session->userdata('permissions');
 		$p_administrator = $this->Memberinfo->checkpermission($permissions, 'Administrator', $division);
 
@@ -708,15 +724,6 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 			$message = 'Informationen er opdateret';
 		}
 
-		// If admin is admin for more than one division
-		if ($this->input->post('division') > 0)
-		{
-			$division = $this->input->post('division');
-		}
-		if ($this->uri->segment(3) > 0)
-		{
-			$division = $this->uri->segment(3);
-		} 
 		
 		$this->db->select('division_newmemberinfo.support, division_newmemberinfo.welcome, division_newmemberinfo.division');
 		$this->db->from('ff_division_newmemberinfo, ff_division_members');
@@ -968,6 +975,8 @@ $workbook->close();
 	function medlemsliste($division = 5) {
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
+//		$js =$this->jquery->corner('#tt_del');
+//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		if ($division > 0)
@@ -993,6 +1002,8 @@ $workbook->close();
 	function initmedlem($division = 8) {
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
+//		$js =$this->jquery->corner('#tt_del');
+//        $this->javascript->output($js);
         $this->javascript->compile();
 
 		if ($division > 0)
