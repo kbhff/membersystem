@@ -26,7 +26,9 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span>
 <p>Alle kan v&aelig;re med i K&oslash;benhavns F&oslash;devaref&aelig;llesskab. <strong>Et medejerskab koster 100 kr.</strong></p>
 <p>Alle medlemmer forpligter sig til at arbejde i foreningen 3 timer om m&aring;neden.</p>
 <p><a href="http://kbhff.dk/om-kbhff/nyt-medlem/" target="_blank">L&aelig;s mere om KBHFF</a> - <a href="http://medlem.kbhff.dk/minside/betingelser/" target="_blank">L&aelig;s betingelser</a>.</p>
-<p><b>Indmeldelse</b> sker ved at <a href="http://kbhff.dk/afdelinger/">m&oslash;de op i afdelingen</a> du vil v&aelig;re medlem af<!-- - et par afdelinger giver dog mulighed for on-line indmeldelse-->.</p>
+<p><b>Indmeldelse</b> sker ved at <a href="http://kbhff.dk/afdelinger/">m&oslash;de op i afdelingen</a> du vil v&aelig;re medlem af. I nogle afdelinger (bl.a. <a href="http://kbhff.wikispaces.com/Infom%C3%B8de+NV">Nordvest</a>) skal man deltage i et informationsm&oslash;de for at blive medlem.
+
+<!-- - et par afdelinger giver dog mulighed for on-line indmeldelse-->.</p>
 <!--<button OnClick="location.href='/blivmedlem';"><span  style="text-decoration: none; font-size: 20px; font-weight: bold;">Online indmeldelse</span></button>-->
 <br>
 </span>
