@@ -69,7 +69,7 @@ class Login extends CI_Controller {
 			        $msg = 'Fejl: Der er ' . $no . ' medlemmer med samme mailadresse.<br>Det kan give problemer - tal med webmaster.';
 			    break;
 			    default;
-			        $msg = 'Fejl i email / ikke fundet.';
+			        $msg = 'Email ikke fundet eller medlemmet er ikke aktivt.';
 			    break;
 			}
 		}
