@@ -310,7 +310,7 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 	{
 		$this->db->select('uid, CONCAT(`firstname`, " ", `middlename`, " ", `lastname`) AS `name`,');
 		$this->db->select('email, tel, UNIX_TIMESTAMP(last_login) AS last_login,');
-		$this->db->select('UNIX_TIMESTAMP(`created`) AS `created`', FALSE);
+		$this->db->select('UNIX_TIMESTAMP(`ff_persons`.`created`) AS `created`', FALSE);
 		$this->db->select('membernote.note');
 		$this->db->from('persons, division_members');
 		$this->db->join('membernote', 'membernote.puid = ff_persons.uid', 'left');
