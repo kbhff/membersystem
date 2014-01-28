@@ -47,13 +47,7 @@ $currency = "208";
 
 echo ("<strong>Ordre nr. $orderno</strong><br>\n");
 
-if ($admin > 0)
-{
-	echo ('<form action="/pay/kontant" method="post" name="Form" id="Form" autocomplete="off">' . "\n");
-	echo ('<input type="hidden" name="uid" value="' . $medlem . '">' . "\n");
-} else {
-	echo ('<form action="https://pay.dandomain.dk/securetunnel.asp" method="post" name="Form" id="Form" autocomplete="off">' . "\n");
-}
+echo ('<form action="https://pay.dandomain.dk/securetunnel.asp" method="post" name="Form" id="Form" autocomplete="off">' . "\n");
 
 ?>
 <input type="hidden" name="AddFormPostVars" value="1">

@@ -96,23 +96,6 @@ class Pay extends CI_Controller {
 	
 	}
 
-    function kontant() 
-	{
-
-		$total = $this->input->get_post('Amount');
-		$orderkey = $this->input->get_post('SessionID');
-		$orderno = $this->input->get_post('OrderID');
-		$admin = $this->input->get_post('admin');
-		
-		$data = array(
-              'heading' => 'Kontantbetaling af medlemsskab',
-              'content' => 'Medlem nr. ' .$uid . ' er nu meldt ind.' . "\n<br>" . "Kontant betaling er registreret på ordre $orderno.",
-         );
-
-		$this->load->view('page', $data);
-	
-	}
-
 
     function fail() 
 	{
