@@ -1,5 +1,5 @@
 <?php
-  require('../../global_config.php');
+  require_once('../../global_config.php');
 	unset($_GET["_"]);
 	require_once("class.inputfilter_clean.php");
 
