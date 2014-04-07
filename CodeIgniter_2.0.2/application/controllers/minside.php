@@ -177,19 +177,6 @@ class Minside extends CI_Controller {
 		$this->load->view('v_future_orders', $viewdata);
 	
     }
-
-    function kontaktinfo() {
-        $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
-        $this->javascript->compile();
-		$data = array(
-               'title' => 'Kontoinformation',
-               'heading' => 'Kontoinformation',
-               'content' => 'Kontaktinformation for'
-          );
-
-		$this->load->view('page', $data);
-	
-    }
 	
 	function _latest_newsletter($division)
 	{
