@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS `ff_chore_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ff_chore_types` (
-  `name` varchar(40) COLLATE latin1_danish_ci NOT NULL,
+  `name` varchar(50) COLLATE latin1_danish_ci NOT NULL,
   `auth` int(11) NOT NULL,
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`uid`)

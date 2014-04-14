@@ -30,6 +30,8 @@ class Admin extends CI_Controller {
 		$cashsel = '';
 		$excelsel = '';
 		$dagenssalg = '';
+		$nyemedlemmer = '';
+		$welcome = '';
 		$this->db->select('divisions.name, divisions.uid');
 		$this->db->from('divisions');
 		$this->db->order_by('divisions.name'); 
@@ -370,10 +372,10 @@ class Admin extends CI_Controller {
 			$this->db->distinct();
 			$this->db->from('groups');
 			$this->db->join('groupmembers', 'groupmembers.group = groups.uid and ff_groupmembers.status = "aktiv" and ff_groupmembers.puid = ' . (int)$puid, 'left');
-			$this->db->where('type', 'Ressourcegruppe'); 
+			$this->db->where('type', 'Projektgruppe'); 
 			$this->db->order_by('name'); 
 			$query = $this->db->get();
-			$ressourcegruppe = $query->result_array();
+			$projektgruppe = $query->result_array();
 
 			$this->db->select('groups.name');
 			$this->db->select('groups.uid');
@@ -422,7 +424,7 @@ class Admin extends CI_Controller {
 				   'message' => '',
 				   'debug' => $this->db->last_query(),
 				   'medlem' => $medlem['firstname'] .' ' . $medlem['middlename'] .' ' . $medlem['lastname'],
-				   'ressourcegruppe' => $ressourcegruppe,
+				   'projektgruppe' => $projektgruppe,
 				   'arbejdsgruppe' => $arbejdsgruppe,
 				   'afdelingsgruppe' => $afdelingsgruppe,
 				   'roles' => $roles,

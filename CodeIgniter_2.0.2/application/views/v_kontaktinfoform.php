@@ -147,9 +147,9 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span>
 				<li>
 					<label>Status</label>
 					<select name="active" class="memberform_select">
+						<option value="X"<?php if ($active === 'X') echo ' selected="selected"'; ?>>Udmeldt</option>
 						<option value="yes"<?php if ($active === 'yes') echo ' selected="selected"'; ?>>Aktiv</option>
 						<option value="no"<?php if ($active === 'no') echo ' selected="selected"'; ?>>Passiv</option>
-						<option value="X"<?php if ($active === 'X') echo ' selected="selected"'; ?>>Udmeldt</option>
 					</select>
 					<div id="form_remarks">Passiv betyder, at medlemmet ikke kan bestille, og heller ikke forventes at tage vagter.<br>
 					Husk ved udmeldelse at sikre, at der ikke ligger ordrer.</div>

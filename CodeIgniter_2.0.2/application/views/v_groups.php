@@ -198,7 +198,7 @@ if (isset($arbejdsgruppe))
 	
 	$counter = 0;
 	$tab = 'g_left_col';
-	foreach ($ressourcegruppe as $gruppe)
+	foreach ($projektgruppe as $gruppe)
 	{
 		echo('<span class="' .$tab . '">');
 		if ($gruppe['member'])

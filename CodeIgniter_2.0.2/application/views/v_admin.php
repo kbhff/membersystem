@@ -31,7 +31,7 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span>
 	?>
 <h1><?php echo $heading;?></h1>
 <?
-	if ($debug > '')
+	if (isset($debug))
 	{
 		echo ('<!--' . $debug . '-->');
 	}

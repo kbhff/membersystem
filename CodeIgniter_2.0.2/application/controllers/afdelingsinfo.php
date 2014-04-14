@@ -46,7 +46,7 @@ class Afdelingsinfo extends CI_Controller {
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
         $this->javascript->compile();
 		$arbejdsgruppe = '';
-		$ressourcegruppe = '';
+		$projektgruppe = '';
 		$afdelingsgruppe = '';
 		$roles = '';
 
@@ -94,7 +94,7 @@ class Afdelingsinfo extends CI_Controller {
 				   'divisionname' => $divisionname,
 				   'debug1' => $debug1,
 				   'arbejdsgruppe' => $arbejdsgruppe,
-				   'ressourcegruppe' => $ressourcegruppe,
+				   'projektgruppe' => $projektgruppe,
 				   'afdelingsgruppe' => $afdelingsgruppe,
 				   'roles' => $roles,
 				   'posts' => $posts,
