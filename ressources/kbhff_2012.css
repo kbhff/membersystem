@@ -662,3 +662,8 @@ input, select
 	height: 5px;
 	align:left;
 }
+
+.loginerror {
+	color: Red;
+	font-size: 120%;
+}

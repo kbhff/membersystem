@@ -18,39 +18,78 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span>
 	<?php 
 		echo getMenu(site_url(), $this->session->userdata('permissions'), $this->session->userdata('uid')); 
 	?>
+
 <h1><?php echo $heading;?></h1>
 <h3><?php echo $msg;?></h3>
-<table class="posts">
-<tr class="odd">
-<td>&nbsp;</td>
-<td><strong>Afhentningsdag</strong></td>
-<td><strong>Sidste ordre, gr&oslashnt</strong></td>
-<td><strong>Sidste ordre, frugt</strong></td>
-</tr>
 
-<?php 
+<?
+
+	if ( (sizeof($bagdays) == 0) || ( (sizeof($bagcollectdays) == 0) ))
+	{
+		echo ("Der er ingen kommende udleveringsdage.");	
+	} else {
+	
+	echo <<< END
+<table border="1" cellspacing="0" cellpadding="4" class="posts" style="border: 1px; border-color: Silver; border-style: solid; border-collapse: collapse;">
+<tr class="odd">
+<td rowspan=2><strong>Afhentningsdag</strong></td>
+END;
+	echo ('<td colspan="' . sizeof($bagdays). '"><div align="center"><strong>Deadlines</strong></div></td></tr>'."\n".'<tr class="odd">');
+	$cols = array();
+	foreach ($bagdays as $bagday)
+	{
+		echo '<td><strong>' .$bagday['explained'] . "</strong></td>\n";
+		$cols[$bagday['id']] = '';
+	}
 
 	$classes = Array('even', 'odd');
 	$count = 0;
-	foreach ($afhentningsdage as $afhentningsdag)
+	$days=0;
+	$savday = $bagcollectdays['0']['pickupdate'];
+	while ($count <= sizeof($bagcollectdays))
 	{
-		echo '		<tr class="'.$classes[$count%2].'"'.">\n		";
-		echo '			<td><a href="/admin/liste/delete/' . $afhentningsdag['division'] . '/' . $afhentningsdag['uid'] .'">Slet</a></td>'."\n";
-		echo '			<td>'.$afhentningsdag['pickupdate'].'</td>'."\n";
-		echo '			<td>'.$afhentningsdag['lastorder'].'</td>'."\n";
-		if (isset($afhentningsdag['flastorder']))
+		if (@$bagcollectdays[$count]['pickupdate'] <> $savday)
 		{
-			echo '			<td>'.$afhentningsdag['flastorder'].'</td>'."\n";
-		} else {
-			echo '			<td>&nbsp;</td>'."\n";
+			if ($count > 0)
+			{
+				echo "		</tr>\n";
+			}
+			$savday = @$bagcollectdays[$count]['pickupdate'];
+			echo '		<tr class="'.$classes[$days%2].'"'.">\n		";
+			echo '			<td>' . $bagcollectdays[$count-1]['pickupdate']. '</td>'."\n";
+			foreach ($bagdays as $bagday)
+			{
+				echo ('<td>');
+				if ($cols[$bagday['id']] > '')
+				{
+					echo $cols[$bagday['id']];
+				} else {
+					echo '&nbsp;';
+				}
+				$cols[$bagday['id']] = '';
+				echo ('</td>');
+			}
+			$days++;
 		}
-		echo "		</tr>\n";
+		foreach ($bagdays as $bagday)
+		{
+			$var = 'p' . $bagday['id'] . 'e';
+			if (@$bagcollectdays[$count][$var] > '')
+			{
+				$cols[$bagday['id']] = '<a href="/admin/liste/delete/' . @$bagcollectdays[$count]['division'] . '/' . @$bagcollectdays[$count]['uid']  . '/' . $bagday['id']  .'"><strong title="Slet">&times;</strong></a> ';
+				$cols[$bagday['id']] .= @$bagcollectdays[$count]['lastorder'] . "\n";
+			}
+		}
 		$count++;
 	}
-
-
-?>
+		echo <<< END
+		</tr>
 </table>
+<p>Slet-funktionen &times;</strong> har kun effekt hvis der IKKE er ordrer for posen p&aring; den angivne dag.<br>
+Kontakt support (<a mailto="it@kbhff.dk">it@kbhff.dk</a>) hvis det er tilf&aelig;ldet.</p>
+END;
+}
+?>
 </span>
 <hr align="left" id="bottomhr">
 <?php echo isset($script_head) ? $script_head : ''; ?>

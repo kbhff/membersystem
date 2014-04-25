@@ -56,11 +56,10 @@ class Udlevering extends CI_Controller {
 			$division = $this->_division($divisionday);
 			$divisionname = $this->_divisionname($division);
 
-			$totalg = $this->_getcount($divisionday, 'total',FF_GROCERYBAG);
-			$totalf = $this->_getcount($divisionday, 'total',FF_FRUITBAG);
-			$totalorder = '<b>Totalt antal gr&oslash;ntposer bestilt: ' . $totalg .' stk., totalt antal frugtposer bestilt: ' . $totalf .' stk.</b>';
-
-		
+			$bagdays = '';
+			$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" order by sortkey');
+			$bagdays = $q2->result_array();
+	
 			$query = $this->db->query('SELECT 
 			ff_orderlines.item as article, ff_pickupdates.pickupdate as pickupdate, ff_divisions.name as name, ff_items.units, ff_items.measure, ff_producttypes.explained as txt, ff_orderlines.quant,
 			ff_persons.firstname, ff_persons.middlename, ff_persons.lastname, ff_persons.tel, ff_persons.email, ff_persons.uid as medlem, ff_orderhead.status1, ff_orderhead.orderno, ff_orderlines.uid,ff_membernote.note
@@ -102,8 +101,7 @@ class Udlevering extends CI_Controller {
 			$orderlist = '';
 		}
 
-
-		$data = array(
+		$viewdata = array(
                'title' => 'Udlevering af poser',
                'heading' => 'Udlevering af poser',
                'divisionday' => (int)$divisionday,
@@ -112,14 +110,17 @@ class Udlevering extends CI_Controller {
 			   'sel' => $createsel,
 			   'orderlist' => $orderlist,
 			   'orderlistcollected' => $orderlistcollected,
-			   'totalorder' => $totalorder,
-			   'numudleveret' => $this->_getcount($divisionday, 'udleveret',FF_GROCERYBAG),
-			   'numikkeudleveret' => $this->_getcount($divisionday, 'ikkeudleveret',FF_GROCERYBAG),
-			   'numudleveretf' => $this->_getcount($divisionday, 'udleveret',FF_FRUITBAG),
-			   'numikkeudleveretf' => $this->_getcount($divisionday, 'ikkeudleveret',FF_FRUITBAG),
+			   'bagdays' => $bagdays,
           );
 
-		$this->load->view('v_udlevering', $data);
+		foreach ($bagdays as $bagday)
+		{
+			$viewdata['count' . $bagday['id']] = $this->_getcount($divisionday, 'ikkeudleveret', $bagday['id']);
+			$viewdata['udlev' . $bagday['id']] = $this->_getcount($divisionday, 'udleveret', $bagday['id']);
+			$viewdata['total' . $bagday['id']] = $this->_getcount($divisionday, 'total', $bagday['id']);
+		}
+
+		$this->load->view('v_udlevering', $viewdata);
     }
 
     function annuller() {

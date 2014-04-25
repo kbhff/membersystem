@@ -633,24 +633,96 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `ff_producttypes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ff_producttypes` (
+-- phpMyAdmin SQL Dump
+-- version 3.3.7deb7
+-- http://www.phpmyadmin.net
+--
+-- Vært: localhost
+-- Genereringstid: 26. 04 2014 kl. 00:48:18
+-- Serverversion: 5.1.72
+-- PHP-version: 5.3.3-7+squeeze17
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `kbhffdev`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `ff_producttypes`
+--
+
+CREATE TABLE IF NOT EXISTS `ff_producttypes` (
   `id` mediumint(9) unsigned NOT NULL AUTO_INCREMENT,
   `explained` varchar(100) COLLATE utf8_danish_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `bag` varchar(1) COLLATE utf8_danish_ci NOT NULL DEFAULT 'N' COMMENT 'Y/N',
+  `activefrom` date NOT NULL,
+  `activeto` date NOT NULL,
+  `sortkey` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sortkey` (`sortkey`),
+  KEY `explained` (`explained`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=53 ;
 
 --
--- Dumping data for table `ff_producttypes`
+-- Data dump for tabellen `ff_producttypes`
 --
 
-LOCK TABLES `ff_producttypes` WRITE;
-/*!40000 ALTER TABLE `ff_producttypes` DISABLE KEYS */;
-INSERT INTO `ff_producttypes` VALUES (1,'bagekartofler'),(2,'basilikum'),(3,'belle de boskoop æbler'),(4,'blommer'),(5,'blåbær'),(6,'bredbladet persille'),(7,'chili'),(8,'concorde'),(9,'fennikel'),(10,'græskar'),(11,'grønkål'),(12,'gulerødder'),(13,'hokkaido'),(14,'hvidkål'),(15,'hvidløg'),(16,'jordskokker'),(17,'julesalat'),(18,'kartofler'),(19,'kruspersille'),(20,'løg'),(21,'madæbler'),(22,'majs'),(23,'pastinak'),(24,'peberrod'),(25,'persillerod'),(26,'pigeon'),(27,'porre'),(28,'porrer'),(29,'pærer'),(30,'rosenkål'),(31,'ræddiker'),(32,'rødbeder'),(33,'rødkål'),(34,'rødløg'),(35,'salat'),(36,'sava'),(37,'savoykål'),(38,'selleri'),(39,'skarlotteløg'),(40,'spidskål'),(41,'spinat'),(42,'sølvbede'),(43,'timian'),(44,'tomater'),(45,'toscanakål'),(46,'æbler'),(47,'grøntsagspose'),(48,'medlemskab'),(49,'depositum, stofpose'),(50,'frugtpose');
-/*!40000 ALTER TABLE `ff_producttypes` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `ff_producttypes` (`id`, `explained`, `bag`, `activefrom`, `activeto`, `sortkey`) VALUES
+(1, 'bagekartofler', 'N', '0000-00-00', '0000-00-00', 100),
+(2, 'basilikum', 'N', '0000-00-00', '0000-00-00', 100),
+(3, 'belle de boskoop æbler', 'N', '0000-00-00', '0000-00-00', 100),
+(4, 'blommer', 'N', '0000-00-00', '0000-00-00', 100),
+(5, 'blåbær', 'N', '0000-00-00', '0000-00-00', 100),
+(6, 'bredbladet persille', 'N', '0000-00-00', '0000-00-00', 100),
+(7, 'chili', 'N', '0000-00-00', '0000-00-00', 100),
+(8, 'concorde', 'N', '0000-00-00', '0000-00-00', 100),
+(9, 'fennikel', 'N', '0000-00-00', '0000-00-00', 100),
+(10, 'græskar', 'N', '0000-00-00', '0000-00-00', 100),
+(11, 'grønkål', 'N', '0000-00-00', '0000-00-00', 100),
+(12, 'gulerødder', 'N', '0000-00-00', '0000-00-00', 100),
+(13, 'hokkaido', 'N', '0000-00-00', '0000-00-00', 100),
+(14, 'hvidkål', 'N', '0000-00-00', '0000-00-00', 100),
+(15, 'hvidløg', 'N', '0000-00-00', '0000-00-00', 100),
+(16, 'jordskokker', 'N', '0000-00-00', '0000-00-00', 100),
+(17, 'julesalat', 'N', '0000-00-00', '0000-00-00', 100),
+(18, 'kartofler', 'N', '0000-00-00', '0000-00-00', 100),
+(19, 'kruspersille', 'N', '0000-00-00', '0000-00-00', 100),
+(20, 'løg', 'N', '0000-00-00', '0000-00-00', 100),
+(21, 'madæbler', 'N', '0000-00-00', '0000-00-00', 100),
+(22, 'majs', 'N', '0000-00-00', '0000-00-00', 100),
+(23, 'pastinak', 'N', '0000-00-00', '0000-00-00', 100),
+(24, 'peberrod', 'N', '0000-00-00', '0000-00-00', 100),
+(25, 'persillerod', 'N', '0000-00-00', '0000-00-00', 100),
+(26, 'pigeon', 'N', '0000-00-00', '0000-00-00', 100),
+(27, 'porre', 'N', '0000-00-00', '0000-00-00', 100),
+(28, 'porrer', 'N', '0000-00-00', '0000-00-00', 100),
+(29, 'pærer', 'N', '0000-00-00', '0000-00-00', 100),
+(30, 'rosenkål', 'N', '0000-00-00', '0000-00-00', 100),
+(31, 'ræddiker', 'N', '0000-00-00', '0000-00-00', 100),
+(32, 'rødbeder', 'N', '0000-00-00', '0000-00-00', 100),
+(33, 'rødkål', 'N', '0000-00-00', '0000-00-00', 100),
+(34, 'rødløg', 'N', '0000-00-00', '0000-00-00', 100),
+(35, 'salat', 'N', '0000-00-00', '0000-00-00', 100),
+(36, 'sava', 'N', '0000-00-00', '0000-00-00', 100),
+(37, 'savoykål', 'N', '0000-00-00', '0000-00-00', 100),
+(38, 'selleri', 'N', '0000-00-00', '0000-00-00', 100),
+(39, 'skarlotteløg', 'N', '0000-00-00', '0000-00-00', 100),
+(40, 'spidskål', 'N', '0000-00-00', '0000-00-00', 100),
+(41, 'spinat', 'N', '0000-00-00', '0000-00-00', 100),
+(42, 'sølvbede', 'N', '0000-00-00', '0000-00-00', 100),
+(43, 'timian', 'N', '0000-00-00', '0000-00-00', 100),
+(44, 'tomater', 'N', '0000-00-00', '0000-00-00', 100),
+(45, 'toscanakål', 'N', '0000-00-00', '0000-00-00', 100),
+(46, 'æbler', 'N', '0000-00-00', '0000-00-00', 100),
+(47, 'grøntsagspose', 'Y', '0000-00-00', '0000-00-00', 10),
+(48, 'medlemskab', 'N', '0000-00-00', '2020-12-31', 100),
+(49, 'depositum, stofpose', 'N', '0000-00-00', '0000-00-00', 100),
+(50, 'frugtpose', 'Y', '0000-00-00', '0000-00-00', 13),
+(51, 'aspargespose', 'Y', '2014-04-22', '2020-12-31', 11),
+(52, 'fiskepose', 'Y', '0000-00-00', '0000-00-00', 12);
 
 --
 -- Table structure for table `ff_report_data`

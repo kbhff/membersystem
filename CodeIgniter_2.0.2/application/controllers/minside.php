@@ -137,7 +137,8 @@ class Minside extends CI_Controller {
 	
 		if ($this->uri->segment(3) > 0)
 		{
-			if ( $this->Memberinfo->checkpermission($permissions, 'Administrator', $row['uid']))
+			$permissions = $this->session->userdata('permissions');
+			if ( $this->Memberinfo->checkpermission($permissions, 'Administrator', $this->session->userdata('uid')))
 			{
 				$id = $this->uri->segment(3);
 			} else {
@@ -149,8 +150,14 @@ class Minside extends CI_Controller {
 			}
 		}
 		$posts = $this->Account->get_future_orders($id);
-		$possibledates = $this->Account->get_open_pickupdays($id, $item = FF_GROCERYBAG); 
-		$possibledatesf = $this->Account->get_open_pickupdays($id, $item = FF_FRUITBAG);
+		
+		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" order by sortkey');
+		$bagdays = $q2->result_array();
+		foreach ($bagdays as $bagday)
+		{
+			$viewdata['pd' . $bagday['id']] = $this->Account->get_open_pickupdays($id, $item = $bagday['id']);
+		}
+
 		$post_to_view = Array();
 		for ($i = 0; $i < count($posts); $i++)
 		{
@@ -171,8 +178,6 @@ class Minside extends CI_Controller {
 		$viewdata['heading'] = 'Mine bestillinger';
 		$viewdata['title'] = 'Mine bestillinger';
 		$viewdata['admin'] = FALSE;
-		$viewdata['possibledates'] = $possibledates;
-		$viewdata['possibledatesf'] = $possibledatesf;
 
 		$this->load->view('v_future_orders', $viewdata);
 	

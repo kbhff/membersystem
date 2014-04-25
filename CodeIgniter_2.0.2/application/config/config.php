@@ -10,7 +10,7 @@
 
 define('FF_GROCERYBAG', 47);
 define('FF_MEMBERSHIP', 48);
-define('FF_FRUITBAG', 50);
+define('FF_FRUITBAG', 51);
 
 require('global_config.php');
 

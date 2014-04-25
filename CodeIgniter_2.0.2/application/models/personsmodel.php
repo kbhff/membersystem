@@ -34,7 +34,7 @@ class Personsmodel extends CI_Model {
 	
 	function retrieve_by_email($email)
 	{
-		$query = $this->db->get_where('persons',array('email'=>$email,'active'=>'yes'));
+		$query = $this->db->get_where('persons',array('email'=>$email));
 		return $query->result_array();
 	}
 

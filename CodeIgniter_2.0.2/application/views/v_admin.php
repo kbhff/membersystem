@@ -16,6 +16,12 @@ $(function() {
 	$('#dato2').datepick({ dateFormat: 'yyyy-mm-dd' });
 	$('#dato3').datepick({ dateFormat: 'yyyy-mm-dd' });
 	$('#dato4').datepick({ dateFormat: 'yyyy-mm-dd' });
+<?
+	foreach ($bagdays as $bagday)
+	{
+		echo "	$('#dato" . $bagday['id'] . "').datepick({ dateFormat: 'yyyy-mm-dd' });\n";
+	}
+?>
 });
 </script>
 <link rel="shortcut icon" href="/images/favicon.ico" />
@@ -60,14 +66,22 @@ Dag: <input type="text" name="dato" id="dato" size="10" maxlength="10"> Sidste o
 <input type="submit" value="Opret" class="form_button"><br>
 </form>
 <br>
-Opret frugtposedag:<br>
-<form action="/admin/opretf/" method="post">
-Dag: <select name="pickupday">
-<?= $createfsel ?>
-</select>
-Sidste ordre: <input type="text" name="dato3" id="dato3" size="10" maxlength="10"> <input type="text" name="tid3" id="tid3" value="18:30" size="5" maxlength="5">
-<input type="submit" value="Opret" class="form_button"><br>
-</form>
+<?
+	foreach ($bagdays as $bagday)
+	{
+		echo 'Opret ' . $bagday['explained'] . 'dag:<br>'."\n";
+		echo '<form action="/admin/opretf/' . $bagday['id'] . '" method="post">' ."\n";
+		echo 'Dag: <select name="pickupday">'."\n";
+		echo $createfsel;
+		echo '</select>'."\n";
+		echo 'Sidste ordre: <input type="text" name="dato'.$bagday['id'].'" id="dato'.$bagday['id'].'" size="10" maxlength="10"> <input type="text" name="tid'.$bagday['id'].'" id="tid'.$bagday['id'].'" value="18:30" size="5" maxlength="5">';
+		echo '<input type="submit" value="Opret" class="form_button"><br>' ."\n";
+		echo '</form>' ."\n";
+		echo '<br>' ."\n";
+	
+	
+	}
+?>
 <br>
 Dagens salg:<br>
 <?= $dagenssalg ?>
