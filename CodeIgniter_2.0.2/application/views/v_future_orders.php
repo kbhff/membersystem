@@ -44,12 +44,9 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span>
 		echo '		<tr class="'.$classes[$count%2].'"'.">\n		";
 		echo '	<td><strong>'.$transaction['pickupdate'].'</strong></td><td>';
 		
-		if ($transaction['itemid'] == FF_FRUITBAG)
-		{
-			$testary = $possibledatesf;
-		} else {
-			$testary = $possibledates;
-		}
+		$var = 'pd' . $transaction['itemid'];
+		$testary = $$var;
+		
 		if (is_array($testary)&&($transaction['cancel']>0))
 		{
 			echo ('Skift til <form action="/minside/mine_ordrer/'. $id.'" method="post"><input type="hidden" name="orderlineid" value="'.$transaction['orderlineid'].'"><input type="hidden" name="orderno" value="'.$transaction['orderno'].'"><input type="hidden" name="presdate" value="'.$transaction['uid'].'"><input type="hidden" name="item" value="'.$transaction['itemid'].'"><select name="newdate">');

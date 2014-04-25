@@ -54,7 +54,16 @@ class Admin extends CI_Controller {
 			}
 		}
 
-
+		$bagdays = '';
+		$this->db->select('id, explained');
+		$this->db->from('producttypes');
+		$this->db->where('bag','Y');
+		$this->db->where('id !=',FF_GROCERYBAG);
+		$this->db->order_by('sortkey'); 
+		$query = $this->db->get();
+		$bagdays = $query->result_array();
+		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" and id != 47');
+		$bagdays = $q2->result_array();
 		$content = '';
 		
 		$data = array(
@@ -69,6 +78,7 @@ class Admin extends CI_Controller {
                'dagenssalg' => $dagenssalg,
 			   'nyemedlemmer' => $nyemedlemmer,
 			   'welcome' => $welcome,
+			   'bagdays' => $bagdays,
           );
 
 		$this->load->view('v_admin', $data);
@@ -162,26 +172,8 @@ class Admin extends CI_Controller {
 		} else {
 			$msg = 'Afhentningsdag ' . $dato . ' er IKKE oprettet.<br>' . $errstr . '<br>';
 		}
-		$this->db->select("division, pickupdate as pickupdatesort, date_format(`ff_pickupdates`.`pickupdate`,'%d/%m/%Y') as pickupdate, date_format(`ff_itemdays`.`lastorder`,'%d/%m/%Y %k:%i') as lastorder, uid", FALSE);
-		$this->db->from('pickupdates');
-		$this->db->from('itemdays');
-		$this->db->where('ff_pickupdates.uid', 'ff_itemdays.pickupday', FALSE); 
-		$this->db->where('itemdays.item', FF_GROCERYBAG); 
-		$this->db->where('division', (int)$division); 
-		$this->db->order_by('pickupdatesort', 'desc'); 
-		$query = $this->db->get();
-		$afhentningsdage = $query->result_array();
-		$divisionname = $this->_divisionname($division);
-		$content = 'Afhentningsdage for ' . $divisionname . ':<br>';
-		$data = array(
-               'title' => 'KBHFF Administrationsside',
-               'heading' => 'Afhentningsdag for ' . $divisionname,
-               'msg' => $msg,
-               'content' => $content,
-               'afhentningsdage' => $afhentningsdage,
-          );
 
-		$this->load->view('v_afhentningliste', $data);
+		$this->_displayliste($division, $msg);
     }
 	
 
@@ -192,12 +184,14 @@ class Admin extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-
+		$bagitem = $this->uri->segment(3);
+		$bagdate = "dato" . $bagitem;
+		$bagtime = "tid" . $bagitem;
 		$error = false;
 		$errstr = '';
 		$pickupday = $this->input->post('pickupday');
-		$dato3 = $this->input->post('dato3');
-		$tid3 = $this->input->post('tid3');
+		$dato3 = $this->input->post($bagdate);
+		$tid3 = $this->input->post($bagtime);
 
 		$this->db->select('divisions.uid');
 		$this->db->select('pickupdate');
@@ -216,39 +210,19 @@ class Admin extends CI_Controller {
 		if ( $c2 < now() )
 		{
 			$error = true;
-			$errstr .= 'Sidste frist for &aelig;ndring skal ligge i fremtiden  (' . $c2 .' < ' . now() . '<br>';
+			$errstr .= 'Sidste frist for &aelig;ndring ('. $dato3 .') skal ligge i fremtiden  ('.  $c2 .' < ' . now() . ')<br>';
 		}
 		
 		if (! $error)
 		{
-			$sql = 'INSERT INTO ' . $this->db->protect_identifiers('itemdays', TRUE) . ' (item, pickupday, lastorder) VALUES (' . FF_FRUITBAG . ',' . (int)$pickupday .',' .$this->db->escape("$dato3 $tid3:00").')';
+			$sql = 'INSERT INTO ' . $this->db->protect_identifiers('itemdays', TRUE) . ' (item, pickupday, lastorder) VALUES (' . $bagitem . ',' . (int)$pickupday .',' .$this->db->escape("$dato3 $tid3:00").')';
 			$this->db->query($sql);
 			$msg = 'Afhentningsdag ' . $date .' for frugtpose er oprettet.<br>';
 		} else {
 			$msg = 'Afhentningsdag ' . $date .' for frugtpose er IKKE oprettet.<br>' . $errstr . '<br>';
 		}
-		$this->db->select("division, pickupdate as pickupdatesort, date_format(`ff_pickupdates`.`pickupdate`,'%d/%m/%Y') as pickupdate, date_format(`ff_itemdays`.`lastorder`,'%d/%m/%Y %k:%i') as lastorder, uid, date_format(`j2`.`lastorder`,'%d/%m/%Y %k:%i') as flastorder", FALSE);
-		$this->db->from('pickupdates');
-		$this->db->from('itemdays');
-		$this->db->join('itemdays as j2', 'j2.item = ' . FF_FRUITBAG . ' AND j2.pickupday = ff_itemdays.pickupday', 'left');
-		$this->db->where('ff_pickupdates.uid', 'ff_itemdays.pickupday', FALSE); 
-		$this->db->where('itemdays.item', FF_GROCERYBAG); 
-		$this->db->where('division', (int)$division); 
-		$this->db->where('pickupdate >= curdate()', NULL, FALSE); 
-		$this->db->order_by('pickupdatesort','desc'); 
-		$query = $this->db->get();
-		$afhentningsdage = $query->result_array();
-		$divisionname = $this->_divisionname($division);
-		$content = 'Afhentningsdage for ' . $divisionname . ':<br>';
-		$data = array(
-               'title' => 'KBHFF Administrationsside',
-               'heading' => 'Afhentningsdag for ' . $divisionname,
-               'msg' => $msg,
-               'content' => $content,
-               'afhentningsdage' => $afhentningsdage,
-          );
 
-		$this->load->view('v_afhentningliste', $data);
+		$this->_displayliste($division, $msg);
     }
 
 
@@ -607,35 +581,13 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		{
 			$division = $this->uri->segment(4);
 			$pickupdateuid = $this->uri->segment(5);
-			$msg = $this->_deletepickupdate($division,$pickupdateuid);
+			$pickupdateitem = $this->uri->segment(6);
+			$msg = $this->_deletepickupdate($division,$pickupdateuid, $pickupdateitem);
 		} else {
 			$division = $this->input->post('division');
 			$msg = '';
 		}
-
-		$this->db->select("division, pickupdate as pickupdatesort, date_format(`ff_pickupdates`.`pickupdate`,'%d/%m/%Y') as pickupdate, date_format(`ff_itemdays`.`lastorder`,'%d/%m/%Y %k:%i') as lastorder, uid, date_format(`j2`.`lastorder`,'%d/%m/%Y %k:%i') as flastorder", FALSE);
-		$this->db->from('pickupdates');
-		$this->db->from('itemdays');
-		$this->db->join('itemdays as j2', 'j2.item = ' . FF_FRUITBAG . ' AND j2.pickupday = ff_itemdays.pickupday', 'left');
-		$this->db->where('ff_pickupdates.uid', 'ff_itemdays.pickupday', FALSE); 
-		$this->db->where('itemdays.item', FF_GROCERYBAG); 
-		$this->db->where('division', (int)$division); 
-		$this->db->where('pickupdate >= curdate()', NULL, FALSE); 
-		$this->db->order_by('pickupdatesort','desc'); 
-		$query = $this->db->get();
-		$afhentningsdage = $query->result_array();
-		$divisionname = $this->_divisionname($division);
-
-		$content = 'Afhentningsdage for ' . $divisionname . ':<br>';
-		$data = array(
-               'title' => 'KBHFF Administrationsside',
-               'heading' => 'Afhentningsdage for ' . $divisionname,
-               'msg' => $msg,
-               'content' => $content,
-               'afhentningsdage' => $afhentningsdage,
-          );
-
-		$this->load->view('v_afhentningliste', $data);
+		$this->_displayliste($division, $msg);
     }
 
     function medlemmer($division = 0) {
@@ -735,41 +687,57 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		$this->load->view('v_dept_info', $this->viewdata);
 	}		
 	
-	function _deletepickupdate($division, $pickupdateuid)
+	function _deletepickupdate($division, $pickupdateuid, $pickupdateitem)
 	{
-		if (($division > 0)&&($pickupdateuid > 0))
+		if (($division > 0)&&($pickupdateuid > 0)&&($pickupdateitem > 0))
 		{
-			if ($this->_checkpickupdateorders($pickupdateuid)> 0)
+			if ($this->_checkpickupdateorders($pickupdateuid, $pickupdateitem)> 0)
 			{
 				$msg = 'Afhentningsdag kan ikke slettes, der er ordrer.';
 			} else {
+				if ($pickupdateitem == FF_GROCERYBAG)
+				{
+					$this->db->where('uid', $pickupdateuid); 
+					$this->db->where('division', $division); 
+					$this->db->delete('pickupdates'); 
+				}
 				$this->db->where('pickupday', $pickupdateuid); 
+				$this->db->where('item', $pickupdateitem); 
 				$this->db->delete('ff_itemdays'); 
-				$this->db->where('uid', $pickupdateuid); 
-				$this->db->where('division', $division); 
-				$this->db->delete('pickupdates'); 
 				if ($this->db->affected_rows() > 0)
 				{
 					$msg = 'Afhentningsdag er slettet';
 				} else {
-					$msg = 'Afhentningsdag fandtes ikke!';
+					$msg = 'Afhentningsdag/vare fandtes ikke!';
 				}
 			}
 		} else {
-			$msg = 'Afhentningsdag/afdeling fandtes ikke!';
+			$msg = 'Afhentningsdag/afdeling/vare fandtes ikke!';
 		}
 		return $msg;
 	}
 
-	function _checkpickupdateorders($pickupdateuid)
+	function _checkpickupdateorders($pickupdateuid, $pickupdateitem)
 	{
-		$query = $this->db->query('SELECT 
-		ff_pickupdates.pickupdate 
-		FROM ff_orderlines, ff_orderhead, ff_pickupdates
-		WHERE ff_orderlines.orderno = ff_orderhead.orderno 
-		AND ((ff_orderhead.status1 = "kontant") or (ff_orderhead.status1 = "nets"))
-		AND ff_orderlines.iteminfo = ff_pickupdates.uid
-		AND ff_pickupdates.uid = ' . (int)$pickupdateuid);
+		if ($pickupdateitem == FF_GROCERYBAG)
+		{
+			$query = $this->db->query('SELECT 
+			ff_pickupdates.pickupdate 
+			FROM ff_orderlines, ff_orderhead, ff_pickupdates
+			WHERE ff_orderlines.orderno = ff_orderhead.orderno 
+			AND ((ff_orderhead.status1 = "kontant") or (ff_orderhead.status1 = "nets"))
+			AND ff_orderlines.iteminfo = ff_pickupdates.uid
+			AND ff_pickupdates.uid = ' . (int)$pickupdateuid);
+		} else {
+			$query = $this->db->query('SELECT 
+			ff_pickupdates.pickupdate 
+			FROM ff_orderlines, ff_orderhead, ff_pickupdates
+			WHERE ff_orderlines.orderno = ff_orderhead.orderno 
+			AND ((ff_orderhead.status1 = "kontant") or (ff_orderhead.status1 = "nets"))
+			AND ff_orderlines.item = '. (int)$pickupdateitem .'
+			AND ff_orderlines.iteminfo = ff_pickupdates.uid
+			AND ff_pickupdates.uid = ' . (int)$pickupdateuid);
+		}
 		return $query->num_rows();
 	}
 	
@@ -1122,24 +1090,81 @@ ORDER BY ff_producttypes.explained');
 			return $row->name;
 	}
 	
+	private function _displayliste($division, $msg)
+	{
+		$divisionname = $this->_divisionname($division);
+
+		$bagdays = '';
+		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" order by sortkey');
+		$bagdays = $q2->result_array();
+
+		$bdsel1 = '';
+		$bdsel2 = '';
+		foreach ($bagdays as $bagday)
+		{
+			$bdsel1 .= ', p' . $bagday['id'] . '.explained as p' . $bagday['id'] . 'e ';
+			$bdsel2 .= 'left join ff_producttypes as p' . $bagday['id'] . ' on p' . $bagday['id'] . '.id = ff_itemdays.item and p' . $bagday['id'] . '.id = ' . $bagday['id'] . ' ';
+		}
+		$q3 = $this->db->query("select division, 
+		pickupdate as pickupdatesort, 
+		date_format(`ff_pickupdates`.`pickupdate`,'%d/%m/%Y') as pickupdate, 
+		date_format(`ff_itemdays`.`lastorder`,'%d/%m/%Y %k:%i') as lastorder, uid, item $bdsel1
+		from (ff_pickupdates, ff_itemdays)
+		$bdsel2
+		where ff_pickupdates.uid = ff_itemdays.pickupday
+		and division = 3
+		and pickupdate >= curdate()
+		order by pickupdatesort, p47.sortkey");
+		$bagcollectdays = $q3->result_array();
+
+		
+		$content = 'Afhentningsdage for ' . $divisionname . ':<br>';
+		$data = array(
+               'title' => 'KBHFF Administrationsside',
+               'heading' => 'Afhentningsdage for ' . $divisionname,
+               'msg' => $msg,
+			   'bagdays' => $bagdays,
+			   'bagcollectdays' => $bagcollectdays,
+          );
+
+		$this->load->view('v_afhentningliste', $data);
+
+	}
+
 	private function _getfuturepickupdays($division)
 	{
 		$divisionname = $this->_divisionname($division);
+/*
 		$return = '<optgroup  label="' .$divisionname . '">';
 		$this->db->select('ff_pickupdates.pickupdate, ff_pickupdates.uid, ff_itemdays.lastorder', FALSE);
 		$this->db->from('pickupdates');
-		$this->db->join('itemdays', 'itemdays.item = ' . FF_FRUITBAG . ' AND ff_itemdays.pickupday = ff_pickupdates.uid', 'left');
+		$this->db->join('itemdays', 'itemdays.item = ' . 50 . ' AND ff_itemdays.pickupday = ff_pickupdates.uid', 'left');
 		$this->db->where('division', (int)$division); 
 		$this->db->where('pickupdate >= curdate()', NULL, FALSE); 
 		$this->db->where('ff_itemdays.lastorder is null'); 
 		$this->db->order_by('pickupdate','desc'); 
 		$query = $this->db->get();
-		$row = $query->row();
+*/
+			$query = $this->db->query("SELECT 
+ff_pickupdates.pickupdate, ff_pickupdates.uid, ff_itemdays.lastorder, pt.id, pt.explained
+FROM (ff_pickupdates) 
+
+LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != 47
+
+LEFT JOIN ff_itemdays ON ff_itemdays.item = pt.id AND ff_itemdays.pickupday = ff_pickupdates.uid 
+
+WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate() ORDER BY ff_pickupdates.pickupdate desc");
+		$return = '';
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result() as $row)
 			{
-				$return .= '<option value="' . $row->uid .'">' . $row->pickupdate ."</option>\n";
+				if ($row->lastorder > '')
+				{
+					$return .= '<option value="' . $row->uid .'" disabled>' . $row->pickupdate . "-" . $row->explained ."</option>\n";
+				} else {
+					$return .= '<option value="' . $row->uid .'">' . $row->pickupdate . "</option>\n";
+				}
 			}
 		} 
 		$return .= '</optgroup>' ."\n";

@@ -60,10 +60,22 @@ class Login extends CI_Controller {
 					$lastname = $data[0]['lastname'];
 					$email = $data[0]['email'];
 					$medlemsnummer = $data[0]['uid'];
-					$data = $this->Personsmodel->set_user_activation_key($medlemsnummer);
-					$user_activation_key = $data[0]['user_activation_key'];
-					$this->_sendinfomail($email, $firstname, $middlename, $lastname, $medlemsnummer, $user_activation_key);
-					$msg = 'Email med instruktioner er fremsendt til ' . $email;
+			        $msg = '<br><span class="loginerror">Du har status som <strong>udmeldt</strong> af KBHFF - kontakt din afdeling hvis du vil meldes ind igen</span>';
+					if ($data[0]['active'] === 'yes')
+					{
+						$data = $this->Personsmodel->set_user_activation_key($medlemsnummer);
+						$user_activation_key = $data[0]['user_activation_key'];
+						$this->_sendinfomail($email, $firstname, $middlename, $lastname, $medlemsnummer, $user_activation_key);
+						$msg = 'Email med instruktioner er fremsendt til ' . $email;
+					}
+					if ($data[0]['active'] === 'no')
+					{
+				        $msg = '<br><span class="loginerror">Du har status af <strong>inaktiv</strong> i KBHFFs medlemssystem. Derfor har du ikke adgang til at logge ind. Hvis du gerne vil v&aelig;re aktiv igen, skal du kontakte din afdeling</span>';
+					}
+					if ($data[0]['active'] === 'X')
+					{
+				        $msg = '<br><span class="loginerror">Du har status som <strong>udmeldt</strong> af KBHFF - kontakt din afdeling hvis du vil meldes ind igen</span>';
+					}
 				break;
 			    case 2;
 			        $msg = 'Fejl: Der er ' . $no . ' medlemmer med samme mailadresse.<br>Det kan give problemer - tal med webmaster.';

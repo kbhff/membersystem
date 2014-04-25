@@ -54,7 +54,7 @@ $('#waiting').show(500);
     // DOM element for the form do this: 
     // var formElement = jqForm[0]; 
  
-//    alert('About to submit: \n\n' + queryString); 
+	//    alert('About to submit: \n\n' + queryString); 
  
     // here we could return false to prevent the form from being submitted; 
     // returning anything other than false will allow the form submit to continue 
@@ -74,7 +74,9 @@ function showResponse(responseText, statusText, xhr, $form)  {
     // property set to 'json' then the first argument to the success callback 
     // is the json data object returned by the server 
 
-$('#waiting').hide(500);
+    $('#waiting').hide(500);
+
+
 var displaymessage = responseText.msg;
 $('#message').removeClass().addClass((responseText.error === true) ? 'error' : 'success')
 .text(displaymessage).show(500);
@@ -86,21 +88,21 @@ $('#message').removeClass().addClass((responseText.error === true) ? 'error' : '
 	updtxt = responseText.receipt + nytxt.innerHTML;
 	nytxt.innerHTML = updtxt;
 
-	// grønt
-	var numudleveret = document.getElementById("numudleveret");
-	numudleveret.innerHTML = responseText.numudleveret;
-	var numikkeudleveret = document.getElementById("numikkeudleveret");
-	tmp = responseText.numtotalorders - responseText.numudleveret;
-	numikkeudleveret.innerHTML = tmp;
-	// frugt
-	var numudleveretf = document.getElementById("numudleveretf");
-	numudleveretf.innerHTML = responseText.numudleveretf;
-	var numikkeudleveretf = document.getElementById("numikkeudleveretf");
-	tmp = responseText.numtotalordersf - responseText.numudleveretf;
-	numikkeudleveretf.innerHTML = tmp;
-	
-	if (responseText.error === true) $('#udlever').show(500);
+	// Bags
+<?
 
+	foreach ($bagdays as $bagday)
+	{
+		echo '    // item ' . $bagday['id'] . ', ' . $bagday['explained'] .  "\n";
+		echo '    $("#udlev' . $bagday['id'] . '").html(responseText.numudlev' . $bagday['id'] . ');' . "\n";
+		echo '    tmp = responseText.total' . $bagday['id'] . ' - responseText.numudlev' . $bagday['id'] . ';' . "\n";
+		echo '    $("#ejudlev' . $bagday['id'] . '").html(tmp);' . "\n\n";
+	}
+
+?>	
+
+			
+	if (responseText.error === true) $('#udlever').show(500);
 } 
 
 	function sendsms(afdeling,sms, navn)
@@ -236,26 +238,36 @@ if (date("Y-m-d") == $pickupdate)
 } else{
 		echo ('<h1>' . $divisionname . ' ' . $pickupdate .' <span style="color: Red;">(NB: Det er ikke i dag)</span></h1>');
 }
-?>		
+?>
 <form id="udlever" action="/ressources/regudlever.php" method="get"> 
 <input type="hidden" name="divisionday" value="<?=$divisionday?>">
 
-<?php
+<?
+		echo('<table>' . "\n");
+		foreach ($bagdays as $bagday)
+		{
+			
+			$ejlev = 'count'   . $bagday['id'];
+			$udlev   = 'udlev'   . $bagday['id'];
+			$total   = 'total'   . $bagday['id'];
+			if ($$total > 0)
+			{
+				echo ('<tr><td>I alt ' . $$total . ' ' . $bagday['explained'] . 'r bestilt - </td>');
+				echo ('<td><span id="ejudlev' . $bagday['id'] . '">' . $$ejlev . '</span> ikke hentet,</td>');
+				echo ('<td><span id="udlev'   . $bagday['id'] . '">' . $$udlev   . '</span> hentet</td></tr>' . "\n");
+			} else {
+				echo ('<!--<tr><td>I alt ' . $$total . ' ' . $bagday['explained'] . 'r bestilt</td>');
+				echo ('<td><span id="ejudlev' . $bagday['id'] . '">' . $$ejlev . '</span> ikke hentet,</td>');
+				echo ('<td><span id="udlev'   . $bagday['id'] . '">' . $$udlev   . '</span> hentet</td></tr>-->' . "\n");
+			}
+		}
+		echo('</table>' . "\n");
 
 if (is_array($orderlist))
 {
 	if (count($orderlist) > 0)
 	{
-//		echo ("<!-- ");
-//		print_r($orderlist);
-//		print_r($orderlistcollected);
-//		echo ($sel);
-//		echo ("-->");
-//		echo ('<h2>' . $orderlist[0]['name'] . ' ' . $orderlist[0]['pickupdate'] .'</h2>');
-		echo $totalorder;
-		echo ("<h2>Gr&oslash;ntsagsposer: <span id=\"numikkeudleveret\">$numikkeudleveret</span> ikke afhentet<br>");
-		echo ("Frugtposer: <span id=\"numikkeudleveretf\">$numikkeudleveretf</span> ikke afhentet</h2>");
-		echo ('<table>');
+		echo ('<br>' . "\n" . '<table>');
 	}
 
 	$classes = Array('even', 'odd');
@@ -263,7 +275,6 @@ if (is_array($orderlist))
 	foreach ($orderlist as $order)
 	{
 		echo '		<tr id="uid' . $order['uid'] . '" class="'.$classes[$count%2].'"'.">\n		";
-//		echo '		<tr id="uid' . $order['uid'] . '" class="list"'.">\n		";
 		if (date("Y-m-d") == $pickupdate)
 		{
 			echo '			<td class="submitcell"><input type="submit" name="submitbutton" id="subm" value="Udlever' . $order['uid'] .'"></td>'."\n";
@@ -274,21 +285,12 @@ if (is_array($orderlist))
 		echo '			<td class="listcell">'.$order['orderno']. ', ' .$order['status1']. '</td>'."\n";
 		if (date("Y-m-d") == $pickupdate)
 		{
-/*
-			if ($order['email'] > ' ')
-			{
-				echo '			<td class="listcell"><div class="emailbut" id="email' . (int)$order['medlem'] . '" onClick="Javascript:sendemail(' . "'" . $orderlist[0]['name'] . "', '" . $order['email'] ."', " . (int)$order['medlem'] .", '" . $order['firstname'].' ' . $order['middlename'].' ' . $order['lastname']."');" .'">Email</div></td>'."\n";
-			} else {
-				echo '			<td class="listcell">-</td>'."\n";
-			}
-*/
 			if ($order['tel'] > ' ')
 			{
 				echo '			<td class="listcell"><div class="smsbut" id="sms' . (int)$order['tel'] . '" onClick="Javascript:sendsms(' . "'" . $orderlist[0]['name'] . "'," . (int)$order['tel'] .", '" . $order['firstname'].' ' . $order['middlename'].' ' . $order['lastname']."');" .'">SMS</div></td>'."\n";
 			} else {
 				echo '			<td class="listcell">-</td>'."\n";
 			}
-//			echo '			<td class="submitcell"><input type="submit" name="submitbutton" id="subm" value="Udlever' . $order['uid'] .'"></td>'."\n";
 		}
 		echo "		</tr>\n";
 		if ($order['note'] > '')
@@ -302,8 +304,7 @@ if (is_array($orderlist))
 ?>
 </form>
 <p><span class="note" id="output1"></span></p>
-<h2>Gr&oslash;ntsagsposer: <span id="numudleveret"><?=$numudleveret?></span> afhentet<br>
-Frugtposer <span id="numudleveretf"><?=$numudleveretf?></span> afhentet</h2>
+
 
 <span id="afhentet"><?
 	foreach ($orderlistcollected as $order)

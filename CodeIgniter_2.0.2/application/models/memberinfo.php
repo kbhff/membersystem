@@ -109,9 +109,9 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 
 
 		
-// echo '<!---';
-// print_r($this->db->last_query());
-// echo '-->';
+ echo '<!---';
+ print_r($this->db->last_query());
+ echo '-->';
 
 		if ($query->num_rows() > 0)
 		{
@@ -136,11 +136,11 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 			} else {
 				if ($row->active === 'no')
 				{
-			        return "Du har status af inaktiv i Kbhff's medlemssystem. Derfor har du ikke adgang til at logge ind. Hvis du gerne vil v&aelig;re aktiv igen, skal du kontakte din lokalafdeling";
+			        return '<br><span class="loginerror">Du har status af <strong>inaktiv</strong> i KBHFFs medlemssystem. Derfor har du ikke adgang til at logge ind. Hvis du gerne vil v&aelig;re aktiv igen, skal du kontakte din afdeling</span>';
 				}
 				if ($row->active === 'X')
 				{
-			        return 'Du har status som udmeldt af KBHFF - kontakt din afdeling hvis du vil meldes ind igen';
+			        return '<br><span class="loginerror">Du har status som <strong>udmeldt</strong> af KBHFF - kontakt din afdeling hvis du vil meldes ind igen</span>';
 				}
 			}
 		}

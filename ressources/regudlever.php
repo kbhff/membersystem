@@ -62,11 +62,14 @@ $result = doquery($query);
 		$return['msg'] = 'Der er ingen ordre fra medlem ' . $medlemsnummer ;
 	}
 
-	$return['numtotalorders'] = getcount($divisionday, '', 47);         // NB Hardcoded itemno!!!!
-	$return['numudleveret'] = getcount($divisionday, 'udleveret', 47);  // NB Hardcoded itemno!!!!
-	$return['numtotalordersf'] = getcount($divisionday, '', 50);         // NB Hardcoded itemno!!!!
-	$return['numudleveretf'] = getcount($divisionday, 'udleveret', 50); // NB Hardcoded itemno!!!!
-	
+	$query = 'select id, explained from ff_producttypes where bag = "Y" order by sortkey';
+	$result = doquery($query);
+	while($row=mysql_fetch_array($result)) {
+       $return['numudlev' . $row[0]] = getcount($divisionday, 'udleveret', $row[0]);;
+       $return['total' . $row[0]] = getcount($divisionday, '', $row[0]);;
+   }
+   
+
 echo json_encode($return);
 
 function setpicked($uid)
