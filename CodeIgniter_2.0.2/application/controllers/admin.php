@@ -775,42 +775,62 @@ AND ff_pickupdates.division = ff_items.division
 	}
 
 
-	function _saveexceldata($sheet, $division, $currentrow)
-	{
-		if ($division > 0)
-		{
-			$select = ', ff_division_members where ff_division_members.member = ff_persons.uid AND ff_division_members.division = ' . (int)$division;
-		}
-		$query = $this->db->query('SELECT firstname, middlename, lastname, email, tel, created, active FROM ff_persons' . $select . ' order by firstname');
-		foreach ($query->result() as $row)
-		{
-			$sheet->write($currentrow, 0, "$row->firstname");
-			$sheet->write($currentrow, 1, "$row->middlename");
-			$sheet->write($currentrow, 2, "$row->lastname");
-			$sheet->write($currentrow, 3, "$row->email");
-			$sheet->write($currentrow, 4, "$row->tel");
-			$sheet->write($currentrow, 5, "$row->created");
-			$sheet->write($currentrow, 6, "$row->active");
-			$currentrow++;
-		}
-	}
-	
 	function excel($division = 5) {
-		require_once 'Spreadsheet/Excel/Writer.php';
+
+		/** Include PHPExcel */
+		require_once 'PHPExcel.php';
 		$divisionname = $this->_divisionname($division);
+		$this->load->helper('date');
 
 		// Create a workbook
-		$workbook = new Spreadsheet_Excel_Writer();
-	
-		$this->load->helper('date');
-		$excelfile = 'medlemmer_' . $divisionname . '.xls';
+		$objPHPExcel = new PHPExcel();	
+		PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+		$objPHPExcel->getProperties()->setCreator("KBHFF Medlemssystem");
+		$objPHPExcel->getProperties()->setLastModifiedBy("KBHFF Medlemssystem");
+		$objPHPExcel->getProperties()->setTitle("KBHFF medlemsliste");
+		$objPHPExcel->getProperties()->setSubject("Medlemsliste");
+		$objPHPExcel->getProperties()->setDescription("Medlemsliste udskrevet fra medlemssystemet (medlem.kbhff.dk)");
+		$objPHPExcel->getProperties()->setKeywords("KBHFF medlemsliste");
+		$objPHPExcel->getProperties()->setCategory("medlemsliste");
+		$objPHPExcel->getSheet(0);
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToHeight(0);
+		// Rename worksheet
+		$objPHPExcel->getActiveSheet()->setTitle("KBHFF medlemsliste");
 
-		// sending HTTP headers
-		$workbook->send($excelfile);
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$objPHPExcel->setActiveSheetIndex(0);
 
-		$formatbold = $workbook->addFormat();
-		$formatbold->setBold(600);
-		$workbook->setCustomColor(22, 10, 110, 10);
+
+		$locale = 'da';
+		date_default_timezone_set('Europe/London');
+
+
+		$objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Hello')
+            ->setCellValue('B2', 'world!')
+            ->setCellValue('C1', 'Hello')
+            ->setCellValue('D2', 'world!');
+		
+		// Redirect output to a clientâ^À^Ùs web browser (Excel5)
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="01simple.xls"');
+		header('Cache-Control: max-age=0');
+		// If you're serving to IE 9, then the following may be needed
+		header('Cache-Control: max-age=1');
+		
+		// If you're serving to IE over SSL, then the following may be needed
+		header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header ('Pragma: public'); // HTTP/1.0
+		
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
+		
+		/*
+
+
 
 		$rowformat1 =& $workbook->addFormat(array('Size' => 10,'Color' => '22'));
 		$rowformat2 =& $workbook->addFormat(array('Size' => 10,'Color' => 'black'));
@@ -851,57 +871,31 @@ AND ff_pickupdates.division = ff_items.division
 			$currentrow++;
 		}
 
-// Let's send the file
-$workbook->close();
+		// Let's send the file
+		$workbook->close();
+		
+		*/
 	}
 
-    function x($division = 5) {
-		require_once 'Spreadsheet/Excel/Writer.php';
-		ini_set('memory_limit', '128M');
-		$this->load->helper('download');
-		$this->load->helper('date');
-		$excelfile = 'medlemmer_' . $division . '_' . unix_to_human(time(), FALSE, 'eu') . '.xls';
-		$data = 'tekst';
-	
-		// Generate Excel
-		$excel = new Spreadsheet_Excel_Writer($excelfile);
-	
-	
-		$formatbold = $excel->addFormat();
-		$formatbold->setBold(600);
-		$sheet =& $excel->addWorksheet($division);
-		$currentrow = 2;
-//		$this->_createtitles();
-//		$this->_saveexceldata($sheet, $division, $currentrow);
-
-	   	$sheet->write(1, 1, 'Medlemsliste',$formatbold);    
-
-
+	function _saveexceldata($sheet, $division, $currentrow)
+	{
 		if ($division > 0)
 		{
 			$select = ', ff_division_members where ff_division_members.member = ff_persons.uid AND ff_division_members.division = ' . (int)$division;
 		}
-		$query = $this->db->query('SELECT firstname, middlename, lastname FROM ff_persons' . $select . ' order by firstname');
+		$query = $this->db->query('SELECT firstname, middlename, lastname, email, tel, created, active FROM ff_persons' . $select . ' order by firstname');
 		foreach ($query->result() as $row)
 		{
 			$sheet->write($currentrow, 0, "$row->firstname");
 			$sheet->write($currentrow, 1, "$row->middlename");
 			$sheet->write($currentrow, 2, "$row->lastname");
+			$sheet->write($currentrow, 3, "$row->email");
+			$sheet->write($currentrow, 4, "$row->tel");
+			$sheet->write($currentrow, 5, "$row->created");
+			$sheet->write($currentrow, 6, "$row->active");
 			$currentrow++;
 		}
-
-
-//		$excel->send('test.xls');		
-
-
-		if ($excel->close() === true) {
-		  echo "Spreadsheet $excelfile successfully saved!\n\n";  
-		} else {
-		  echo 'ERROR: Could not save spreadsheet ' . $excelfile;
-		}
-		
-//		force_download($excelfile, $data);
-    }
+	}
 	
 
 	function _createtitles($title,$formatbold,$colvars)
@@ -1112,7 +1106,7 @@ ORDER BY ff_producttypes.explained');
 		from (ff_pickupdates, ff_itemdays)
 		$bdsel2
 		where ff_pickupdates.uid = ff_itemdays.pickupday
-		and division = 3
+		and division = $division
 		and pickupdate >= curdate()
 		order by pickupdatesort, p47.sortkey");
 		$bagcollectdays = $q3->result_array();
