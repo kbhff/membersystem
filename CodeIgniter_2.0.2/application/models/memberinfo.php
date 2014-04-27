@@ -322,7 +322,8 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 
 	function checkpermission($permissions, $role, $division = 0)
 	{
-		if (intval($this->session->userdata('uid'))<10)	// member is superadmin & all depts
+		if (is_numeric($this->session->userdata('uid'))
+        && intval($this->session->userdata('uid'))<10)	// member is superadmin & all depts
 		{
 			return true;
 		}
