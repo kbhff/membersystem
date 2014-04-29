@@ -3,7 +3,7 @@
 function getMenu($siteURL, $permissions, $uid)
 {
 $extra_menu = '';
-$admin = $info = $butik = $indkob = $kasse = false;
+$admin = $info = $butik = $indkob = $kasse = $finance = false;
 
 if (is_array($permissions))
 {
@@ -27,8 +27,12 @@ if (is_array($permissions))
 				if ($role == 'Butiksgruppe') {
 					$butik = true;
 				}
-				if ($role == 'Fælles indkøbsgruppe') {
+//				if ($role == 'FÃ¦lles indkÃ¸bsgruppe') {
+				if ($role == 'Central indkøbsgruppe') {
 					$indkob = true;
+				}
+				if ($role == 'Central økonomigruppe') {
+					$finance = true;
 				}
 			}
 		}
@@ -42,14 +46,20 @@ $extra_menu .= '<li class="extra">
    </li>';
 }
 */
+
+if ($admin)
+{
+$extra_menu .= '<li class="extra"><a href="'.$siteURL.'admin">Admin</a></li>';
+}
+
 if ($indkob)
 {
 $extra_menu .= '<li class="extra"><a href="'.$siteURL.'indkob">Indk&oslash;b</a></li>';
 }
 
-if ($admin)
+if ($finance)
 {
-$extra_menu .= '<li class="extra"><a href="'.$siteURL.'admin">Admin</a></li>';
+$extra_menu .= '<li class="extra"><a href="'.$siteURL.'finance">&Oslash;konomi</a></li>';
 }
 
 if ($info)

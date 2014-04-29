@@ -29,6 +29,8 @@ Medlemsnummer <?= $adress['uid']?><br>
 <?= $adress['email']?><br>
 <br>
 <a href="/afdelingsinfo/grupper/<?= $divisioninfo['division']?>">N&oslash;glepersoner i min afdeling</a><br>
+<a href="/afdelingsinfo/grupper/">Centrale n&oslash;glepersoner i KBHFF</a><br>
+
 <?php if (count($permissions) > 0):?>
 <h3>Mine arbejdsroller:</h3>
 <? 

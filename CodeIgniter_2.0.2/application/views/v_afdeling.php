@@ -5,11 +5,9 @@
 	<title><?php echo $title;?></title>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>ressources/kbhff_2012.css" type="text/css" media="screen" />
-<?php echo isset($library_src) ? $library_src : ''; ?>
-<script type="text/javascript" charset="utf-8" src="/ressources/jquery.form.js"></script>
-<script type="text/javascript" src="/ressources/jquery/jquery.datepick.js"></script>
-<script type="text/javascript" src="/ressources/jquery/jquery.datepick-da.js"></script>
-<link rel="STYLESHEET" type="text/css" href="/ressources/1st.datepick.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script>
+<script type="text/javascript" src="/ressources/jquery.qtip.js"></script>
+<link type="text/css" rel="stylesheet" href="/ressources/jquery.qtip.css" />
 <link rel="shortcut icon" href="/images/favicon.ico" />
 <style type="text/css">
 	span.g_left_col{
@@ -29,7 +27,31 @@
 	.gbox {
 	width: 490px;
 	}
+
+	.contactinfo {
+		color: #009900;
+	}
+	.contactinfohidden {
+		display: none;
+	}
 </style>
+<script language="JavaScript" type="text/javascript">
+
+$(document).ready(function () {
+    
+	$('.contactinfo').each(function() { 
+	    $(this).qtip({
+	        content: {
+	            text: $(this).next('div') 
+	        },
+         show: 'click',
+         hide: 'unfocus'
+	    });
+	});
+    
+});
+</script>
+
 </head>
 <body>
 <span id="tt">
@@ -48,13 +70,17 @@ vi mangler i en af arbejdsgrupperne. Vi vil generelt meget gerne v&aelig;re fler
  eller ad-hoc-gruppe.</p>
  
 <p>Lokale arbejdsgrupper<br>
- De lokale arbejdsgrupper i afdelingerne s&oslash;rger for at afdelingen fungerer b&aring;de praktisk og administrativt, herunder 
+De lokale arbejdsgrupper i afdelingerne s&oslash;rger for at afdelingen fungerer b&aring;de praktisk og administrativt, herunder 
 den daglige drift af vores butikker, lokale &oslash;konomi og medlemslister.</p>
+
+<p>Mangler du p&aring; listen?<br>
+Det er din afdelings Administrator, der kan opdatere listen over medlemsskaber.</p> 
+<p><strong>Klik p&aring; navnet for at se kontaktinformation</strong></p>
 <?php echo $content;?>
 <?php
 	$classes = Array('even', 'odd');
 
-if (isset($roles))
+if (is_array($roles))
 {
 	echo ('<h3>Arbejdsroller i ' . $divisionname."</h3>\n");
 	$tab = 'zg_left_col';
@@ -66,53 +92,91 @@ if (isset($roles))
 		if ($gruppe['name']<> $prevname) {
 			echo($gspan);
 			echo('<span class="' .$tab . '">');
-			echo('<b>' . $gruppe['name'] . '</b><br>');
+			echo('<br><b>' . $gruppe['name'] . '</b><br>');
 			$comma = "";
 			$gspan = "</span><br>\n";
 		}
+		echo ('<span class="contactinfo">');
 		echo ($comma . $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']);
+		echo ('</span>');
+		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>');
 		$comma = ", ";
 		$prevname = $gruppe['name'];
 	}
 }
 
-if (isset($arbejdsgruppe))
+if (is_array($arbejdsgruppe))
 {
 	$tab = 'zg_left_col';
 	$prevtype = '';
+	$dist = '';
 	$counter = 0;
 	foreach ($arbejdsgruppe as $gruppe)
 	{
 		if ($gruppe['type']<> $prevtype) {
-			echo ("<br clear=\"all\">\n<br>\n");
+			echo $dist;
 			echo ('<h3>' . $gruppe['type'] . "r</h3>\n"); // 'r' to pluralize
 			$prevtype = $gruppe['type'];
 			$gspan = '';
 			$comma = "";
 			$prevname = '';
+			$dist = ("<br clear=\"all\">\n\n");
 		}
 		if ($gruppe['name']<> $prevname) {
 			echo($gspan);
 			echo('<span class="' .$tab . '">');
-			echo('<b>' . $gruppe['name'] . '</b><br>');
+			echo('<br><b>' . $gruppe['name'] . '</b><br>');
 			$comma = "";
 			$gspan = "</span><br>\n";
-/*
-			if ($counter%2) 
-			{
-				echo ("<br clear=\"all\">\n");
-				$tab = 'zg_left_col';
-			} else {
-				$tab = 'zg_right_col';
-			}
-			$counter++;
-*/
 		}
-		echo ($comma . $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']);
+		echo ('<span class="contactinfo">');
+		echo ($comma . ''. $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']. '');
+		echo ('</span>');
+		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>');
 		$comma = ", ";
 		$prevname = $gruppe['name'];
 	}
 }
+
+if (isset($commongruppe))
+{
+	$tab = 'zg_left_col';
+	$prevtype = '';
+	$dist = '';
+	$counter = 0;
+	foreach ($commongruppe as $gruppe)
+	{
+		if ($gruppe['type']<> $prevtype) {
+			echo $dist;
+			echo ('<h2>KBHFF Centrale ' . $gruppe['type'] . "r</h2>\n"); // 'r' to pluralize
+			$prevtype = $gruppe['type'];
+			$gspan = '';
+			$comma = "";
+			$prevname = '';
+			$dist = ("<br clear=\"all\">\n");
+		}
+		if ($gruppe['name']<> $prevname) {
+			echo($gspan);
+			echo('<span class="' .$tab . '">');
+			echo('<br><b>' . $gruppe['name'] . '</b><br>');
+			$comma = "";
+			$gspan = "</span><br>\n";
+		}
+		echo ('<span class="contactinfo">');
+		if ($gruppe['division'] == $division)
+		{	
+			echo ($comma . '<i>'. $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']. ' (' . $gruppe['divisionname'] .')</i>');
+			$comma = ", ";
+		} else {
+			echo ($comma . ''. $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']. ' (' . $gruppe['divisionname'] .')');
+			$comma = ", ";
+		}
+		echo ('</span>');
+		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>');
+		$prevname = $gruppe['name'];
+	}
+}
+
 
 
 ?>

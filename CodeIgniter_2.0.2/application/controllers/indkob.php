@@ -19,7 +19,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Fælles indkøbsgruppe')))
+		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
 		redirect('/minside');		
 
 		$createsel = '';
@@ -52,7 +52,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Fælles indkøbsgruppe')))
+		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
 		redirect('/minside');		
 
 		if ($this->uri->segment(3) > 0)
@@ -61,18 +61,29 @@ class Indkob extends CI_Controller {
 		} else {
 			$pickupdate = $this->input->post('pickupdate');
 		}
-		
-		$res = '<table><tr><td><strong>Afdeling</strong></td><td><strong>Gr&oslash;nt</strong></td><td><strong>Frugt</strong></td></tr>';
+
+		$bagdays = '';
+		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" order by sortkey');
+		$bagdays = $q2->result_array();
+
+		$bdsel1 = '';
+		$bdsel2 = '';
+		$res = '<table><tr><td><strong>Afdeling</strong></td>';
+		foreach ($bagdays as $bagday)
+		{
+			$res .= '<td><strong>' . $bagday['explained'] . '</strong></td>';
+		}
+		$res .= '</tr>';
 		$this->db->select('divisions.uid as uid,divisions.name, pickupdates.pickupdate, pickupdates.uid as pickupdateuid');
 		$this->db->from('divisions');
 		$this->db->from('pickupdates');
 		$this->db->where('divisions.uid = ff_pickupdates.division'); 
 		$this->db->where('pickupdates.pickupdate ="' . addslashes($pickupdate) .'"'); 
-		$this->db->order_by('pickupdates.pickupdate'); 
+		$this->db->order_by('divisions.name'); 
 		$query = $this->db->get();
 		foreach ($query->result_array() as $row)
 		{
-			$res .= $this->_getdiv($pickupdate, $row['uid']);
+			$res .= $this->_getdiv($pickupdate, $bagdays, $row['uid']);
 		}
 		$res .= '</table>';
 
@@ -81,6 +92,7 @@ class Indkob extends CI_Controller {
 		$data = array(
                'title' => 'Bestilte poser ' . $pickupdate,
                'heading' => 'Bestilte poser ' . $pickupdate,
+			   'bagdays' => $bagdays,
 			   'totalorder' => $res,
                'pickupdate' => $pickupdate,
           );
@@ -95,7 +107,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-//		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Indkøbsgruppen')))
+//		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
 //		redirect('/minside');		
 		$medlemsnummer = intval($this->session->userdata('uid'));
 		$divisioninfo = $this->Memberinfo->division_info($medlemsnummer);
@@ -114,13 +126,18 @@ class Indkob extends CI_Controller {
 
 	
 	
-	function _getdiv($pickupdate, $division)	
+	function _getdiv($pickupdate, $bagdays, $division)	
 	{
 			$divisionname = $this->_divisionname($division);
+			$totalorder = '<tr><td>' . $divisionname . '</td>';
+			foreach ($bagdays as $bagday)
+			{
+				$totalorder .= '<td align="right">';
+				$totalorder .= $this->_getcount(0, 'total',$bagday['id'], $pickupdate, $division);
+				$totalorder .= '</td>';
+			}
+			$totalorder .= '</tr>' . "\n";
 
-			$totalg = $this->_getcount(0, 'total',FF_GROCERYBAG, $pickupdate, $division);
-			$totalf = $this->_getcount(0, 'total',FF_FRUITBAG, $pickupdate, $division);
-			$totalorder = '<tr><td>' .$divisionname.'</td><td align="right">' . $totalg .'</td><td align="right">' . $totalf .'</td></tr>';
 			return $totalorder;
 	}
 
