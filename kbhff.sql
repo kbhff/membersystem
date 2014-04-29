@@ -237,10 +237,13 @@ DROP TABLE IF EXISTS `ff_groups`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ff_groups` (
   `name` varchar(35) COLLATE latin1_danish_ci NOT NULL,
-  `type` varchar(20) COLLATE latin1_danish_ci NOT NULL,
+  `type` varchar(100) COLLATE latin1_danish_ci NOT NULL,
+  `common` varchar(1) COLLATE latin1_danish_ci NOT NULL DEFAULT 'Y',
+  `key` varchar(20) COLLATE latin1_danish_ci NOT NULL COMMENT 'update `ff_groups` set `key` = hex(aes_encrypt(name, ''deerme''))',
   `uid` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
+  PRIMARY KEY (`uid`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=MyISAM AUTO_INCREMENT=67 DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,9 +252,18 @@ CREATE TABLE `ff_groups` (
 
 LOCK TABLES `ff_groups` WRITE;
 /*!40000 ALTER TABLE `ff_groups` DISABLE KEYS */;
-INSERT INTO `ff_groups` VALUES ('Kollektivgruppen','Arbejdsgruppe',1),('Fælles indkøbsgruppe','Arbejdsgruppe',2),('Fælles kommunikationsgruppe','Arbejdsgruppe',3),('Fælles økonomigruppe','Arbejdsgruppe',4),('Arrangementsgruppen','Arbejdsgruppe',5),('Logistikgruppen','Arbejdsgruppe',29),('Fiskegruppen','Ressourcegruppe',28),('Stofposegruppen','Ressourcegruppe',27),('Faciliteringsgruppen','Ressourcegruppe',11),('Håndværkergruppen','Ressourcegruppe',12),('Indkøbsgruppen','Afdelingsgruppe',16),('Butiksgruppen','Afdelingsgruppe',17),('Kassemester- og lærlingegruppen','Afdelingsgruppe',18),('Økonomi gruppen','Afdelingsgruppe',19),('Kommunikationsgruppen','Afdelingsgruppe',20),('Kontaktpersoner','Afdelingsgruppe',21),('Hygiejnegruppen','Ressourcegruppe',22),('Udviklingsgruppen','Ressourcegruppe',25),('Programming Group','Ressourcegruppe',26),('Arrangementsgruppen','Afdelingsgruppe',30),('Evalueringskorpset','Ressourcegruppe',32),('VSM-gruppen','Ressourcegruppe',33),('Formidlingskorpset','Ressourcegruppe',34);
+INSERT INTO `ff_groups` VALUES ('IndkÃ¸bsgruppen','Afdelingsgruppe','N','46175991B5D867687372',16),('Butiksgruppen','Afdelingsgruppe','N','83E2F63CB696301FCBCD',17),('Kassemester- og lÃ¦rlingegruppen','Afdelingsgruppe','N','D290899E04ED8DE880D6',18),('Ãkonomi gruppen','Afdelingsgruppe','N','21262464C6D7D09C6EB6',19),('Kommunikationsgruppen','Afdelingsgruppe','N','C0A8EC46B65C06EE5B69',20),('Kontaktpersoner','Afdelingsgruppe','N','9D64DE396A672CD3D168',21),('Arrangementsgruppen','Afdelingsgruppe','N','D1FE867728C52F2216CD',30),('Distributionsgruppen','Arbejdsgruppe','Y','398C194A202D2AFE4192',50),('Central distributionsgruppe','Arbejdsgruppe','Y','D34F6B69D0E64B90BE6D',51),('Central indkÃ¸bsgruppe','Arbejdsgruppe','Y','C851EEC0C294386807B1',52),('Central kommunikationsgruppe','Arbejdsgruppe','Y','A87397C556B9352CC2AF',53),('Central Ã¸konomigruppe','Arbejdsgruppe','Y','3C404B51953ADBD4CA24',54),('Central arrangementsgruppe','Arbejdsgruppe','Y','F9977552D0458DA0DA45',55),('Evalueringskopset','Projektgruppe','Y','CB80561EB5E1353613AA',56),('Fiskegruppen','Projektgruppe','Y','57F3B8F6CFC3A2EE86D5',57),('Formidlingskorps','Projektgruppe','Y','AFF1F980520239976FD0',58),('Grafikgruppen','Projektgruppe','Y','1EA3EB844E2836B06057',59),('Hygiejnegruppen','Projektgruppe','Y','CC9C77663B63872855F1',60),('HÃ¥ndvÃ¦rkergruppen','Projektgruppe','Y','CABA07B204E4E8DAD82F',61),('Stofposegruppen','Projektgruppe','Y','7B1744C7FB5BB96B2502',62),('Programming Group','Projektgruppe','Y','01AA87815FC3CFFF9B9A',63),('Regnskabsgruppen','Projektgruppe','Y','33739974E95796407187',64),('FÃ¦llesbutik-gruppen','Projektgruppe','Y','91CF730CF6180AFB6CFA',65),('Strukturgruppen','Projektgruppe','Y','9E08A3F876C4A17B0566',66);
 /*!40000 ALTER TABLE `ff_groups` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 --
 -- Table structure for table `ff_itemdays`
