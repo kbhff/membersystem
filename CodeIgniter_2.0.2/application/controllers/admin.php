@@ -484,6 +484,7 @@ class Admin extends CI_Controller {
 		}
 		$query = $this->db->query('replace into `ff_groupmembers` set `group` = ' . (int)$group . ', puid = ' . (int)$puid . ', department = ' . (int)$division . ', status = "' . $active . '", note = "upd", valid_from = curdate(), expires = date_add(now(), interval 1 year) ' );
 	}
+
 	function _updaterolemembership($role, $division, $puid, $status){
 		// role 	level 	puid 	department 	auth_by 	valid_from 	expires		
 		if ($status > '')
@@ -780,41 +781,125 @@ AND ff_pickupdates.division = ff_items.division
 		/** Include PHPExcel */
 		require_once 'PHPExcel.php';
 		$divisionname = $this->_divisionname($division);
+//		$cellval = trim(iconv("UTF-8","ISO-8859-1",$cell->getValue())," \t\n\r\0\x0B\xA0");
 		$this->load->helper('date');
+
+		$locale = 'da';
+		date_default_timezone_set('Europe/London');
+		$now = Date("H:i d-m-Y");
 
 		// Create a workbook
 		$objPHPExcel = new PHPExcel();	
 		PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 		$objPHPExcel->getProperties()->setCreator("KBHFF Medlemssystem");
-		$objPHPExcel->getProperties()->setLastModifiedBy("KBHFF Medlemssystem");
-		$objPHPExcel->getProperties()->setTitle("KBHFF medlemsliste");
+		$objPHPExcel->getProperties()->setLastModifiedBy("KBHFF Medlemssystem $now");
+		$objPHPExcel->getProperties()->setTitle( utf8_decode($divisionname) . ' medlemsliste');
 		$objPHPExcel->getProperties()->setSubject("Medlemsliste");
-		$objPHPExcel->getProperties()->setDescription("Medlemsliste udskrevet fra medlemssystemet (medlem.kbhff.dk)");
+		$objPHPExcel->getProperties()->setDescription('KBHFF ' . $divisionname . "medlemsliste udskrevet $now");
 		$objPHPExcel->getProperties()->setKeywords("KBHFF medlemsliste");
 		$objPHPExcel->getProperties()->setCategory("medlemsliste");
 		$objPHPExcel->getSheet(0);
 		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToWidth(1);
 		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToHeight(0);
+
 		// Rename worksheet
-		$objPHPExcel->getActiveSheet()->setTitle("KBHFF medlemsliste");
+		$objPHPExcel->getActiveSheet()->setTitle(substr ( $divisionname . ' ' . Date("H.i d-m-Y"), 0, 31 ));
 
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 		$objPHPExcel->setActiveSheetIndex(0);
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getTabColor()->setRGB('33cc66');
 
 
-		$locale = 'da';
-		date_default_timezone_set('Europe/London');
 
-
-		$objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'Hello')
-            ->setCellValue('B2', 'world!')
-            ->setCellValue('C1', 'Hello')
-            ->setCellValue('D2', 'world!');
+		// Creating a title
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getStyle('A1:I1')->getFont()->setSize(13)->getColor()->setARGB(PHPExcel_Style_Color::COLOR_DARKGREEN);
+		$objWorksheet->setCellValueByColumnAndRow(0, 1, 'Medlem #');
+		$objWorksheet->setCellValueByColumnAndRow(1, 1, 'Fornavn');
+		$objWorksheet->setCellValueByColumnAndRow(2, 1, 'Mellemnavn');
+		$objWorksheet->setCellValueByColumnAndRow(3, 1, 'Efternavn');
+		$objWorksheet->setCellValueByColumnAndRow(4, 1, 'Email');
+		$objWorksheet->setCellValueByColumnAndRow(5, 1, 'Telefon');    
+		$objWorksheet->setCellValueByColumnAndRow(6, 1, 'Oprettet');    
+		$objWorksheet->setCellValueByColumnAndRow(7, 1, 'Aktiv');
+		$objWorksheet->setCellValueByColumnAndRow(8, 1, 'Note');    
+			
+		// Autoset widths
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getColumnDimension('A')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('B')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('C')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('D')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('E')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('F')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('G')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('H')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('I')->setAutoSize(true);
 		
-		// Redirect output to a clientâ^À^Ùs web browser (Excel5)
+		if ($division > 0)
+		{
+			$select = ', ff_division_members where ff_division_members.member = ff_persons.uid AND ff_division_members.division = ' . (int)$division;
+		}
+		$query = $this->db->query('SELECT uid,firstname, middlename, lastname, email, tel, created, active, remark FROM (ff_persons) left join ff_persons_info on (ff_persons.uid = ff_persons_info.puid) ' . $select . ' order by firstname');
+		$rowformat1 = array(
+		'font' => array(
+			'bold' => false,
+			),
+		'fill' => array(
+			'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			'color' =>  array(
+				'rgb' =>  'd9ffe2',
+				),
+			)
+		);
+
+		$rowformat2 = array(
+		'font' => array(
+			'bold' => false,
+			)
+		);
+
+		$currentrow = 2;
+		foreach ($query->result() as $row)
+		{
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValueByColumnAndRow(0, $currentrow, ("$row->uid"))
+				->setCellValueByColumnAndRow(1, $currentrow, ("$row->firstname"))
+				->setCellValueByColumnAndRow(2, $currentrow, ("$row->middlename"))
+				->setCellValueByColumnAndRow(3, $currentrow, ("$row->lastname"))
+				->setCellValueByColumnAndRow(4, $currentrow, ("$row->email"))
+				->setCellValueByColumnAndRow(5, $currentrow, ("$row->tel"))
+				->setCellValueByColumnAndRow(6, $currentrow, ("$row->created"))
+				->setCellValueByColumnAndRow(7, $currentrow, ("$row->active"))
+				->setCellValueByColumnAndRow(8, $currentrow, ("$row->remark"));
+			$dynformat = alternator('rowformat1', 'rowformat2');
+			$format = $$dynformat;
+			$objPHPExcel->getActiveSheet()->getStyle('A' . $currentrow .':I' . $currentrow)->applyFromArray($format);
+			$currentrow++;
+		}
+
+		// Align
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$highestRow = $objWorksheet->getHighestRow(); 
+		$objPHPExcel->getActiveSheet()->getStyle('F1:F' . $highestRow)
+			->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:A' . $highestRow)
+			->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+
+		// Set repeated headers
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(1, 1);
+
+		// Specify printing area
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$highestRow = $objWorksheet->getHighestRow(); 
+		$highestColumn = $objWorksheet->getHighestColumn(); 
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setPrintArea('A1:' . $highestColumn . $highestRow );
+
+		
+		// Redirect output to a clients web browser (Excel5)
 		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="01simple.xls"');
+		header('Content-Disposition: attachment;filename="KBHFF medlemsliste ' . $divisionname . ' ' . $now .'.xls"');
 		header('Cache-Control: max-age=0');
 		// If you're serving to IE 9, then the following may be needed
 		header('Cache-Control: max-age=1');
@@ -828,89 +913,8 @@ AND ff_pickupdates.division = ff_items.division
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output');
 		
-		/*
-
-
-
-		$rowformat1 =& $workbook->addFormat(array('Size' => 10,'Color' => '22'));
-		$rowformat2 =& $workbook->addFormat(array('Size' => 10,'Color' => 'black'));
-									  
-		// Creating a worksheet
-		$tabname = 'Medlemsliste, ' . $division . ' ' . unix_to_human(time(), FALSE, 'eu');
-		$worksheet =& $workbook->addWorksheet('Medlemmer ' . $divisionname );
-
-		// Creating a title
-	   	$worksheet->write(0, 0, 'Medlemsnummer' ,$formatbold);    
-	   	$worksheet->write(0, 1, 'Fornavn' ,$formatbold);    
-	   	$worksheet->write(0, 2, 'Mellemnavn' ,$formatbold);    
-	   	$worksheet->write(0, 3, 'Efternavn' ,$formatbold);    
-	   	$worksheet->write(0, 4, 'Email' ,$formatbold);    
-	   	$worksheet->write(0, 5, 'Telefon' ,$formatbold);    
-	   	$worksheet->write(0, 6, 'Oprettet' ,$formatbold);    
-	   	$worksheet->write(0, 7, 'Aktiv' ,$formatbold);    
-	   	$worksheet->write(0, 8, 'Note' ,$formatbold);    
-		if ($division > 0)
-		{
-			$select = ', ff_division_members where ff_division_members.member = ff_persons.uid AND ff_division_members.division = ' . (int)$division;
-		}
-		$query = $this->db->query('SELECT uid,firstname, middlename, lastname, email, tel, created, active, remark FROM (ff_persons) left join ff_persons_info on (ff_persons.uid = ff_persons_info.puid) ' . $select . ' order by firstname');
-		$currentrow = 1;
-		foreach ($query->result() as $row)
-		{
-			$dynformat = alternator('rowformat1', 'rowformat2');
-			$format = $$dynformat;
-			$worksheet->write($currentrow, 0, utf8_decode("$row->uid"),$format);
-			$worksheet->write($currentrow, 1, utf8_decode("$row->firstname"),$format);
-			$worksheet->write($currentrow, 2, utf8_decode("$row->middlename"),$format);
-			$worksheet->write($currentrow, 3, utf8_decode("$row->lastname"),$format);
-			$worksheet->write($currentrow, 4, utf8_decode("$row->email"),$format);
-			$worksheet->write($currentrow, 5, utf8_decode("$row->tel"),$format);
-			$worksheet->write($currentrow, 6, utf8_decode("$row->created"),$format);
-			$worksheet->write($currentrow, 7, utf8_decode("$row->active"),$format);
-			$worksheet->write($currentrow, 8, utf8_decode("$row->remark"),$format);
-			$currentrow++;
-		}
-
-		// Let's send the file
-		$workbook->close();
-		
-		*/
 	}
 
-	function _saveexceldata($sheet, $division, $currentrow)
-	{
-		if ($division > 0)
-		{
-			$select = ', ff_division_members where ff_division_members.member = ff_persons.uid AND ff_division_members.division = ' . (int)$division;
-		}
-		$query = $this->db->query('SELECT firstname, middlename, lastname, email, tel, created, active FROM ff_persons' . $select . ' order by firstname');
-		foreach ($query->result() as $row)
-		{
-			$sheet->write($currentrow, 0, "$row->firstname");
-			$sheet->write($currentrow, 1, "$row->middlename");
-			$sheet->write($currentrow, 2, "$row->lastname");
-			$sheet->write($currentrow, 3, "$row->email");
-			$sheet->write($currentrow, 4, "$row->tel");
-			$sheet->write($currentrow, 5, "$row->created");
-			$sheet->write($currentrow, 6, "$row->active");
-			$currentrow++;
-		}
-	}
-	
-
-	function _createtitles($title,$formatbold,$colvars)
-	{
-	
-	   	$sheet->write(0, 1, $title,$formatbold);    
-	
-		$row = 1;
-		$col = 1;
-	
-		foreach ($colvars as $value) {
-		   	$sheet->write($row, $col, $value,$formatbold);    
-			$col++;
-		}
-	}
 	
 	function medlemsliste($division = 5) {
 

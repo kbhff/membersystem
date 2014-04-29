@@ -19,7 +19,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Indkøbsgruppen')))
+		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
 		redirect('/minside');		
 
 		$createsel = '';
@@ -52,7 +52,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Indkøbsgruppen')))
+		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
 		redirect('/minside');		
 
 		if ($this->uri->segment(3) > 0)
@@ -79,7 +79,7 @@ class Indkob extends CI_Controller {
 		$this->db->from('pickupdates');
 		$this->db->where('divisions.uid = ff_pickupdates.division'); 
 		$this->db->where('pickupdates.pickupdate ="' . addslashes($pickupdate) .'"'); 
-		$this->db->order_by('pickupdates.pickupdate'); 
+		$this->db->order_by('divisions.name'); 
 		$query = $this->db->get();
 		foreach ($query->result_array() as $row)
 		{
@@ -107,7 +107,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-//		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Indkøbsgruppen')))
+//		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
 //		redirect('/minside');		
 		$medlemsnummer = intval($this->session->userdata('uid'));
 		$divisioninfo = $this->Memberinfo->division_info($medlemsnummer);
