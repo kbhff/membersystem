@@ -11,21 +11,21 @@
 <link rel="shortcut icon" href="/images/favicon.ico" />
 <style type="text/css">
 	span.g_left_col{
-	    float: left;
-	    padding: 5px;
-	    width: 230px;
-	    border: 0px solid gray;
+		float: left;
+		padding: 5px;
+		width: 230px;
+		border: 0px solid gray;
 	}
-	
+
 	span.g_right_col{
-	    float: right;
-	    padding: 5px;
-	    width: 230px;
-	    border: 0px solid gray;
+		float: right;
+		padding: 5px;
+		width: 230px;
+		border: 0px solid gray;
 	}
-	
+
 	.gbox {
-	width: 490px;
+		width: 490px;
 	}
 
 	.contactinfo {
@@ -33,6 +33,13 @@
 	}
 	.contactinfohidden {
 		display: none;
+	}
+	.groupinfo {
+		background:#e1fde2;
+		display: block;
+	}
+	.groupinfo A {
+		color: #009900;
 	}
 </style>
 <script language="JavaScript" type="text/javascript">
@@ -98,8 +105,8 @@ if (is_array($roles))
 		}
 		echo ('<span class="contactinfo">');
 		echo ($comma . $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']);
-		echo ('</span>');
-		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>');
+		echo ('</span>'. "\n");
+		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>' . "\n");
 		$comma = ", ";
 		$prevname = $gruppe['name'];
 	}
@@ -131,8 +138,8 @@ if (is_array($arbejdsgruppe))
 		}
 		echo ('<span class="contactinfo">');
 		echo ($comma . ''. $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']. '');
-		echo ('</span>');
-		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>');
+		echo ('</span>'. "\n");
+		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>'. "\n");
 		$comma = ", ";
 		$prevname = $gruppe['name'];
 	}
@@ -148,7 +155,7 @@ if (isset($commongruppe))
 	{
 		if ($gruppe['type']<> $prevtype) {
 			echo $dist;
-			echo ('<h2>KBHFF Centrale ' . $gruppe['type'] . "r</h2>\n"); // 'r' to pluralize
+			echo ('<h2>KBHFF F&aelig;lles ' . $gruppe['type'] . "r</h2>\n"); // 'r' to pluralize
 			$prevtype = $gruppe['type'];
 			$gspan = '';
 			$comma = "";
@@ -159,6 +166,34 @@ if (isset($commongruppe))
 			echo($gspan);
 			echo('<span class="' .$tab . '">');
 			echo('<br><b>' . $gruppe['name'] . '</b><br>');
+			if (($gruppe['contactmail'] > '')||($gruppe['maillist'] > '')||($gruppe['wiki'] > '')||($gruppe['samba'] > ''))
+			{
+				echo ('<span class="groupinfo">');
+				if (($gruppe['contactmail'] > '')||($gruppe['maillist'] > ''))
+				{
+					if ($gruppe['contactmail'] > '')
+					{
+						echo ('<a href="mailto:' . $gruppe['contactmail'] . '">Kontaktmail for gruppen</a>&nbsp;&nbsp;' );
+					}
+					if ($gruppe['maillist'] > '')
+					{
+						echo ('<a href="mailto:' . $gruppe['maillist'] . '">Mailliste for gruppen</a>' );
+					} 
+					echo ("<br>");
+				}
+				if (($gruppe['wiki'] > '')||($gruppe['samba'] > ''))
+				{
+					if ($gruppe['wiki'] > '')
+					{
+						echo ('<a href="' . $gruppe['wiki'] . '">Gruppens www</a>&nbsp;&nbsp;' );
+					}
+					if ($gruppe['samba'] > '')
+					{
+						echo ('<a href="' . $gruppe['samba'] . '">Gruppens diskussionsforum (SAMBA)</a>' );
+					} 
+				}
+				echo ("</span><br>");
+			}
 			$comma = "";
 			$gspan = "</span><br>\n";
 		}
@@ -171,8 +206,8 @@ if (isset($commongruppe))
 			echo ($comma . ''. $gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname']. ' (' . $gruppe['divisionname'] .')');
 			$comma = ", ";
 		}
-		echo ('</span>');
-		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>');
+		echo ('</span>'. "\n");
+		echo ('<div class="contactinfohidden"><p><b>Kontaktinfo '.$gruppe['firstname'] . ' ' .$gruppe['middlename'] . ' ' . $gruppe['lastname'].'</b><br>Email: <a href="mailto:' . $gruppe['email'] .'">' . $gruppe['email'] . '</a><br>Telefon: ' . $gruppe['tel'] . '</p></div>'. "\n");
 		$prevname = $gruppe['name'];
 	}
 }

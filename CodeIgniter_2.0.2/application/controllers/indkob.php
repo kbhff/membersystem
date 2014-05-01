@@ -19,27 +19,50 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
+		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Fælles indkøbsgruppe')))
 		redirect('/minside');		
 
+		$permissions = $this->session->userdata('permissions');
+
 		$createsel = '';
-		$this->db->select('pickupdates.pickupdate');
-		$this->db->distinct();
-		$this->db->from('pickupdates');
-		$this->db->where('pickupdates.pickupdate >= curdate()'); 
-		$this->db->order_by('pickupdates.pickupdate'); 
+		$createfsel = '';
+		$adminsel = '';
+		$cashsel = '';
+		$excelsel = '';
+		$dagenssalg = '';
+		$nyemedlemmer = '';
+		$welcome = '';
+		$this->db->select('divisions.name, divisions.uid');
+		$this->db->from('divisions');
+		$this->db->where('type','aktiv');
+		$this->db->order_by('divisions.name'); 
 		$query = $this->db->get();
 
 		foreach ($query->result_array() as $row)
-			{
-				$createsel .= '<option value="' . $row['pickupdate'] . '">' . $row['pickupdate']. "</option>\n";
-			}
+		{
+			$createsel .= '<option value="' . $row['uid'] . '">' . $row['name'] . "</option>\n";
+			$createfsel .= $this->_getfuturepickupdays($row['uid']);
+		}
 
+		$bagdays = '';
+		$this->db->select('id, explained');
+		$this->db->from('producttypes');
+		$this->db->where('bag','Y');
+		$this->db->where('id !=',FF_GROCERYBAG);
+		$this->db->order_by('sortkey'); 
+		$query = $this->db->get();
+		$bagdays = $query->result_array();
+		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" and id != 47');
+		$bagdays = $q2->result_array();
+		$content = '';
+		
 		$data = array(
                'title' => 'KBHFF Administrationsside',
                'heading' => 'KBHFF Administrationsside (demo): INDK&Oslash;B',
-  			   'sel' => $createsel,
-             'content' => '<br>',
+               'content' => $content,
+			   'bagdays' => $bagdays,
+               'createsel' => $createsel,
+               'createfsel' => $createfsel,
           );
 
 		$this->load->view('v_indkob', $data);
@@ -52,7 +75,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
+		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Fælles indkøbsgruppe')))
 		redirect('/minside');		
 
 		if ($this->uri->segment(3) > 0)
@@ -107,7 +130,7 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-//		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central indkøbsgruppe')))
+//		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Fælles indkøbsgruppe')))
 //		redirect('/minside');		
 		$medlemsnummer = intval($this->session->userdata('uid'));
 		$divisioninfo = $this->Memberinfo->division_info($medlemsnummer);
@@ -225,6 +248,27 @@ class Indkob extends CI_Controller {
 	}
 	
 
+	private function _getfuturepickupdays($division)
+	{
+		$divisionname = $this->_divisionname($division);
+		$return = '<optgroup  label="' .$divisionname . '">';
+			$query = $this->db->query("SELECT distinct
+			ff_pickupdates.pickupdate, ff_pickupdates.uid
+			FROM (ff_pickupdates) 
+			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != 47
+			LEFT JOIN ff_itemdays ON ff_itemdays.item = pt.id AND ff_itemdays.pickupday = ff_pickupdates.uid and ff_itemdays.lastorder is null
+			WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate() 
+			ORDER BY ff_pickupdates.pickupdate desc");
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{
+				$return .= '<option value="' . $row->uid .'">' . $row->pickupdate . "</option>\n";
+			}
+		} 
+		$return .= '</optgroup>' ."\n";
+		return $return;
+	}
 	
 	
 	

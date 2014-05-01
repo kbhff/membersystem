@@ -94,7 +94,9 @@ Afdeling: <select name="division"><option value="0">Alle afdelinger</a>
 siden: <input type="text" name="dato" id="dato4" size="10" maxlength="10">&nbsp;<input type="submit" value="Vis" class="form_button"><br>
 </form>
 <br>
-
+Statistik over ikke-afhentede poser:<br>
+<a href="/admin/ikke_afhentet">Ikke-afhentede poser</a><br>
+<br>
 <a href="/mail">Massemail</a><br>
 <br>
 Rediger medlemmer<br>

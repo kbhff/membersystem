@@ -28,10 +28,10 @@ if (is_array($permissions))
 					$butik = true;
 				}
 //				if ($role == 'FÃ¦lles indkÃ¸bsgruppe') {
-				if ($role == 'Central indkøbsgruppe') {
+				if ($role == 'FÃ¦lles indkøbsgruppe') {
 					$indkob = true;
 				}
-				if ($role == 'Central økonomigruppe') {
+				if ($role == 'FÃ¦lles økonomigruppe') {
 					$finance = true;
 				}
 			}

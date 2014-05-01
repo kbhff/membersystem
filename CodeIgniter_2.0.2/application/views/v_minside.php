@@ -29,7 +29,8 @@ Medlemsnummer <?= $adress['uid']?><br>
 <?= $adress['email']?><br>
 <br>
 <a href="/afdelingsinfo/grupper/<?= $divisioninfo['division']?>">N&oslash;glepersoner i min afdeling</a><br>
-<a href="/afdelingsinfo/grupper/">Centrale n&oslash;glepersoner i KBHFF</a><br>
+<a href="/afdelingsinfo/grupper/">N&oslash;glepersoner i KBHFFs f&aelig;lles arbejdsgrupper</a><br>
+<a href="http://kbhff.dk/om-kbhff/organisationen" target="_blank">Overblik over KBHFFs organisation</a><br>
 
 <?php if (count($permissions) > 0):?>
 <h3>Mine arbejdsroller:</h3>

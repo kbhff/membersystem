@@ -20,7 +20,7 @@ class Finance extends CI_Controller {
 
 		$permissions = $this->session->userdata('permissions');
 
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Central økonomigruppe')))
+		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Fælles økonomigruppe')))
 		redirect('/minside');		
 
 		$dagenssalg = '';
