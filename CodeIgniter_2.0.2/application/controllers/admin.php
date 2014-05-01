@@ -34,6 +34,7 @@ class Admin extends CI_Controller {
 		$welcome = '';
 		$this->db->select('divisions.name, divisions.uid');
 		$this->db->from('divisions');
+		$this->db->where('type','aktiv');
 		$this->db->order_by('divisions.name'); 
 		$query = $this->db->get();
 
@@ -299,6 +300,52 @@ class Admin extends CI_Controller {
 		
 	}
 	
+	function ikke_afhentet($limit = 5)
+	{
+
+		if ($this->uri->segment(3) > 0)
+		{
+			$limit = $this->uri->segment(3);
+		}
+
+		$content = '';
+		$ikkeafhentet = 0;
+		$ikkeafhentet = array();
+
+		$this->db->select("divisions.uid, divisions.name, divisions.shortname");
+		$this->db->from('divisions');
+		$this->db->where('type', 'aktiv'); 
+		$this->db->order_by('divisions.name', 'asc'); 
+		$query = $this->db->get();
+		$divisions = $query->result_array();
+
+	
+		$this->db->select('pickupdate');
+		$this->db->distinct();
+		$this->db->from('pickupdates');
+		$this->db->where('pickupdate <= curdate()'); 
+		$this->db->order_by('pickupdate', 'desc'); 
+		$this->db->limit($limit); 
+		$queryday = $this->db->get();
+		$debug = $this->db->last_query();
+		foreach ($queryday->result_array() as $row)
+		{
+			$quant = $this->_ikkeafhentet_statistik($row['pickupdate']);
+			$ikkeafhentet[$row['pickupdate']] = $quant;
+		}
+		$data = array(
+               'title' => 'KBHFF Administrationsside',
+               'heading' => "Oversigt over ikke-afhentede poser",
+               'content' => $content,
+			   'divisions' => $divisions,
+			   'debug' => $debug,
+			   'ikkeafhentet' => $ikkeafhentet,
+          );
+		$this->load->view('v_ikke_afhentet', $data);
+	
+	}
+
+
 	function opdatertransaktioner($ordre = 0)
 	{
 		if ($this->uri->segment(3) > 0)
@@ -775,6 +822,29 @@ AND ff_pickupdates.division = ff_items.division
 		
 	}
 
+	function _ikkeafhentet_statistik($date)
+	{
+
+		$ret = array();
+		$query = $this->db->query('SELECT 
+		SUM(ff_orderlines.quant) as quant, ff_pickupdates.pickupdate, ff_items.division, ff_producttypes.explained
+		FROM (ff_orderlines, ff_orderhead, ff_items, ff_producttypes, ff_pickupdates, ff_divisions)
+		WHERE ff_orderlines.orderno = ff_orderhead.orderno
+		AND ff_orderlines.item = ff_items.id
+		AND ff_items.producttype_id = ff_producttypes.id
+		AND ff_orderlines.iteminfo = ff_pickupdates.uid
+		AND ff_divisions.uid = ff_pickupdates.division
+		AND ff_pickupdates.division = ff_items.division
+		AND ff_pickupdates.pickupdate = "' . addslashes($date) . '"
+		AND ((ff_orderhead.status1 = "kontant") or (ff_orderhead.status1 = "nets"))
+		AND ff_orderlines.status2 <> "udleveret"
+		GROUP by ff_pickupdates.pickupdate, ff_items.division
+		ORDER BY ff_pickupdates.pickupdate desc, ff_items.division,  ff_producttypes.id');
+		
+		$row = $query->row();
+		return $query->result_array();
+		
+	}
 
 	function excel($division = 5) {
 
@@ -1132,37 +1202,19 @@ ORDER BY ff_producttypes.explained');
 	private function _getfuturepickupdays($division)
 	{
 		$divisionname = $this->_divisionname($division);
-/*
 		$return = '<optgroup  label="' .$divisionname . '">';
-		$this->db->select('ff_pickupdates.pickupdate, ff_pickupdates.uid, ff_itemdays.lastorder', FALSE);
-		$this->db->from('pickupdates');
-		$this->db->join('itemdays', 'itemdays.item = ' . 50 . ' AND ff_itemdays.pickupday = ff_pickupdates.uid', 'left');
-		$this->db->where('division', (int)$division); 
-		$this->db->where('pickupdate >= curdate()', NULL, FALSE); 
-		$this->db->where('ff_itemdays.lastorder is null'); 
-		$this->db->order_by('pickupdate','desc'); 
-		$query = $this->db->get();
-*/
-			$query = $this->db->query("SELECT 
-ff_pickupdates.pickupdate, ff_pickupdates.uid, ff_itemdays.lastorder, pt.id, pt.explained
-FROM (ff_pickupdates) 
-
-LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != 47
-
-LEFT JOIN ff_itemdays ON ff_itemdays.item = pt.id AND ff_itemdays.pickupday = ff_pickupdates.uid 
-
-WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate() ORDER BY ff_pickupdates.pickupdate desc");
-		$return = '';
+			$query = $this->db->query("SELECT distinct
+			ff_pickupdates.pickupdate, ff_pickupdates.uid
+			FROM (ff_pickupdates) 
+			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != 47
+			LEFT JOIN ff_itemdays ON ff_itemdays.item = pt.id AND ff_itemdays.pickupday = ff_pickupdates.uid and ff_itemdays.lastorder is null
+			WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate() 
+			ORDER BY ff_pickupdates.pickupdate desc");
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result() as $row)
 			{
-				if ($row->lastorder > '')
-				{
-					$return .= '<option value="' . $row->uid .'" disabled>' . $row->pickupdate . "-" . $row->explained ."</option>\n";
-				} else {
-					$return .= '<option value="' . $row->uid .'">' . $row->pickupdate . "</option>\n";
-				}
+				$return .= '<option value="' . $row->uid .'">' . $row->pickupdate . "</option>\n";
 			}
 		} 
 		$return .= '</optgroup>' ."\n";

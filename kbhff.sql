@@ -173,18 +173,15 @@ UNLOCK TABLES;
 -- Table structure for table `ff_divisions`
 --
 
-DROP TABLE IF EXISTS `ff_divisions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ff_divisions` (
+CREATE TABLE IF NOT EXISTS `ff_divisions` (
   `name` varchar(30) COLLATE utf8_danish_ci NOT NULL,
+  `shortname` varchar(4) COLLATE utf8_danish_ci NOT NULL,
   `type` varchar(10) COLLATE utf8_danish_ci NOT NULL,
   `webmembers` varchar(1) COLLATE utf8_danish_ci NOT NULL,
   `kontakt` varchar(150) COLLATE utf8_danish_ci NOT NULL,
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `ff_divisions`
@@ -192,7 +189,7 @@ CREATE TABLE `ff_divisions` (
 
 LOCK TABLES `ff_divisions` WRITE;
 /*!40000 ALTER TABLE `ff_divisions` DISABLE KEYS */;
-INSERT INTO `ff_divisions` VALUES ('Afdeling 1','aktiv','N','afdeling1@etellerandet.dk',1),('Afdeling 2','aktiv','N','afdeling2@etellerandet.dk',2);
+INSERT INTO `ff_divisions` VALUES ('Afdeling 1','A1','aktiv','N','afdeling1@etellerandet.dk',1),('Afdeling 2','A2','aktiv','N','afdeling2@etellerandet.dk',2);
 /*!40000 ALTER TABLE `ff_divisions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,38 +229,50 @@ UNLOCK TABLES;
 -- Table structure for table `ff_groups`
 --
 
-DROP TABLE IF EXISTS `ff_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ff_groups` (
-  `name` varchar(35) COLLATE latin1_danish_ci NOT NULL,
-  `type` varchar(100) COLLATE latin1_danish_ci NOT NULL,
-  `common` varchar(1) COLLATE latin1_danish_ci NOT NULL DEFAULT 'Y',
-  `key` varchar(20) COLLATE latin1_danish_ci NOT NULL COMMENT 'update `ff_groups` set `key` = hex(aes_encrypt(name, ''deerme''))',
+CREATE TABLE IF NOT EXISTS `ff_groups` (
+  `name` varchar(35) COLLATE utf8_danish_ci NOT NULL,
+  `type` varchar(100) COLLATE utf8_danish_ci NOT NULL,
+  `common` varchar(1) COLLATE utf8_danish_ci NOT NULL DEFAULT 'Y',
+  `active` varchar(1) COLLATE utf8_danish_ci NOT NULL DEFAULT 'Y',
+  `contactmail` varchar(150) COLLATE utf8_danish_ci NOT NULL,
+  `maillist` varchar(150) COLLATE utf8_danish_ci NOT NULL,
+  `wiki` varchar(150) COLLATE utf8_danish_ci NOT NULL,
+  `samba` varchar(150) COLLATE utf8_danish_ci NOT NULL,
+  `key` varchar(20) COLLATE utf8_danish_ci NOT NULL COMMENT '`key` = hex(aes_encrypt(name, ''deerme''))',
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=MyISAM AUTO_INCREMENT=67 DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=67 ;
 
 --
--- Dumping data for table `ff_groups`
+-- Data dump for tabellen `ff_groups`
 --
 
-LOCK TABLES `ff_groups` WRITE;
-/*!40000 ALTER TABLE `ff_groups` DISABLE KEYS */;
-INSERT INTO `ff_groups` VALUES ('IndkÃ¸bsgruppen','Afdelingsgruppe','N','46175991B5D867687372',16),('Butiksgruppen','Afdelingsgruppe','N','83E2F63CB696301FCBCD',17),('Kassemester- og lÃ¦rlingegruppen','Afdelingsgruppe','N','D290899E04ED8DE880D6',18),('Ãkonomi gruppen','Afdelingsgruppe','N','21262464C6D7D09C6EB6',19),('Kommunikationsgruppen','Afdelingsgruppe','N','C0A8EC46B65C06EE5B69',20),('Kontaktpersoner','Afdelingsgruppe','N','9D64DE396A672CD3D168',21),('Arrangementsgruppen','Afdelingsgruppe','N','D1FE867728C52F2216CD',30),('Distributionsgruppen','Arbejdsgruppe','Y','398C194A202D2AFE4192',50),('Central distributionsgruppe','Arbejdsgruppe','Y','D34F6B69D0E64B90BE6D',51),('Central indkÃ¸bsgruppe','Arbejdsgruppe','Y','C851EEC0C294386807B1',52),('Central kommunikationsgruppe','Arbejdsgruppe','Y','A87397C556B9352CC2AF',53),('Central Ã¸konomigruppe','Arbejdsgruppe','Y','3C404B51953ADBD4CA24',54),('Central arrangementsgruppe','Arbejdsgruppe','Y','F9977552D0458DA0DA45',55),('Evalueringskopset','Projektgruppe','Y','CB80561EB5E1353613AA',56),('Fiskegruppen','Projektgruppe','Y','57F3B8F6CFC3A2EE86D5',57),('Formidlingskorps','Projektgruppe','Y','AFF1F980520239976FD0',58),('Grafikgruppen','Projektgruppe','Y','1EA3EB844E2836B06057',59),('Hygiejnegruppen','Projektgruppe','Y','CC9C77663B63872855F1',60),('HÃ¥ndvÃ¦rkergruppen','Projektgruppe','Y','CABA07B204E4E8DAD82F',61),('Stofposegruppen','Projektgruppe','Y','7B1744C7FB5BB96B2502',62),('Programming Group','Projektgruppe','Y','01AA87815FC3CFFF9B9A',63),('Regnskabsgruppen','Projektgruppe','Y','33739974E95796407187',64),('FÃ¦llesbutik-gruppen','Projektgruppe','Y','91CF730CF6180AFB6CFA',65),('Strukturgruppen','Projektgruppe','Y','9E08A3F876C4A17B0566',66);
-/*!40000 ALTER TABLE `ff_groups` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+INSERT INTO `ff_groups` (`name`, `type`, `common`, `active`, `contactmail`, `maillist`, `wiki`, `samba`, `key`, `uid`) VALUES
+('Indkøbsgruppen', 'Afdelingsgruppe', 'N', 'Y', '', '', '', '', '46175991B5D867687372', 16),
+('Butiksgruppen', 'Afdelingsgruppe', 'N', 'Y', '', '', '', '', '83E2F63CB696301FCBCD', 17),
+('Kassemester- og lærlingegruppen', 'Afdelingsgruppe', 'N', 'Y', '', '', '', '', 'D290899E04ED8DE880D6', 18),
+('Økonomi gruppen', 'Afdelingsgruppe', 'N', 'Y', '', '', '', '', '21262464C6D7D09C6EB6', 19),
+('Kommunikationsgruppen', 'Afdelingsgruppe', 'N', 'Y', '', '', '', '', 'C0A8EC46B65C06EE5B69', 20),
+('Kontaktpersoner', 'Afdelingsgruppe', 'N', 'Y', '', '', '', '', '9D64DE396A672CD3D168', 21),
+('Arrangementsgruppen', 'Afdelingsgruppe', 'N', 'Y', '', '', '', '', 'D1FE867728C52F2216CD', 30),
+('Distributionsgruppen', 'Arbejdsgruppe', 'N', 'Y', '', '', '', '', '398C194A202D2AFE4192', 50),
+('Fælles distributionsgruppe', 'Arbejdsgruppe', 'Y', 'Y', 'distributionsgruppen@kbhff.dk', '', 'http://kbhff.wikispaces.com/Distributionsgruppen', '', 'D34F6B69D0E64B90BE6D', 51),
+('Fælles indkøbsgruppe', 'Arbejdsgruppe', 'Y', 'Y', 'indkoeb@kbhff.dk', '', 'http://http://kbhff.wikispaces.com/Indk%C3%B8bsgruppen', '', 'C851EEC0C294386807B1', 52),
+('Fælles kommunikationsgruppe', 'Arbejdsgruppe', 'Y', 'Y', 'kommunikation@kbhff.dk', '', 'http://kbhff.wikispaces.com/Kommunikationsgruppen', 'http://kbhff.dk/groups/kommunikationsgruppen', 'A87397C556B9352CC2AF', 53),
+('Fælles økonomigruppe', 'Arbejdsgruppe', 'Y', 'Y', 'okonomi@kbhff.dk', '', 'http://kbhff.wikispaces.com/%C3%98konomigruppen', '', '3C404B51953ADBD4CA24', 54),
+('Fælles arrangementsgruppe', 'Arbejdsgruppe', 'Y', 'Y', 'arrangement@kbhff.dk', 'arrangementsgruppen@kbhff.dk', 'http://kbhff.wikispaces.com/Arrangementsgruppen', 'http://kbhff.dk/groups/arrangementsgruppen/', 'F9977552D0458DA0DA45', 55),
+('Evalueringskopset', 'Projektgruppe', 'Y', 'Y', '', '', '', '', 'CB80561EB5E1353613AA', 56),
+('Fiskegruppen', 'Projektgruppe', 'Y', 'Y', '', '', '', '', '57F3B8F6CFC3A2EE86D5', 57),
+('Formidlingskorps', 'Projektgruppe', 'Y', 'Y', '', '', '', '', 'AFF1F980520239976FD0', 58),
+('Grafikgruppen', 'Projektgruppe', 'Y', 'Y', '', '', '', '', '1EA3EB844E2836B06057', 59),
+('Hygiejnegruppen', 'Projektgruppe', 'Y', 'Y', '', '', '', '', 'CC9C77663B63872855F1', 60),
+('Håndværkergruppen', 'Projektgruppe', 'Y', 'Y', '', '', '', '', 'CABA07B204E4E8DAD82F', 61),
+('Stofposegruppen', 'Projektgruppe', 'Y', 'Y', '', '', '', '', '7B1744C7FB5BB96B2502', 62),
+('Programming Group', 'Projektgruppe', 'Y', 'Y', '', '', '', '', '01AA87815FC3CFFF9B9A', 63),
+('Regnskabsgruppen', 'Projektgruppe', 'Y', 'N', '', '', '', '', '33739974E95796407187', 64),
+('Fællesbutik-gruppen', 'Projektgruppe', 'Y', 'Y', '', '', '', '', '91CF730CF6180AFB6CFA', 65),
+('Strukturgruppen', 'Projektgruppe', 'Y', 'N', '', '', '', '', '9E08A3F876C4A17B0566', 66);
 
 --
 -- Table structure for table `ff_itemdays`

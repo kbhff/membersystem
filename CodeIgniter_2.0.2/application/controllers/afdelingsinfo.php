@@ -48,6 +48,10 @@ class Afdelingsinfo extends CI_Controller {
 
 		$this->db->select('groups.name');
 		$this->db->select('groups.type as type');
+		$this->db->select('groups.contactmail');
+		$this->db->select('groups.maillist');
+		$this->db->select('groups.wiki');
+		$this->db->select('groups.samba');
 		$this->db->select('persons.firstname');
 		$this->db->select('persons.middlename');
 		$this->db->select('persons.lastname');
@@ -60,6 +64,7 @@ class Afdelingsinfo extends CI_Controller {
 		$this->db->from('divisions');
 		$this->db->join('(ff_groupmembers,ff_persons)', 'ff_groupmembers.group = ff_groups.uid and ff_groupmembers.status = "aktiv" and ff_persons.uid = ff_groupmembers.puid', 'left');  
 		$this->db->where('common', 'Y'); 
+		$this->db->where('groups.active', 'Y'); 
 		$this->db->where('groupmembers.department = ff_divisions.uid'); 
 		$this->db->order_by('type'); 
 		$this->db->order_by('name'); 
@@ -75,6 +80,10 @@ class Afdelingsinfo extends CI_Controller {
 			$divisionname = $this->_divisionname($division);
 			$this->db->select('groups.name');
 			$this->db->select('groups.type as type');
+			$this->db->select('groups.contactmail');
+			$this->db->select('groups.maillist');
+			$this->db->select('groups.wiki');
+			$this->db->select('groups.samba');
 			$this->db->select('persons.firstname');
 			$this->db->select('persons.middlename');
 			$this->db->select('persons.lastname');
@@ -85,6 +94,7 @@ class Afdelingsinfo extends CI_Controller {
 			$this->db->from('groups');
 			$this->db->join('(ff_groupmembers,ff_persons)', 'ff_groupmembers.group = ff_groups.uid and ff_groupmembers.status = "aktiv" and ff_persons.uid = ff_groupmembers.puid and ff_groupmembers.department = ' . $division .' ', 'left');  
 			$this->db->where('common', 'N'); 
+			$this->db->where('groups.active', 'Y'); 
 			$this->db->order_by('type'); 
 			$this->db->order_by('name'); 
 			$this->db->order_by('firstname'); 
@@ -130,17 +140,55 @@ class Afdelingsinfo extends CI_Controller {
 		} else {
 			$data = array(
 	               'title' => 'KBHFF Afdelingsside',
-	               'heading' => 'Centrale n&oslash;glepersoner',
+	               'heading' => 'N&oslash;glepersoner i f&aelig;lles arbejdsgrupper',
 	               'content' => '',
 				   'divisionname' => '',
 				   'division' => 0,
 				   'debug1' => $debug1,
+				   'arbejdsgruppe' => '',
 				   'commongruppe' => $commongruppe,
+				   'roles' => '',
 	          );
 			$this->load->view('v_afdeling', $data);
 		}
 		
 	}
+
+	function groupmembers()
+	{
+		$key = $this->uri->segment(3);
+		$this->db->select('groups.name');
+		$this->db->select('groups.type as type');
+		$this->db->select('persons.firstname');
+		$this->db->select('persons.middlename');
+		$this->db->select('persons.lastname');
+		$this->db->select('persons.email');
+		$this->db->select('persons.tel');
+		$this->db->select('groupmembers.puid as member');
+		$this->db->select('groupmembers.department as division');
+		$this->db->select('divisions.name as divisionname');
+		$this->db->from('groups');
+		$this->db->from('divisions');
+		$this->db->join('(ff_groupmembers,ff_persons)', 'ff_groupmembers.group = ff_groups.uid and ff_groupmembers.status = "aktiv" and ff_persons.uid = ff_groupmembers.puid', 'left');  
+		$this->db->where('common', 'Y'); 
+		$this->db->where('key', $key); 
+		$this->db->where('groupmembers.department = ff_divisions.uid'); 
+		$this->db->order_by('type'); 
+		$this->db->order_by('name'); 
+		$this->db->order_by('firstname'); 
+		$query = $this->db->get();
+		$debug2 = $this->db->last_query();
+
+		echo ('<script language="JavaScript" type="text/javascript">' ."\n");
+		echo ('document.write("<table>");' ."\n");
+		foreach ($query->result_array() as $row)
+		{
+			echo('document.write("<tr><td>' . $row['firstname'] . ' ' .$row['middlename'] . ' ' . $row['lastname']. ' (' . $row['divisionname'] .')</td></tr>");' ."\n");
+		}
+		echo ('document.write("</table>");' ."\n");
+		echo  "\n</script>";
+	}
+
 
 	private function _divisionname($division)
 	{

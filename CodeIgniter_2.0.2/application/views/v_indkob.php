@@ -12,7 +12,16 @@
 <link rel="STYLESHEET" type="text/css" href="/ressources/1st.datepick.css">
 <script language="JavaScript" type="text/javascript">
 $(function() {
-	$('#dato').datepick();
+	$('#dato').datepick({ dateFormat: 'yyyy-mm-dd' });
+	$('#dato2').datepick({ dateFormat: 'yyyy-mm-dd' });
+	$('#dato3').datepick({ dateFormat: 'yyyy-mm-dd' });
+	$('#dato4').datepick({ dateFormat: 'yyyy-mm-dd' });
+<?
+	foreach ($bagdays as $bagday)
+	{
+		echo "	$('#dato" . $bagday['id'] . "').datepick({ dateFormat: 'yyyy-mm-dd' });\n";
+	}
+?>
 });
 </script>
 <link rel="shortcut icon" href="/images/favicon.ico" />
@@ -29,9 +38,43 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span>
 <h1><?php echo $heading;?></h1>
 <form action="/indkob/dag/" method="post">
 Vis ordreliste: <select name="pickupdate">
-<?= $sel ?>
+<?= $createsel ?>
 </select> <input type="submit" value="Vis" class="form_button"></form>
 <br>
+Se afhentningsdage:<br>
+<form action="/admin/liste/" method="post">
+Afdeling: <select name="division">
+<?= $createsel ?>
+</select>
+<input type="submit" value="Vis liste" class="form_button"><br>
+</form>
+<br>
+Opret afhentningsdag:<br>
+<form action="/admin/opret/" method="post">
+Afdeling: <select name="division">
+<?= $createsel ?>
+</select>
+Dag: <input type="text" name="dato" id="dato" size="10" maxlength="10"> Sidste ordre: <input type="text" name="dato2" id="dato2" size="10" maxlength="10"> <input type="text" name="tid2" id="tid2" value="18:30" size="5" maxlength="5">
+<input type="submit" value="Opret" class="form_button"><br>
+</form>
+<br>
+<?
+	foreach ($bagdays as $bagday)
+	{
+		echo 'Opret ' . $bagday['explained'] . 'dag:<br>'."\n";
+		echo '<form action="/admin/opretf/' . $bagday['id'] . '" method="post">' ."\n";
+		echo 'Dag: <select name="pickupday">'."\n";
+		echo $createfsel;
+		echo '</select>'."\n";
+		echo 'Sidste ordre: <input type="text" name="dato'.$bagday['id'].'" id="dato'.$bagday['id'].'" size="10" maxlength="10"> <input type="text" name="tid'.$bagday['id'].'" id="tid'.$bagday['id'].'" value="18:30" size="5" maxlength="5">';
+		echo '<input type="submit" value="Opret" class="form_button"><br>' ."\n";
+		echo '</form>' ."\n";
+		echo '<br>' ."\n";
+	
+	
+	}
+?>
+
 </span>
 <hr align="left" id="bottomhr">
 <?php echo isset($script_head) ? $script_head : ''; ?>
