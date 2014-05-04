@@ -122,11 +122,44 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 	
 	function validate_login($user, $pw, $timestamp)
 	{
+    // Load password validation framework
+    $this->load->library("phpass");
+    
+    /* Provisional code for transitioning the password hashes
+     * 
+     * This can be deleted when the remaining md5 hashes have been
+     * wiped from the database.
+     */
+    
+    // Super provisional one liner: upgrade the password column to varchar(60)
+    $this->db->query("ALTER TABLE `ff_persons` MODIFY `password` VARCHAR(60)");
+    
+    // Get current password hash
+    $this->db->select('password')->from('persons')->where('uid', $user);
+		$query = $this->db->get();
+    
+    // Test for plain md5
+		if ($query->row()->password === md5($pw))
+    {
+      // Update password hash
+      $data = array(
+        'password' => $this->phpass->hash($pw)
+      );
+      $this->db->where('uid', $user);
+      $this->db->update('persons', $data);
+    }
+    
+    
+    /* End of provisional code */
+        
+    
+    // Query database
 		$this->db->select('uid, password, last_login, active')->from('persons')->where('uid', $user)->limit(1);
 		$query = $this->db->get();
 		$row = $query->row();
-
-		if($query->num_rows() === 1 && md5($pw) === $row->password && $timestamp > mysql_to_unix($row->last_login))
+    
+    // Validate login
+    if($query->num_rows() === 1 && $this->phpass->check($pw, $row->password) && $timestamp > mysql_to_unix($row->last_login))
 		{
 			if ($row->active == 'yes')
 			{
@@ -174,8 +207,14 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 				$password_change = FALSE;
 		}
 		
-		if ($password_change)
-			$this->password = md5($this->input->post('password'));
+		if ($password_change) {
+      // Load password validation framework
+      $this->load->library("phpass");
+      
+      // Hash new password
+      $newpass = $this->input->post('password');
+			$this->password = $this->phpass->hash($newpass);;
+    }
 		
 		if ($admin)
 			$this->active = $this->input->post('active');
@@ -322,7 +361,8 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 
 	function checkpermission($permissions, $role, $division = 0)
 	{
-		if (intval($this->session->userdata('uid'))<10)	// member is superadmin & all depts
+		if (is_numeric($this->session->userdata('uid'))
+        && intval($this->session->userdata('uid'))<10)	// member is superadmin & all depts
 		{
 			return true;
 		}
