@@ -108,11 +108,6 @@ AND `ff_producttypes`.`id` = `ff_items`.`producttype_id`
 ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 
 
-		
- echo '<!---';
- print_r($this->db->last_query());
- echo '-->';
-
 		if ($query->num_rows() > 0)
 		{
 			return $query->result_array();
@@ -130,10 +125,7 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
      * This can be deleted when the remaining md5 hashes have been
      * wiped from the database.
      */
-    
-    // Super provisional one liner: upgrade the password column to varchar(60)
-    $this->db->query("ALTER TABLE `ff_persons` MODIFY `password` VARCHAR(60)");
-    
+
     // Get current password hash
     $this->db->select('password')->from('persons')->where('uid', $user);
 		$query = $this->db->get();

@@ -15,6 +15,7 @@ git clone git@github.com:kbhff/membersystem.git
 
 This will load the following test data: Two departments, one administrator, one member.
 Admin account is: `Memberno: 1, password: 1234`
+Please note: tables are dropped before create/insert. Do not use with production data!
 
 ```bash
 echo "create database membersystem" | mysql -u root -p
@@ -36,6 +37,9 @@ apt-get install libphp-phpmailer
 # You may need to:  
 # ln -s  /usr/share/php/libphp-phpmailer/class.phpmailer.php /usr/share/php/class.phpmailer.php
 ```
+
+### Install PHPExcel (https://phpexcel.codeplex.com/)
+
 
 ## Git Workflow
 
