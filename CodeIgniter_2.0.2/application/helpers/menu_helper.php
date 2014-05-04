@@ -27,11 +27,10 @@ if (is_array($permissions))
 				if ($role == 'Butiksgruppe') {
 					$butik = true;
 				}
-//				if ($role == 'FÃ¦lles indkÃ¸bsgruppe') {
-				if ($role == 'FÃ¦lles indkøbsgruppe') {
+				if ($role == utf8_encode('F�lles indk�bsgruppe')) {
 					$indkob = true;
 				}
-				if ($role == 'FÃ¦lles økonomigruppe') {
+				if ($role == utf8_encode('F�lles �konomigruppe')) {
 					$finance = true;
 				}
 			}
