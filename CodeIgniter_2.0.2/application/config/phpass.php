@@ -14,5 +14,5 @@ if (!defined('BASEPATH'))
 |                          Turn off for PHP 5.3 or above.
 */
 
-$config['iteration_count_log2'] = 8;
+$config['iteration_count_log2'] = 10;
 $config['portable_hashes']      = FALSE;

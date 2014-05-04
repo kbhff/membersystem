@@ -127,8 +127,12 @@ class Login extends CI_Controller {
 
 		if ($pw1 === $pw2)
 		{
+        // Load password validation framework
+        $this->load->library("phpass");
+        
+        
 				$sql = 'update ' . $this->db->protect_identifiers('persons', TRUE) . '
-				SET user_activation_key = "", password = "' . addslashes(md5($pw1)) .'"
+				SET user_activation_key = "", password = "' . addslashes($this->phpass->hash($pw1)) .'"
 				WHERE uid = ' . doubleval($medlemsnummer) . ' and
 				user_activation_key = "' . addslashes($user_activation_key) . '"';
 				$query = $this->db->query($sql);

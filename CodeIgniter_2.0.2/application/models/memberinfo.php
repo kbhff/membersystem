@@ -122,11 +122,16 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 	
 	function validate_login($user, $pw, $timestamp)
 	{
+    // Load password validation framework
+    $this->load->library("phpass");
+    
+    // Query database
 		$this->db->select('uid, password, last_login, active')->from('persons')->where('uid', $user)->limit(1);
 		$query = $this->db->get();
 		$row = $query->row();
-
-		if($query->num_rows() === 1 && md5($pw) === $row->password && $timestamp > mysql_to_unix($row->last_login))
+    
+    // Validate login
+    if($query->num_rows() === 1 && $this->phpass->check($pw, $row->password) && $timestamp > mysql_to_unix($row->last_login))
 		{
 			if ($row->active == 'yes')
 			{
@@ -174,8 +179,14 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
 				$password_change = FALSE;
 		}
 		
-		if ($password_change)
-			$this->password = md5($this->input->post('password'));
+		if ($password_change) {
+      // Load password validation framework
+      $this->load->library("phpass");
+      
+      // Hash new password
+      $newpass = $this->input->post('password');
+			$this->password = $this->phpass->hash($newpass);;
+    }
 		
 		if ($admin)
 			$this->active = $this->input->post('active');
