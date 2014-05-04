@@ -125,6 +125,31 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
     // Load password validation framework
     $this->load->library("phpass");
     
+    /* Provisional code for transitioning the password hashes
+     * 
+     * This can be deleted when the remaining md5 hashes have been
+     * wiped from the database.
+     */
+    
+    // Get current password hash
+    $this->db->select('password')->from('persons')->where('uid', $user);
+		$query = $this->db->get();
+    
+    // Test for plain md5
+		if ($query->row()->password === md5($pw))
+    {
+      // Update password hash
+      $data = array(
+        'password' => $this->phpass->hash($pw)
+      );
+      $this->db->where('uid', $user);
+      $this->db->update('persons', $data);
+    }
+    
+    
+    /* End of provisional code */
+        
+    
     // Query database
 		$this->db->select('uid, password, last_login, active')->from('persons')->where('uid', $user)->limit(1);
 		$query = $this->db->get();
