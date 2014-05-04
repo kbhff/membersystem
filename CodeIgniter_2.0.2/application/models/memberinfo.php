@@ -131,6 +131,9 @@ ORDER BY `ff_pickupdates`.`pickupdate`,ff_producttypes.explained ');
      * wiped from the database.
      */
     
+    // Super provisional one liner: upgrade the password column to varchar(60)
+    $this->db->query("ALTER TABLE `ff_persons` MODIFY `password` VARCHAR(60)");
+    
     // Get current password hash
     $this->db->select('password')->from('persons')->where('uid', $user);
 		$query = $this->db->get();
