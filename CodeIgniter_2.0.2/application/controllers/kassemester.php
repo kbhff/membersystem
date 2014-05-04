@@ -112,7 +112,14 @@ class Kassemester extends CI_Controller {
 
 	
 	function ordreliste($divisionday = 0) {
-		require_once 'Spreadsheet/Excel/Writer.php';
+		/** Include PHPExcel */
+		require_once 'PHPExcel.php';
+//		$cellval = trim(iconv("UTF-8","ISO-8859-1",$cell->getValue())," \t\n\r\0\x0B\xA0");
+		$this->load->helper('date');
+
+		$locale = 'da';
+		date_default_timezone_set('Europe/London');
+		$now = Date("H:i d-m-Y");
 
 		if ($this->uri->segment(3) > 0)
 		{
@@ -121,50 +128,62 @@ class Kassemester extends CI_Controller {
 			$divisionday = $this->input->post('divisionday');
 		}
 
-		// Create a workbook
-		$workbook = new Spreadsheet_Excel_Writer();
-	
-		$this->load->helper('date');
-		$now = time();
-
-		$time = unix_to_human($now, FALSE, 'eu'); // Euro time with seconds		
 		$division = $this->_division($divisionday);
 		$divisionname = $this->_divisionname($division);
 
-		$excelfile = 'Ordreliste_' . $time . '_' . $divisionname . '.xls';
+		// Create a workbook
+		$objPHPExcel = new PHPExcel();	
+		PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+		$objPHPExcel->getProperties()->setCreator("KBHFF Medlemssystem");
+		$objPHPExcel->getProperties()->setLastModifiedBy("KBHFF Medlemssystem $now");
+		$objPHPExcel->getProperties()->setTitle( utf8_decode($divisionname) . ' medlemsliste');
+		$objPHPExcel->getProperties()->setSubject("Ordreliste");
+		$objPHPExcel->getProperties()->setDescription('KBHFF ' . utf8_decode($divisionname) . " ordrer udskrevet $now");
+		$objPHPExcel->getProperties()->setKeywords("KBHFF ordreliste");
+		$objPHPExcel->getProperties()->setCategory("ordreliste");
+		$objPHPExcel->getSheet(0);
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToHeight(0);
 
-		// sending HTTP headers
-		$workbook->send($excelfile);
+		// Rename worksheet
+		$objPHPExcel->getActiveSheet()->setTitle( substr ( $divisionname . ' ' . Date("H.i d-m-Y"), 0, 31 ));
 
-		$formatbold = $workbook->addFormat();
-		$formatbold->setBold(600);
-		$workbook->setCustomColor(22, 10, 110, 10);
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getTabColor()->setRGB('33cc66');
 
-		$rowformat1 =& $workbook->addFormat(array('Size' => 10,'Color' => '22'));
-		$rowformat2 =& $workbook->addFormat(array('Size' => 10,'Color' => 'black'));
-									  
-		// Creating a worksheet
-		$tabname = 'Ordreliste, ' . $division . ' ' . unix_to_human(time(), FALSE, 'eu');
-		$worksheet =& $workbook->addWorksheet('Ordreliste, ' . utf8_decode($divisionname) );
 
-		$worksheet->setColumn(1,1,11);	// date
-		$worksheet->setColumn(2,2,6);	// date
-		$worksheet->setColumn(3,3,22);	// item
-		$worksheet->setColumn(8,8,25);	// name
-		$worksheet->setColumn(10,10,70);	// email
-		
 		// Creating a title
-	   	$worksheet->write(0, 0, 'Afd.' ,$formatbold);    
-	   	$worksheet->write(0, 1, 'Dato' ,$formatbold);    
-	   	$worksheet->write(0, 2, 'Vare' ,$formatbold);    
-	   	$worksheet->write(0, 3, 'Beskrivelse' ,$formatbold);    
-	   	$worksheet->write(0, 4, 'Antal' ,$formatbold);    
-	   	$worksheet->write(0, 5, 'Ordre.' ,$formatbold);    
-	   	$worksheet->write(0, 6, 'Betaling' ,$formatbold);    
-	   	$worksheet->write(0, 7, 'Beløb' ,$formatbold);    
-	   	$worksheet->write(0, 8, 'Navn' ,$formatbold);    
-	   	$worksheet->write(0, 9, 'Mobil' ,$formatbold);    
-	   	$worksheet->write(0, 10, 'Email' ,$formatbold);    
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getStyle('A1:K1')->getFont()->setSize(13)->getColor()->setARGB(PHPExcel_Style_Color::COLOR_DARKGREEN);
+		$objWorksheet->setCellValueByColumnAndRow(0, 1, 'Afd.');
+		$objWorksheet->setCellValueByColumnAndRow(1, 1, 'Dato');
+		$objWorksheet->setCellValueByColumnAndRow(2, 1, 'Antal');
+		$objWorksheet->setCellValueByColumnAndRow(3, 1, 'Varenr.');
+		$objWorksheet->setCellValueByColumnAndRow(4, 1, 'Beskrivelse');
+		$objWorksheet->setCellValueByColumnAndRow(5, 1, 'Ordre');    
+		$objWorksheet->setCellValueByColumnAndRow(6, 1, 'Betaling');    
+		$objWorksheet->setCellValueByColumnAndRow(7, 1, 'Beløb');
+		$objWorksheet->setCellValueByColumnAndRow(8, 1, 'Navn');    
+		$objWorksheet->setCellValueByColumnAndRow(9, 1, 'Mobil');    
+		$objWorksheet->setCellValueByColumnAndRow(10, 1, 'Email');    
+			
+		// Autoset widths
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getColumnDimension('A')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('B')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('C')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('D')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('E')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('F')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('G')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('H')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('I')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('J')->setAutoSize(true);
+		$objWorksheet->getColumnDimension('K')->setAutoSize(true);
+
+
 		if ($divisionday > 0)
 		{
 			$select = ' AND ff_pickupdates.uid = ' . (int)$divisionday;
@@ -190,110 +209,147 @@ class Kassemester extends CI_Controller {
 		AND ff_orderlines.puid = ff_persons.uid ' . $select .
 		' ORDER BY ff_pickupdates.pickupdate, ff_orderhead.orderno');
 		
-		$currentrow = 1;
+		$rowformat1 = array(
+		'font' => array(
+			'bold' => false,
+			),
+		'fill' => array(
+			'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			'color' =>  array(
+				'rgb' =>  'd9ffe2',
+				),
+			)
+		);
+
+		$rowformat2 = array(
+		'font' => array(
+			'bold' => false,
+			)
+		);
+
+		$currentrow = 2;
 		foreach ($query->result() as $row)
 		{
-			$dynformat = alternator('rowformat1', 'rowformat2');
-			$format = $$dynformat;
-			$worksheet->write($currentrow, 0, utf8_decode("$row->name"),$format);
-			$worksheet->write($currentrow, 1, utf8_decode("$row->pickupdate"),$format);
-			$worksheet->write($currentrow, 2, utf8_decode("$row->article"),$format);
-			$worksheet->write($currentrow, 3, utf8_decode("$row->txt"),$format);
-			$worksheet->write($currentrow, 4, utf8_decode("$row->quant"),$format);
-			$worksheet->write($currentrow, 5, utf8_decode("$row->orderno"),$format);
-			$worksheet->write($currentrow, 6, utf8_decode("$row->status1"),$format);
-			$worksheet->write($currentrow, 7, utf8_decode("$row->amount"),$format);
 			if ($row->middlename > '')
 			{
 				$name = $row->firstname  . ' ' . $row->middlename . ' ' . $row->lastname ;
 			} else {
 				$name = $row->firstname  . ' ' . $row->lastname ;
 			}
-			$worksheet->write($currentrow, 8, utf8_decode("$name"),$format);
-			$worksheet->write($currentrow, 9, utf8_decode("$row->tel"),$format);
-			$worksheet->write($currentrow, 10, utf8_decode("$row->email"),$format);
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValueByColumnAndRow(0, $currentrow, ("$row->name"))
+				->setCellValueByColumnAndRow(1, $currentrow, ("$row->pickupdate"))
+				->setCellValueByColumnAndRow(2, $currentrow, ("$row->quant"))
+				->setCellValueByColumnAndRow(3, $currentrow, ("$row->article"))
+				->setCellValueByColumnAndRow(4, $currentrow, ("$row->txt"))
+				->setCellValueByColumnAndRow(5, $currentrow, ("$row->orderno"))
+				->setCellValueByColumnAndRow(6, $currentrow, ("$row->status1"))
+				->setCellValueByColumnAndRow(7, $currentrow, ("$row->amount"))
+				->setCellValueByColumnAndRow(8, $currentrow, ($name))
+				->setCellValueByColumnAndRow(9, $currentrow, ("$row->tel"))
+				->setCellValueByColumnAndRow(10, $currentrow, ("$row->email"));
+			$dynformat = alternator('rowformat1', 'rowformat2');
+			$format = $$dynformat;
+			$objPHPExcel->getActiveSheet()->getStyle('A' . $currentrow .':K' . $currentrow)->applyFromArray($format);
 			$currentrow++;
 		}
-		$finalExcelRow = $currentrow;	// rowstart in Excel is 1, so is correct after ++
-		$worksheet->write($currentrow, 0, utf8_decode("SUM"),$formatbold);
-		$formula = '=SUM(E2:E'.$finalExcelRow.')';
-		$worksheet->writeFormula($currentrow,4,$formula);
-		$formula = '=SUM(H2:H'.$finalExcelRow.')';
-		$worksheet->writeFormula($currentrow,7,$formula);
-		
 
-		// Let's send the file
-		$workbook->close();
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$highestRow = $objWorksheet->getHighestRow(); 
+		
+		// Align
+		$objPHPExcel->getActiveSheet()->getStyle('C1:C' . $highestRow)
+			->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		$objPHPExcel->getActiveSheet()->getStyle('D1:D' . $highestRow)
+			->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		$objPHPExcel->getActiveSheet()->getStyle('F1:F' . $highestRow)
+			->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		$objPHPExcel->getActiveSheet()->getStyle('H1:H' . $highestRow)
+			->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+ 
+ 		// Numberformat
+		$objPHPExcel->getActiveSheet()->getStyle('H1:H' . $highestRow)->getNumberFormat()
+			->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			
+		// Set repeated headers
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(1, 1);
+
+		// Specify printing area
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$highestRow = $objWorksheet->getHighestRow(); 
+		$highestColumn = $objWorksheet->getHighestColumn(); 
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setPrintArea('A1:' . $highestColumn . $highestRow );
+
+		
+		// Redirect output to a clients web browser (Excel5)
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="KBHFF ordreliste ' . $divisionname . ' ' . $now .'.xls"');
+		header('Cache-Control: max-age=0');
+		// If you're serving to IE 9, then the following may be needed
+		header('Cache-Control: max-age=1');
+		
+		// If you're serving to IE over SSL, then the following may be needed
+		header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header ('Pragma: public'); // HTTP/1.0
+		
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
 	}
 
-	function medlemordreliste($division = 0) {
-$time_start = microtime(true);
-apache_setenv('KeepAliveTimeout', 60);
-apache_setenv('Timeout', 60);
-apache_setenv('no-gzip', 0);
-ini_set('zlib.output_compression', 1);
-
-error_reporting(E_ALL);
-
- ini_set('display_errors','On');
- 
-ini_set('error_log','/var/log/php.log'); #linux
-  set_time_limit(300);
-  
+	function medlemordreliste($divisionday = 0) {
+		$time_start = microtime(true);
+		apache_setenv('KeepAliveTimeout', 300);
+		apache_setenv('Timeout', 300);
+		apache_setenv('no-gzip', 0);
+		ini_set('zlib.output_compression', 1);
+		error_reporting(E_ALL);
+		ini_set('display_errors','On');
+		ini_set('error_log','/var/log/php.log'); #linux
+		set_time_limit(300);
 		ini_set('max_execution_time', 300); 
-/*
-  @apache_setenv('no-gzip', 1);
-     @ini_set('zlib.output_compression', 0);
-     @ini_set('implicit_flush', 1);
-     for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
-     ob_implicit_flush(1);
-*/
- 		require_once 'Spreadsheet/Excel/Writer.php';
+		
+		/** Include PHPExcel */
+		require_once 'PHPExcel.php';
+//		$cellval = trim(iconv("UTF-8","ISO-8859-1",$cell->getValue())," \t\n\r\0\x0B\xA0");
+		$this->load->helper('date');
+
+		$locale = 'da';
+		date_default_timezone_set('Europe/London');
+		$now = Date("H:i d-m-Y");
 
 		if ($this->uri->segment(3) > 0)
 		{
-			$division = $this->uri->segment(3);
+			$divisionday = $this->uri->segment(3);
 		} else {
-			$division = $this->input->post('division');
+			$divisionday = $this->input->post('divisionday');
 		}
 
-		// Create a workbook
-//		$workbook = new Spreadsheet_Excel_Writer('/www/kbhff.skrig.dk/excel/test.xls');
-		$workbook = new Spreadsheet_Excel_Writer();
-	
-		$this->load->helper('date');
-		$now = time();
-
-		$time = unix_to_human($now, FALSE, 'eu'); // Euro time with seconds		
+		$division = $this->_division($divisionday);
 		$divisionname = $this->_divisionname($division);
 
-		$excelfile = 'Medlemmer_ordrer_' . $time . '_' . utf8_decode($divisionname) . '.xls';
+		// Create a workbook
+		$objPHPExcel = new PHPExcel();	
+		PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+		$objPHPExcel->getProperties()->setCreator("KBHFF Medlemssystem");
+		$objPHPExcel->getProperties()->setLastModifiedBy("KBHFF Medlemssystem $now");
+		$objPHPExcel->getProperties()->setTitle( utf8_decode($divisionname) . ' medlemsliste');
+		$objPHPExcel->getProperties()->setSubject("Ordreliste");
+		$objPHPExcel->getProperties()->setDescription('KBHFF ' . utf8_decode($divisionname) . " ordrer udskrevet $now");
+		$objPHPExcel->getProperties()->setKeywords("KBHFF ordreliste");
+		$objPHPExcel->getProperties()->setCategory("ordreliste");
+		$objPHPExcel->getSheet(0);
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToHeight(0);
 
-		// sending HTTP headers
-		$workbook->send($excelfile);
+		// Rename worksheet
+		$objPHPExcel->getActiveSheet()->setTitle( substr ( $divisionname . ' ' . Date("H.i d-m-Y"), 0, 31 ));
 
-		$formatbold = $workbook->addFormat();
-		$formatbold->setBold(600);
-		$workbook->setCustomColor(12, 218, 254, 218);
-		$format_our_green =& $workbook->addFormat();
-		$format_our_green->setFgColor(12);
-
-		
-		
-		$rowformat1 =& $workbook->addFormat(array('Size' => 10,'Color' => 'black'));
-		$rowformat2 =& $workbook->addFormat(array('Size' => 10,'Color' => 'black','FgColor' => '12'));
-									  
-		// Creating a worksheet
-		$tabname = 'Oversigt, ' . $division . ' ' . unix_to_human(time(), FALSE, 'eu');
-		$worksheet =& $workbook->addWorksheet('Oversigt, ' . utf8_decode($divisionname) );
-
-		$worksheet->setColumn(0,0,10);	// medlemsnummer
-		$worksheet->setColumn(1,1,30);	// navn
-		$worksheet->setColumn(2,12,11);	// orderdate
-		
-		// Creating a title
-	   	$worksheet->write(0, 0, 'Medlem' ,$formatbold);    
-	   	$worksheet->write(0, 1, 'Navn' ,$formatbold);    
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getTabColor()->setRGB('33cc66');
 
 		$query = $this->db->query('SELECT uid, firstname, middlename, lastname 
 		FROM ff_persons, ff_division_members
@@ -301,69 +357,120 @@ ini_set('error_log','/var/log/php.log'); #linux
 		AND ff_division_members.division = ' . (int)$division .
 		' ORDER BY ff_persons.firstname');
 		
-		$currentrow = 1;
+		$rowformat1 = array(
+		'font' => array(
+			'bold' => false,
+			),
+		'fill' => array(
+			'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			'color' =>  array(
+				'rgb' =>  'd9ffe2',
+				),
+			)
+		);
+
+		$rowformat2 = array(
+		'font' => array(
+			'bold' => false,
+			)
+		);
+
+		$datequery = $this->db->query('SELECT uid, pickupdate FROM ff_pickupdates WHERE division = ' . (int)$division .
+		' and datediff(now(),pickupdate) < 100  ORDER BY pickupdate ');
+		$ordercolstart = 2;
+		$count = 0;
+
+		foreach ($datequery->result() as $pickupdate)
+		{
+			// set col names
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($ordercolstart + $count, 1, $pickupdate->pickupdate);
+			$count++;
+		}
+
+		$highestColumm = $objPHPExcel->setActiveSheetIndex(0)->getHighestColumn();
+
+		$currentrow = 2;
 		foreach ($query->result() as $row)
 		{
-			$dynformat = alternator('rowformat1', 'rowformat2');
-			$format = $$dynformat;
-			$worksheet->write($currentrow, 0, utf8_decode("$row->uid"),$format);
 			if ($row->middlename > '')
 			{
 				$name = $row->firstname  . ' ' . $row->middlename . ' ' . $row->lastname ;
 			} else {
 				$name = $row->firstname  . ' ' . $row->lastname ;
 			}
-			// get member orderdetails
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValueByColumnAndRow(0, $currentrow, ("$row->uid"))
+				->setCellValueByColumnAndRow(1, $currentrow, ($name));
+
+			$count = 0;
 			$datequery = $this->db->query('SELECT uid, pickupdate FROM ff_pickupdates WHERE division = ' . (int)$division .
 			' and datediff(now(),pickupdate) < 100  ORDER BY pickupdate ');
-			$ordercolstart = 2;
-			$count = 0;
+
 			foreach ($datequery->result() as $pickupdate)
 			{
-				if ($currentrow == 1)	// only print coltitles first time
-				{
-					$worksheet->write(0, $ordercolstart + $count, $pickupdate->pickupdate,$formatbold);
-				}
 				$order = $this->_get_member_dateorder($row->uid, $pickupdate->uid);
 				if ($order > 0)
 				{
-					$worksheet->write($currentrow, $ordercolstart + $count, $order,$format);
+					$objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($ordercolstart + $count, $currentrow, ($order));
 				} else {
-					$worksheet->write($currentrow, $ordercolstart + $count, '',$format);
+					$objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($ordercolstart + $count, $currentrow, (''));
 				}
 				$count++;
 			}
-			$worksheet->write($currentrow, 1, utf8_decode("$name"),$format);
+				
+			$dynformat = alternator('rowformat1', 'rowformat2');
+			$format = $$dynformat;
+			$objPHPExcel->getActiveSheet()->getStyle('A' . $currentrow .':' . $highestColumm . $currentrow)->applyFromArray($format);
 			$currentrow++;
 		}
-		$finalExcelRow = $currentrow;	// rowstart in Excel is 1, so is correct after ++
-		$worksheet->write($currentrow, 0, utf8_decode("SUM"),$formatbold);
-	
-		$tempcol = 3;	
-		$tempmaxcol = $ordercolstart + $count;
-		while ($tempcol <= $tempmaxcol)
-		{ 
-			if ($tempcol>26)
-			{
-				$formula = '=SUM(A' . $this->_numtochars($tempcol) . '2:A'. $this->_numtochars($tempcol) .$finalExcelRow.')';
-			} else {
-				$formula = '=SUM(' . $this->_numtochars($tempcol) . '2:'. $this->_numtochars($tempcol) .$finalExcelRow.')';
-			}
-			$worksheet->writeFormula($currentrow,$tempcol-1,$formula);
-			$tempcol++;
-		}
-		
-		$time_end = microtime(true);
-		$time = $time_end - $time_start;
-		$worksheet->write($currentrow+1, 1, $time);
-		$x = memory_get_peak_usage(true) ;
-		$x2 = memory_get_peak_usage() ;
-		$worksheet->write($currentrow+2, 1, $x);
-		$worksheet->write($currentrow+3, 1, $x2);
 
-		// Let's send the file
-		$workbook->close();
+		$highestRow = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
+		
+		// Creating a title
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$objWorksheet->getStyle('A1:' . $highestColumm . '1')->getFont()->setSize(13)->getColor()->setARGB(PHPExcel_Style_Color::COLOR_DARKGREEN);
+		$objWorksheet->setCellValueByColumnAndRow(0, 1, 'Medlem');
+		$objWorksheet->setCellValueByColumnAndRow(1, 1, 'Navn');
+
+		// Autoset widths
+		foreach(range('A',$highestColumm) as $columnID) {
+    		$objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
+        		->setAutoSize(true);
+		}
+
+		
+		// Align
+ 
+ 		// Numberformat
+			
+		// Set repeated headers
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(1, 1);
+
+		// Specify printing area
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$highestRow = $objWorksheet->getHighestRow(); 
+		$highestColumn = $objWorksheet->getHighestColumn(); 
+		$objPHPExcel->getActiveSheet()->getPageSetup()->setPrintArea('A1:' . $highestColumn . $highestRow );
+
+		
+		// Redirect output to a clients web browser (Excel5)
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="KBHFF ' . $divisionname . ' alle ordrer ' . $now .'.xls"');
+		header('Cache-Control: max-age=0');
+		// If you're serving to IE 9, then the following may be needed
+		header('Cache-Control: max-age=1');
+		
+		// If you're serving to IE over SSL, then the following may be needed
+		header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header ('Pragma: public'); // HTTP/1.0
+		
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
 	}
+	
+	
 
 	private function _get_member_dateorder($member, $date)
 	{
