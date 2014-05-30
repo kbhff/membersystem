@@ -25,9 +25,9 @@
 F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span><br clear="all">
 	<?php 
 		echo getMenu(site_url(), $this->session->userdata('permissions'), $this->session->userdata('uid')); 
-echo ('<!--');
-print_r($pickups);
-echo ('-->');
+// echo ('<!--');
+// print_r($pickups);
+// echo ('-->');
 
 	?>
 <h3>Registrering af kontantordrer, <?= $divisionname ?></h3>
@@ -94,9 +94,16 @@ foreach ($pickups as $item)
 		foreach ($members as $member)
 		{
 			echo '		<tr class="'.$classes[$count%2].'"'.">\n		";
-			echo '			<td><input type="radio" name="puid" value="'.$member['uid'].'" /></td>'."\n";
+			if ($member['active'] == '2')
+			{
+			echo '			<td><input type="radio" name="puid" value="'.$member['uid'] .'" /></td>'."\n";
 			echo '			<td>'.$member['uid'].'</td>'."\n";
 			echo '			<td>'.$member['name'].'</td>'."\n";
+			} else{
+				echo '			<td>&nbsp;</td>'."\n";
+				echo '			<td>'.$member['uid'].'</td>'."\n";
+				echo '			<td>(ikke aktiv: '.$member['name'].')</td>'."\n";
+			}
 			echo '			<td><a href="mailto:'.$member['email'].'">mail</a></td>'."\n";
 			echo '			<td>'.$member['tel'].' ' . $member['tel2'].'</td>'."\n";
 			echo "		</tr>\n";
