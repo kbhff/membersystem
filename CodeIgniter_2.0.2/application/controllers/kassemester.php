@@ -321,12 +321,12 @@ class Kassemester extends CI_Controller {
 
 		if ($this->uri->segment(3) > 0)
 		{
-			$divisionday = $this->uri->segment(3);
+			$division = $this->uri->segment(3);
 		} else {
 			$divisionday = $this->input->post('divisionday');
+			$division = $this->_division($divisionday);
 		}
 
-		$division = $this->_division($divisionday);
 		$divisionname = $this->_divisionname($division);
 
 		// Create a workbook
