@@ -18,7 +18,7 @@ class Admin extends CI_Controller {
 
     function index() {
 		if (! intval($this->session->userdata('uid')) > 0)
-			redirect('/login');		
+			redirect('/login');
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
         $this->javascript->compile();
 
@@ -35,7 +35,7 @@ class Admin extends CI_Controller {
 		$this->db->select('divisions.name, divisions.uid');
 		$this->db->from('divisions');
 		$this->db->where('type','aktiv');
-		$this->db->order_by('divisions.name'); 
+		$this->db->order_by('divisions.name');
 		$query = $this->db->get();
 
 		foreach ($query->result_array() as $row)
@@ -60,13 +60,13 @@ class Admin extends CI_Controller {
 		$this->db->from('producttypes');
 		$this->db->where('bag','Y');
 		$this->db->where('id !=',FF_GROCERYBAG);
-		$this->db->order_by('sortkey'); 
+		$this->db->order_by('sortkey');
 		$query = $this->db->get();
 		$bagdays = $query->result_array();
-		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" and id != 47');
+		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" and id != ' . FF_GROCERYBAG);
 		$bagdays = $q2->result_array();
 		$content = '';
-		
+
 		$data = array(
                'title' => 'KBHFF Administrationsside',
                'heading' => 'KBHFF Administrationsside',
@@ -101,11 +101,11 @@ class Admin extends CI_Controller {
 		$this->db->join('membernote', 'membernote.puid = ff_persons.uid', 'left');
 		$this->db->from('persons, division_members');
 		$this->db->where('persons.created >', $date);
-		$this->db->where('ff_division_members.member', 'ff_persons.uid', false); 
+		$this->db->where('ff_division_members.member', 'ff_persons.uid', false);
 
 		if ((int)$division > 0)
 		{
-			$this->db->where('division_members.division', (int)$division); 
+			$this->db->where('division_members.division', (int)$division);
 		}
 
 		$this->db->order_by('persons.created', 'desc');
@@ -120,10 +120,10 @@ class Admin extends CI_Controller {
 
 		$this->load->view('v_nye_medlemmer.php', $data);
 	}
-	
+
     function opret() {
 		if (! intval($this->session->userdata('uid')) > 0)
-			redirect('/login');		
+			redirect('/login');
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
         $this->javascript->compile();
 
@@ -143,7 +143,7 @@ class Admin extends CI_Controller {
 			$error = true;
 			$errstr .= 'Sidste frist for &aelig;ndring skal ligge f&oslash;r afhentningsdagen<br>';
 		}
-		
+
 		if ( $c1 <= now() )
 		{
 			$error = true;
@@ -155,19 +155,19 @@ class Admin extends CI_Controller {
 			$error = true;
 			$errstr .= 'Sidste frist for &aelig;ndring skal ligge i fremtiden<br>';
 		}
-		
-		
+
+
 		if ($this->_checkpickupdate($dato, $division))
 		{
 			$error = true;
 			$errstr .= 'Afhentningsdagen er allerede oprettet<br>';
 		}
-		
+
 		if (! $error)
 		{
 			$sql = 'INSERT INTO ' . $this->db->protect_identifiers('pickupdates', TRUE) . ' (division, pickupdate) VALUES (' . (int)$division . ','.$this->db->escape($dato).')';
 			$this->db->query($sql);
-			$sql = 'INSERT INTO ' . $this->db->protect_identifiers('itemdays', TRUE) . ' (item, pickupday, lastorder) VALUES (' . FF_GROCERYBAG . ',' . $this->db->insert_id().',' .$this->db->escape("$dato2 $tid2:00").')';
+			$sql = 'REPLACE INTO ' . $this->db->protect_identifiers('itemdays', TRUE) . ' (item, pickupday, lastorder) VALUES (' . FF_GROCERYBAG . ',' . $this->db->insert_id().',' .$this->db->escape("$dato2 $tid2:00").')';
 			$this->db->query($sql);
 			$msg = 'Afhentningsdag ' . $dato . ' er oprettet.<br>';
 		} else {
@@ -176,11 +176,11 @@ class Admin extends CI_Controller {
 
 		$this->_displayliste($division, $msg);
     }
-	
+
 
     function opretf() {
 		if (! intval($this->session->userdata('uid')) > 0)
-			redirect('/login');		
+			redirect('/login');
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
         $this->javascript->compile();
 
@@ -198,8 +198,8 @@ class Admin extends CI_Controller {
 		$this->db->select('pickupdate');
 		$this->db->from('divisions');
 		$this->db->from('pickupdates ');
-		$this->db->where('pickupdates.uid', (int)$pickupday); 
-		$this->db->where('ff_divisions.uid = ff_pickupdates.division'); 
+		$this->db->where('pickupdates.uid', (int)$pickupday);
+		$this->db->where('ff_divisions.uid = ff_pickupdates.division');
 		$query = $this->db->get();
 		$row = $query->row();
 		$division = $row->uid;
@@ -213,10 +213,10 @@ class Admin extends CI_Controller {
 			$error = true;
 			$errstr .= 'Sidste frist for &aelig;ndring ('. $dato3 .') skal ligge i fremtiden  ('.  $c2 .' < ' . now() . ')<br>';
 		}
-		
+
 		if (! $error)
 		{
-			$sql = 'INSERT INTO ' . $this->db->protect_identifiers('itemdays', TRUE) . ' (item, pickupday, lastorder) VALUES (' . $bagitem . ',' . (int)$pickupday .',' .$this->db->escape("$dato3 $tid3:00").')';
+			$sql = 'REPLACE INTO ' . $this->db->protect_identifiers('itemdays', TRUE) . ' (item, pickupday, lastorder) VALUES (' . $bagitem . ',' . (int)$pickupday .',' .$this->db->escape("$dato3 $tid3:00").')';
 			$this->db->query($sql);
 			$msg = 'Afhentningsdag ' . $date .' for frugtpose er oprettet.<br>';
 		} else {
@@ -246,18 +246,18 @@ class Admin extends CI_Controller {
 		$this->db->select("division, pickupdate as pickupdatesort, date_format(`ff_pickupdates`.`pickupdate`,'%d/%m/%Y') as pickupdate, date_format(`ff_itemdays`.`lastorder`,'%d/%m/%Y %k:%i') as lastorder, uid", FALSE);
 		$this->db->from('pickupdates');
 		$this->db->from('itemdays');
-		$this->db->where('ff_pickupdates.uid', 'ff_itemdays.pickupday', FALSE); 
-		$this->db->where('itemdays.item', FF_GROCERYBAG); 
-		$this->db->where('division', (int)$division); 
-		$this->db->where('pickupdate <= curdate()'); 
-		$this->db->order_by('pickupdatesort', 'desc'); 
+		$this->db->where('ff_pickupdates.uid', 'ff_itemdays.pickupday', FALSE);
+		$this->db->where('itemdays.item', FF_GROCERYBAG);
+		$this->db->where('division', (int)$division);
+		$this->db->where('pickupdate <= curdate()');
+		$this->db->order_by('pickupdatesort', 'desc');
 		$query = $this->db->get();
 		$afhentningsdage = $query->result_array();
 		$divisionname = $this->_divisionname($division);
-		
+
 		if ($dag == 0)
 		{
-	
+
 			$content = $divisionname . ': Dagens salg<br>';
 			$data = array(
 	               'title' => 'KBHFF Administrationsside',
@@ -269,12 +269,12 @@ class Admin extends CI_Controller {
 				   'ikkeafhentet' => '',
 	               'afhentningsdage' => $afhentningsdage,
 	          );
-	
+
 			$this->load->view('v_dagens_salg', $data);
 		} else {
 			$this->db->select('pickupdate');
 			$this->db->from('pickupdates');
-			$this->db->where('uid', (int)$dag); 
+			$this->db->where('uid', (int)$dag);
 			$query = $this->db->get();
 			$row = $query->row();
 			$dagsdato = $row->pickupdate;
@@ -297,9 +297,9 @@ class Admin extends CI_Controller {
 	          );
 			$this->load->view('v_dagens_salg', $data);
 		}
-		
+
 	}
-	
+
 	function ikke_afhentet($limit = 5)
 	{
 
@@ -314,18 +314,18 @@ class Admin extends CI_Controller {
 
 		$this->db->select("divisions.uid, divisions.name, divisions.shortname");
 		$this->db->from('divisions');
-		$this->db->where('type', 'aktiv'); 
-		$this->db->order_by('divisions.name', 'asc'); 
+		$this->db->where('type', 'aktiv');
+		$this->db->order_by('divisions.name', 'asc');
 		$query = $this->db->get();
 		$divisions = $query->result_array();
 
-	
+
 		$this->db->select('pickupdate');
 		$this->db->distinct();
 		$this->db->from('pickupdates');
-		$this->db->where('pickupdate <= curdate()'); 
-		$this->db->order_by('pickupdate', 'desc'); 
-		$this->db->limit($limit); 
+		$this->db->where('pickupdate <= curdate()');
+		$this->db->order_by('pickupdate', 'desc');
+		$this->db->limit($limit);
 		$queryday = $this->db->get();
 		$debug = $this->db->last_query();
 		foreach ($queryday->result_array() as $row)
@@ -342,7 +342,7 @@ class Admin extends CI_Controller {
 			   'ikkeafhentet' => $ikkeafhentet,
           );
 		$this->load->view('v_ikke_afhentet', $data);
-	
+
 	}
 
 
@@ -382,19 +382,19 @@ class Admin extends CI_Controller {
 			$this->db->distinct();
 			$this->db->from('groups');
 			$this->db->join('groupmembers', 'groupmembers.group = groups.uid and ff_groupmembers.status = "aktiv" and ff_groupmembers.puid = ' . (int)$puid, 'left');
-			$this->db->where('type', 'Arbejdsgruppe'); 
-			$this->db->order_by('name'); 
+			$this->db->where('type', 'Arbejdsgruppe');
+			$this->db->order_by('name');
 			$query = $this->db->get();
 			$arbejdsgruppe = $query->result_array();
-			
+
 			$this->db->select('name');
 			$this->db->select('uid');
 			$this->db->select('groupmembers.puid as member');
 			$this->db->distinct();
 			$this->db->from('groups');
 			$this->db->join('groupmembers', 'groupmembers.group = groups.uid and ff_groupmembers.status = "aktiv" and ff_groupmembers.puid = ' . (int)$puid, 'left');
-			$this->db->where('type', 'Projektgruppe'); 
-			$this->db->order_by('name'); 
+			$this->db->where('type', 'Projektgruppe');
+			$this->db->order_by('name');
 			$query = $this->db->get();
 			$projektgruppe = $query->result_array();
 
@@ -408,11 +408,11 @@ class Admin extends CI_Controller {
 			$this->db->from('divisions');
 			$this->db->from('division_members');
 			$this->db->join('groupmembers', 'groupmembers.group = groups.uid and ff_groupmembers.status = "aktiv" and ff_groupmembers.department = ff_division_members.division and ff_groupmembers.puid = ' . (int)$puid, 'left');
-			$this->db->where('groups.type', 'Afdelingsgruppe'); 
-			$this->db->where('division_members.division = ff_divisions.uid'); 
-			$this->db->where('division_members.member', (int)$puid); 
-			$this->db->order_by('divisions.name'); 
-			$this->db->order_by('groups.name'); 
+			$this->db->where('groups.type', 'Afdelingsgruppe');
+			$this->db->where('division_members.division = ff_divisions.uid');
+			$this->db->where('division_members.member', (int)$puid);
+			$this->db->order_by('divisions.name');
+			$this->db->order_by('groups.name');
 			$query = $this->db->get();
 			$afdelingsgruppe = $query->result_array();
 
@@ -426,11 +426,11 @@ class Admin extends CI_Controller {
 			$this->db->from('divisions');
 			$this->db->from('division_members');
 			$this->db->join('roles', 'roles.role = chore_types.uid and ff_roles.status = "aktiv" and ff_roles.department = ff_division_members.division and ff_roles.puid = ' . (int)$puid, 'left');
-			$this->db->where('division_members.division = ff_divisions.uid'); 
-			$this->db->where('division_members.member', (int)$puid); 
-			$this->db->where('chore_types.auth >', 0); 
-			$this->db->order_by('divisions.name'); 
-			$this->db->order_by('chore_types.name'); 
+			$this->db->where('division_members.division = ff_divisions.uid');
+			$this->db->where('division_members.member', (int)$puid);
+			$this->db->where('chore_types.auth >', 0);
+			$this->db->order_by('divisions.name');
+			$this->db->order_by('chore_types.name');
 			$query = $this->db->get();
 			$roles = $query->result_array();
 
@@ -440,7 +440,7 @@ class Admin extends CI_Controller {
 	               'heading' => 'Vedligeholdelse af gruppe-medlemskab',
 	               'content' => 'Her kan du til/framelde gruppemedlemskaber.<br>',
 				   'division' => $division,
-				   'divisionname' => $this->_divisionname($division), 
+				   'divisionname' => $this->_divisionname($division),
 				   'puid' => $puid,
 				   'message' => '',
 				   'debug' => $this->db->last_query(),
@@ -451,13 +451,13 @@ class Admin extends CI_Controller {
 				   'roles' => $roles,
 				   'posts' => $posts,
 	          );
-	
+
 			$this->load->view('v_groups', $data);
 		} else {
 			if ($this->input->post('status'))
 			{
 				$division = $this->uri->segment(3);
-				$this->db->select('uid')->from('groups')->where('groups.type <>', 'Afdelingsgruppe'); 
+				$this->db->select('uid')->from('groups')->where('groups.type <>', 'Afdelingsgruppe');
 				$query = $this->db->get();
 				if ($query->num_rows() > 0)
 				{
@@ -469,13 +469,13 @@ class Admin extends CI_Controller {
 					}
 				}
 
-				$this->db->select('division_members.division')->from('division_members')->where('division_members.member =', $this->input->post('puid')); 
+				$this->db->select('division_members.division')->from('division_members')->where('division_members.member =', $this->input->post('puid'));
 				$divquery = $this->db->get();
 				if ($divquery->num_rows() > 0)
 				{
 					foreach ($divquery->result() as $divrow)
 					{
-						$this->db->select('chore_types.uid')->from('chore_types')->where('chore_types.auth >', 0); 
+						$this->db->select('chore_types.uid')->from('chore_types')->where('chore_types.auth >', 0);
 						$query = $this->db->get();
 						if ($query->num_rows() > 0)
 						{
@@ -485,8 +485,8 @@ class Admin extends CI_Controller {
 								$this->_updaterolemembership($row->uid, $divrow->division, $this->input->post('puid'), $status);
 
 							}
-						} 
-						$this->db->select('uid')->from('groups')->where('groups.type', 'Afdelingsgruppe'); 
+						}
+						$this->db->select('uid')->from('groups')->where('groups.type', 'Afdelingsgruppe');
 						$query = $this->db->get();
 						if ($query->num_rows() > 0)
 						{
@@ -496,7 +496,7 @@ class Admin extends CI_Controller {
 								$this->_updategroupmembership($row->uid, $divrow->division, $this->input->post('puid'), $status);
 
 							}
-						} 
+						}
 					}
 				}
 				$division = $this->uri->segment(3);
@@ -512,7 +512,7 @@ class Admin extends CI_Controller {
 	               'title' => 'KBHFF Administrationsside',
 	               'heading' => 'Vedligeholdelse af gruppe-medlemskab',
 	               'division' => $division,
-				   'divisionname' => $this->_divisionname($division), 
+				   'divisionname' => $this->_divisionname($division),
 	               'content' => '',
 				   'message' => $message,
 				   'posts' => $posts,
@@ -533,7 +533,7 @@ class Admin extends CI_Controller {
 	}
 
 	function _updaterolemembership($role, $division, $puid, $status){
-		// role 	level 	puid 	department 	auth_by 	valid_from 	expires		
+		// role 	level 	puid 	department 	auth_by 	valid_from 	expires
 		if ($status > '')
 		{
 			$active = 'aktiv';
@@ -542,14 +542,14 @@ class Admin extends CI_Controller {
 		}
 		$query = $this->db->query('replace into `ff_roles` set `role` = ' . (int)$role . ', puid = ' . (int)$puid . ', level = 1, department = ' . (int)$division . ', status = "' . $active . '", auth_by = "' . $this->session->userdata('uid') . '", valid_from = curdate(), expires = date_add(now(), interval 1 year) ' );
 	}
-	
-	
+
+
     function _checkpickupdate($date, $division) {
 
 		$this->db->select('pickupdate');
 		$this->db->from('pickupdates');
-		$this->db->where('division', (int)$division); 
-		$this->db->where('pickupdate', $date); 
+		$this->db->where('division', (int)$division);
+		$this->db->where('pickupdate', $date);
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -562,7 +562,7 @@ class Admin extends CI_Controller {
 		} else {
 			$select = 'AND ff_orderhead.orderno = ' . (int)$orderno . ' ';
 		}
-		$query = $this->db->query('SELECT 
+		$query = $this->db->query('SELECT
 		ff_orderhead.orderno, ff_orderlines.puid, ff_orderlines.amount, ff_orderhead.status1, ff_orderhead.status2, ff_orderhead.cc_trans_no, ff_orderhead.cc_trans_no
 		FROM ff_orderlines, ff_orderhead
 		WHERE ff_orderlines.orderno = ff_orderhead.orderno ' . $select .
@@ -608,7 +608,7 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 
 	function _check_transaction($orderno, $puid)
 	{
-		$query = $this->db->query('SELECT 
+		$query = $this->db->query('SELECT
 		ff_transactions.puid
 		FROM ff_transactions
 		WHERE ff_transactions.orderno = ' . (int)$orderno . ' ' .
@@ -619,7 +619,7 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 
     function liste() {
 		if (! intval($this->session->userdata('uid')) > 0)
-			redirect('/login');		
+			redirect('/login');
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
         $this->javascript->compile();
 
@@ -640,7 +640,7 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 
     function medlemmer($division = 0) {
 		if (! intval($this->session->userdata('uid')) > 0)
-			redirect('/login');		
+			redirect('/login');
 		if ($this->uri->segment(3) > 0)
 		{
 			$division = $this->uri->segment(3);
@@ -655,7 +655,7 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 			redirect(base_url().'index.php/logud');
 
 		$this->viewdata['name'] = $this->input->post('name');
-		
+
 		if ($this->input->post('name') != '')
 		{
 			$this->viewdata['members'] = $this->Memberinfo->search_member($this->input->post('name'), $division);
@@ -675,7 +675,7 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
     function afdinfo($info) {
 
 		if (! intval($this->session->userdata('uid')) > 0)
-			redirect('/login');		
+			redirect('/login');
 
 		// If admin is admin for more than one division
 		if ($this->input->post('division') > 0)
@@ -685,7 +685,7 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		if ($this->uri->segment(3) > 0)
 		{
 			$division = $this->uri->segment(3);
-		} 
+		}
 
 		$permissions = $this->session->userdata('permissions');
 		$p_administrator = $this->Memberinfo->checkpermission($permissions, 'Administrator', $division);
@@ -702,16 +702,16 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 			$message = 'Informationen er opdateret';
 		}
 
-		
+
 		$this->db->select('division_newmemberinfo.support, division_newmemberinfo.welcome, division_newmemberinfo.division');
 		$this->db->from('ff_division_newmemberinfo, ff_division_members');
 		if ($division == 0)
 		{
-			$this->db->where('ff_division_newmemberinfo.division = ff_division_members.division'); 
+			$this->db->where('ff_division_newmemberinfo.division = ff_division_members.division');
 		} else {
-			$this->db->where('ff_division_newmemberinfo.division', (int)$division); 
+			$this->db->where('ff_division_newmemberinfo.division', (int)$division);
 		}
-		$this->db->where('division_members.member', $this->session->userdata('uid')); 
+		$this->db->where('division_members.member', $this->session->userdata('uid'));
 		$query = $this->db->get();
 
 		if ($query->num_rows() > 0)
@@ -733,8 +733,8 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		$this->viewdata['support'] = $support;
 		$this->viewdata['divisionname'] = $this->_divisionname($division);
 		$this->load->view('v_dept_info', $this->viewdata);
-	}		
-	
+	}
+
 	function _deletepickupdate($division, $pickupdateuid, $pickupdateitem)
 	{
 		if (($division > 0)&&($pickupdateuid > 0)&&($pickupdateitem > 0))
@@ -745,13 +745,13 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 			} else {
 				if ($pickupdateitem == FF_GROCERYBAG)
 				{
-					$this->db->where('uid', $pickupdateuid); 
-					$this->db->where('division', $division); 
-					$this->db->delete('pickupdates'); 
+					$this->db->where('uid', $pickupdateuid);
+					$this->db->where('division', $division);
+					$this->db->delete('pickupdates');
 				}
-				$this->db->where('pickupday', $pickupdateuid); 
-				$this->db->where('item', $pickupdateitem); 
-				$this->db->delete('ff_itemdays'); 
+				$this->db->where('pickupday', $pickupdateuid);
+				$this->db->where('item', $pickupdateitem);
+				$this->db->delete('ff_itemdays');
 				if ($this->db->affected_rows() > 0)
 				{
 					$msg = 'Afhentningsdag er slettet';
@@ -769,18 +769,18 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 	{
 		if ($pickupdateitem == FF_GROCERYBAG)
 		{
-			$query = $this->db->query('SELECT 
-			ff_pickupdates.pickupdate 
+			$query = $this->db->query('SELECT
+			ff_pickupdates.pickupdate
 			FROM ff_orderlines, ff_orderhead, ff_pickupdates
-			WHERE ff_orderlines.orderno = ff_orderhead.orderno 
+			WHERE ff_orderlines.orderno = ff_orderhead.orderno
 			AND ((ff_orderhead.status1 = "kontant") or (ff_orderhead.status1 = "nets"))
 			AND ff_orderlines.iteminfo = ff_pickupdates.uid
 			AND ff_pickupdates.uid = ' . (int)$pickupdateuid);
 		} else {
-			$query = $this->db->query('SELECT 
-			ff_pickupdates.pickupdate 
+			$query = $this->db->query('SELECT
+			ff_pickupdates.pickupdate
 			FROM ff_orderlines, ff_orderhead, ff_pickupdates
-			WHERE ff_orderlines.orderno = ff_orderhead.orderno 
+			WHERE ff_orderlines.orderno = ff_orderhead.orderno
 			AND ((ff_orderhead.status1 = "kontant") or (ff_orderhead.status1 = "nets"))
 			AND ff_orderlines.item = '. (int)$pickupdateitem .'
 			AND ff_orderlines.iteminfo = ff_pickupdates.uid
@@ -788,10 +788,10 @@ function _update_transactions($orderno, $puid, $amount, $status1, $status2, $cc_
 		}
 		return $query->num_rows();
 	}
-	
+
 	function _ikkeafhentet($division, $date)
 	{
-		$query = $this->db->query('SELECT 
+		$query = $this->db->query('SELECT
 		ff_pickupdates.pickupdate, ff_orderlines.puid, ff_persons.firstname, ff_persons.middlename, ff_persons.lastname,ff_orderlines.orderno, ff_orderlines.quant, ff_orderlines.item, ff_items.units, ff_items.measure, ff_producttypes.explained
 FROM ff_orderlines, ff_orderhead, ff_items, ff_producttypes, ff_pickupdates, ff_divisions, ff_persons
 WHERE ff_orderlines.orderno = ff_orderhead.orderno
@@ -816,17 +816,17 @@ AND ff_pickupdates.division = ff_items.division
 			}
 			$ikkeafhentet .= '<table>';
 		} else {
-			$ikkeafhentet = 'Alt afhentet.<br>';		
+			$ikkeafhentet = 'Alt afhentet.<br>';
 		}
-		return $ikkeafhentet;	
-		
+		return $ikkeafhentet;
+
 	}
 
 	function _ikkeafhentet_statistik($date)
 	{
 
 		$ret = array();
-		$query = $this->db->query('SELECT 
+		$query = $this->db->query('SELECT
 		SUM(ff_orderlines.quant) as quant, ff_pickupdates.pickupdate, ff_items.division, ff_producttypes.explained
 		FROM (ff_orderlines, ff_orderhead, ff_items, ff_producttypes, ff_pickupdates, ff_divisions)
 		WHERE ff_orderlines.orderno = ff_orderhead.orderno
@@ -840,10 +840,10 @@ AND ff_pickupdates.division = ff_items.division
 		AND ff_orderlines.status2 <> "udleveret"
 		GROUP by ff_pickupdates.pickupdate, ff_items.division
 		ORDER BY ff_pickupdates.pickupdate desc, ff_items.division,  ff_producttypes.id');
-		
+
 		$row = $query->row();
 		return $query->result_array();
-		
+
 	}
 
 	function excel($division = 5) {
@@ -859,7 +859,7 @@ AND ff_pickupdates.division = ff_items.division
 		$now = Date("H:i d-m-Y");
 
 		// Create a workbook
-		$objPHPExcel = new PHPExcel();	
+		$objPHPExcel = new PHPExcel();
 		PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 		$objPHPExcel->getProperties()->setCreator("KBHFF Medlemssystem");
 		$objPHPExcel->getProperties()->setLastModifiedBy("KBHFF Medlemssystem $now");
@@ -890,11 +890,11 @@ AND ff_pickupdates.division = ff_items.division
 		$objWorksheet->setCellValueByColumnAndRow(2, 1, 'Mellemnavn');
 		$objWorksheet->setCellValueByColumnAndRow(3, 1, 'Efternavn');
 		$objWorksheet->setCellValueByColumnAndRow(4, 1, 'Email');
-		$objWorksheet->setCellValueByColumnAndRow(5, 1, 'Telefon');    
-		$objWorksheet->setCellValueByColumnAndRow(6, 1, 'Oprettet');    
+		$objWorksheet->setCellValueByColumnAndRow(5, 1, 'Telefon');
+		$objWorksheet->setCellValueByColumnAndRow(6, 1, 'Oprettet');
 		$objWorksheet->setCellValueByColumnAndRow(7, 1, 'Aktiv');
-		$objWorksheet->setCellValueByColumnAndRow(8, 1, 'Note');    
-			
+		$objWorksheet->setCellValueByColumnAndRow(8, 1, 'Note');
+
 		// Autoset widths
 		$objWorksheet = $objPHPExcel->getActiveSheet();
 		$objWorksheet->getColumnDimension('A')->setAutoSize(true);
@@ -906,7 +906,7 @@ AND ff_pickupdates.division = ff_items.division
 		$objWorksheet->getColumnDimension('G')->setAutoSize(true);
 		$objWorksheet->getColumnDimension('H')->setAutoSize(true);
 		$objWorksheet->getColumnDimension('I')->setAutoSize(true);
-		
+
 		if ($division > 0)
 		{
 			$select = ', ff_division_members where ff_division_members.member = ff_persons.uid AND ff_division_members.division = ' . (int)$division;
@@ -951,7 +951,7 @@ AND ff_pickupdates.division = ff_items.division
 
 		// Align
 		$objWorksheet = $objPHPExcel->getActiveSheet();
-		$highestRow = $objWorksheet->getHighestRow(); 
+		$highestRow = $objWorksheet->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle('F1:F' . $highestRow)
 			->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 		$objPHPExcel->getActiveSheet()->getStyle('A1:A' . $highestRow)
@@ -962,30 +962,30 @@ AND ff_pickupdates.division = ff_items.division
 
 		// Specify printing area
 		$objWorksheet = $objPHPExcel->getActiveSheet();
-		$highestRow = $objWorksheet->getHighestRow(); 
-		$highestColumn = $objWorksheet->getHighestColumn(); 
+		$highestRow = $objWorksheet->getHighestRow();
+		$highestColumn = $objWorksheet->getHighestColumn();
 		$objPHPExcel->getActiveSheet()->getPageSetup()->setPrintArea('A1:' . $highestColumn . $highestRow );
 
-		
+
 		// Redirect output to a clients web browser (Excel5)
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="KBHFF medlemsliste ' . $divisionname . ' ' . $now .'.xls"');
 		header('Cache-Control: max-age=0');
 		// If you're serving to IE 9, then the following may be needed
 		header('Cache-Control: max-age=1');
-		
+
 		// If you're serving to IE over SSL, then the following may be needed
 		header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 		header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
 		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
 		header ('Pragma: public'); // HTTP/1.0
-		
+
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output');
-		
+
 	}
 
-	
+
 	function medlemsliste($division = 5) {
 
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
@@ -1074,11 +1074,11 @@ ORDER BY ff_orderlines.created,ff_producttypes.explained');
 				}
 				$kontant .= '</table>';
 			} else {
-				$kontant = 'Intet kontantsalg.<br>';		
+				$kontant = 'Intet kontantsalg.<br>';
 			}
-		return $kontant;	
+		return $kontant;
 	}
-	
+
 	function _dagens_modtagne_kontanter($division,$day)
 	{
 		$kontantermodtaget  = '';
@@ -1107,9 +1107,9 @@ ORDER BY ff_orderlines.created, ff_orderlines.item');
 				}
 				$kontantermodtaget .= '</table>';
 			} else {
-				$kontantermodtaget = 'Intet kontantsalg.<br>';		
+				$kontantermodtaget = 'Intet kontantsalg.<br>';
 			}
-		return $kontantermodtaget;	
+		return $kontantermodtaget;
 	}
 
 
@@ -1143,21 +1143,21 @@ ORDER BY ff_producttypes.explained');
 				}
 				$nets .= '</table>';
 			} else {
-				$nets = 'Intet on-linesalg<br>';		
+				$nets = 'Intet on-linesalg<br>';
 			}
-		return $nets;	
+		return $nets;
 	}
 
 	private function _divisionname($division)
 	{
 			$this->db->select('name');
 			$this->db->from('divisions');
-			$this->db->where('uid', (int)$division); 
+			$this->db->where('uid', (int)$division);
 			$query = $this->db->get();
 			$row = $query->row();
 			return $row->name;
 	}
-	
+
 	private function _displayliste($division, $msg)
 	{
 		$divisionname = $this->_divisionname($division);
@@ -1173,9 +1173,9 @@ ORDER BY ff_producttypes.explained');
 			$bdsel1 .= ', p' . $bagday['id'] . '.explained as p' . $bagday['id'] . 'e ';
 			$bdsel2 .= 'left join ff_producttypes as p' . $bagday['id'] . ' on p' . $bagday['id'] . '.id = ff_itemdays.item and p' . $bagday['id'] . '.id = ' . $bagday['id'] . ' ';
 		}
-		$q3 = $this->db->query("select division, 
-		pickupdate as pickupdatesort, 
-		date_format(`ff_pickupdates`.`pickupdate`,'%d/%m/%Y') as pickupdate, 
+		$q3 = $this->db->query("select division,
+		pickupdate as pickupdatesort,
+		date_format(`ff_pickupdates`.`pickupdate`,'%d/%m/%Y') as pickupdate,
 		date_format(`ff_itemdays`.`lastorder`,'%d/%m/%Y %k:%i') as lastorder, uid, item $bdsel1
 		from (ff_pickupdates, ff_itemdays)
 		$bdsel2
@@ -1185,7 +1185,7 @@ ORDER BY ff_producttypes.explained');
 		order by pickupdatesort, p47.sortkey");
 		$bagcollectdays = $q3->result_array();
 
-		
+
 		$content = 'Afhentningsdage for ' . $divisionname . ':<br>';
 		$data = array(
                'title' => 'KBHFF Administrationsside',
@@ -1205,10 +1205,10 @@ ORDER BY ff_producttypes.explained');
 		$return = '<optgroup  label="' .$divisionname . '">';
 			$query = $this->db->query("SELECT distinct
 			ff_pickupdates.pickupdate, ff_pickupdates.uid
-			FROM (ff_pickupdates) 
-			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != 47
+			FROM (ff_pickupdates)
+			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != FF_GROCERYBAG
 			LEFT JOIN ff_itemdays ON ff_itemdays.item = pt.id AND ff_itemdays.pickupday = ff_pickupdates.uid and ff_itemdays.lastorder is null
-			WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate() 
+			WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate()
 			ORDER BY ff_pickupdates.pickupdate desc");
 		if ($query->num_rows() > 0)
 		{
@@ -1216,12 +1216,12 @@ ORDER BY ff_producttypes.explained');
 			{
 				$return .= '<option value="' . $row->uid .'">' . $row->pickupdate . "</option>\n";
 			}
-		} 
+		}
 		$return .= '</optgroup>' ."\n";
 		return $return;
 	}
-	
-} // class Admin 
+
+} // class Admin
 
 
 	include("ressources/.sendmail.php");
