@@ -2,10 +2,10 @@
 -- version 3.3.7deb7
 -- http://www.phpmyadmin.net
 --
--- Vært: localhost
--- Genereringstid: 04. 05 2014 kl. 22:54:28
--- Serverversion: 5.1.72
--- PHP-version: 5.3.3-7+squeeze17
+-- Host: localhost
+-- Generation Time: Jul 06, 2014 at 11:09 AM
+-- Server version: 5.1.72
+-- PHP Version: 5.3.3-7+squeeze17
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,22 +16,21 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `kbhffdev`
+-- Database: `membersystem`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `drenge`
+-- Table structure for table `drenge`
 --
 
-DROP TABLE IF EXISTS `drenge`;
 CREATE TABLE IF NOT EXISTS `drenge` (
   `navn` varchar(150) CHARACTER SET utf8 COLLATE utf8_danish_ci NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `drenge`
+-- Dumping data for table `drenge`
 --
 
 INSERT INTO `drenge` (`navn`) VALUES
@@ -12270,10 +12269,9 @@ INSERT INTO `drenge` (`navn`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_chores`
+-- Table structure for table `ff_chores`
 --
 
-DROP TABLE IF EXISTS `ff_chores`;
 CREATE TABLE IF NOT EXISTS `ff_chores` (
   `chore` int(11) NOT NULL,
   `department` int(11) NOT NULL,
@@ -12284,17 +12282,16 @@ CREATE TABLE IF NOT EXISTS `ff_chores` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci AUTO_INCREMENT=1 ;
 
 --
--- Data dump for tabellen `ff_chores`
+-- Dumping data for table `ff_chores`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_chore_types`
+-- Table structure for table `ff_chore_types`
 --
 
-DROP TABLE IF EXISTS `ff_chore_types`;
 CREATE TABLE IF NOT EXISTS `ff_chore_types` (
   `name` varchar(50) COLLATE latin1_danish_ci NOT NULL,
   `auth` int(11) NOT NULL,
@@ -12303,7 +12300,7 @@ CREATE TABLE IF NOT EXISTS `ff_chore_types` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci AUTO_INCREMENT=36 ;
 
 --
--- Data dump for tabellen `ff_chore_types`
+-- Dumping data for table `ff_chore_types`
 --
 
 INSERT INTO `ff_chore_types` (`name`, `auth`, `uid`) VALUES
@@ -12344,10 +12341,9 @@ INSERT INTO `ff_chore_types` (`name`, `auth`, `uid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_divisions`
+-- Table structure for table `ff_divisions`
 --
 
-DROP TABLE IF EXISTS `ff_divisions`;
 CREATE TABLE IF NOT EXISTS `ff_divisions` (
   `name` varchar(30) COLLATE utf8_danish_ci NOT NULL,
   `shortname` varchar(4) COLLATE utf8_danish_ci NOT NULL,
@@ -12359,7 +12355,7 @@ CREATE TABLE IF NOT EXISTS `ff_divisions` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=3 ;
 
 --
--- Data dump for tabellen `ff_divisions`
+-- Dumping data for table `ff_divisions`
 --
 
 INSERT INTO `ff_divisions` (`name`, `shortname`, `type`, `webmembers`, `kontakt`, `uid`) VALUES
@@ -12369,10 +12365,9 @@ INSERT INTO `ff_divisions` (`name`, `shortname`, `type`, `webmembers`, `kontakt`
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_division_chores`
+-- Table structure for table `ff_division_chores`
 --
 
-DROP TABLE IF EXISTS `ff_division_chores`;
 CREATE TABLE IF NOT EXISTS `ff_division_chores` (
   `division` int(11) NOT NULL,
   `chore` int(11) NOT NULL,
@@ -12385,7 +12380,7 @@ CREATE TABLE IF NOT EXISTS `ff_division_chores` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci AUTO_INCREMENT=24 ;
 
 --
--- Data dump for tabellen `ff_division_chores`
+-- Dumping data for table `ff_division_chores`
 --
 
 INSERT INTO `ff_division_chores` (`division`, `chore`, `needed`, `comment`, `uid`, `tid`) VALUES
@@ -12415,10 +12410,9 @@ INSERT INTO `ff_division_chores` (`division`, `chore`, `needed`, `comment`, `uid
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_division_members`
+-- Table structure for table `ff_division_members`
 --
 
-DROP TABLE IF EXISTS `ff_division_members`;
 CREATE TABLE IF NOT EXISTS `ff_division_members` (
   `division` int(11) NOT NULL,
   `member` int(11) NOT NULL,
@@ -12429,7 +12423,7 @@ CREATE TABLE IF NOT EXISTS `ff_division_members` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
 --
--- Data dump for tabellen `ff_division_members`
+-- Dumping data for table `ff_division_members`
 --
 
 INSERT INTO `ff_division_members` (`division`, `member`, `start`, `exit`) VALUES
@@ -12439,10 +12433,9 @@ INSERT INTO `ff_division_members` (`division`, `member`, `start`, `exit`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_division_newmemberinfo`
+-- Table structure for table `ff_division_newmemberinfo`
 --
 
-DROP TABLE IF EXISTS `ff_division_newmemberinfo`;
 CREATE TABLE IF NOT EXISTS `ff_division_newmemberinfo` (
   `division` int(11) NOT NULL,
   `support` text COLLATE latin1_danish_ci NOT NULL,
@@ -12451,7 +12444,7 @@ CREATE TABLE IF NOT EXISTS `ff_division_newmemberinfo` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_division_newmemberinfo`
+-- Dumping data for table `ff_division_newmemberinfo`
 --
 
 INSERT INTO `ff_division_newmemberinfo` (`division`, `support`, `welcome`) VALUES
@@ -12460,10 +12453,9 @@ INSERT INTO `ff_division_newmemberinfo` (`division`, `support`, `welcome`) VALUE
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_groupmembers`
+-- Table structure for table `ff_groupmembers`
 --
 
-DROP TABLE IF EXISTS `ff_groupmembers`;
 CREATE TABLE IF NOT EXISTS `ff_groupmembers` (
   `group` int(11) NOT NULL,
   `department` int(11) NOT NULL,
@@ -12479,7 +12471,7 @@ CREATE TABLE IF NOT EXISTS `ff_groupmembers` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_groupmembers`
+-- Dumping data for table `ff_groupmembers`
 --
 
 INSERT INTO `ff_groupmembers` (`group`, `department`, `puid`, `status`, `note`, `valid_from`, `expires`) VALUES
@@ -12507,10 +12499,9 @@ INSERT INTO `ff_groupmembers` (`group`, `department`, `puid`, `status`, `note`, 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_groups`
+-- Table structure for table `ff_groups`
 --
 
-DROP TABLE IF EXISTS `ff_groups`;
 CREATE TABLE IF NOT EXISTS `ff_groups` (
   `name` varchar(35) COLLATE utf8_danish_ci NOT NULL,
   `type` varchar(100) COLLATE utf8_danish_ci NOT NULL,
@@ -12527,7 +12518,7 @@ CREATE TABLE IF NOT EXISTS `ff_groups` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=67 ;
 
 --
--- Data dump for tabellen `ff_groups`
+-- Dumping data for table `ff_groups`
 --
 
 INSERT INTO `ff_groups` (`name`, `type`, `common`, `active`, `contactmail`, `maillist`, `wiki`, `samba`, `key`, `uid`) VALUES
@@ -12559,30 +12550,28 @@ INSERT INTO `ff_groups` (`name`, `type`, `common`, `active`, `contactmail`, `mai
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_itemdays`
+-- Table structure for table `ff_itemdays`
 --
 
-DROP TABLE IF EXISTS `ff_itemdays`;
 CREATE TABLE IF NOT EXISTS `ff_itemdays` (
   `item` int(11) NOT NULL,
   `pickupday` int(11) NOT NULL,
   `lastorder` datetime NOT NULL,
-  KEY `item` (`item`),
+  UNIQUE KEY `itemday` (`item`,`pickupday`),
   KEY `day` (`pickupday`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_itemdays`
+-- Dumping data for table `ff_itemdays`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_items`
+-- Table structure for table `ff_items`
 --
 
-DROP TABLE IF EXISTS `ff_items`;
 CREATE TABLE IF NOT EXISTS `ff_items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `division` int(11) NOT NULL,
@@ -12594,10 +12583,10 @@ CREATE TABLE IF NOT EXISTS `ff_items` (
   KEY `quantity` (`measure`),
   KEY `producttype` (`producttype_id`),
   KEY `division` (`division`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=47 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=7 ;
 
 --
--- Data dump for tabellen `ff_items`
+-- Dumping data for table `ff_items`
 --
 
 INSERT INTO `ff_items` (`id`, `division`, `units`, `measure`, `producttype_id`, `amount`) VALUES
@@ -12611,10 +12600,9 @@ INSERT INTO `ff_items` (`id`, `division`, `units`, `measure`, `producttype_id`, 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_jobs`
+-- Table structure for table `ff_jobs`
 --
 
-DROP TABLE IF EXISTS `ff_jobs`;
 CREATE TABLE IF NOT EXISTS `ff_jobs` (
   `division` int(11) NOT NULL,
   `job` varchar(20) COLLATE latin1_danish_ci NOT NULL,
@@ -12626,17 +12614,16 @@ CREATE TABLE IF NOT EXISTS `ff_jobs` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci AUTO_INCREMENT=1 ;
 
 --
--- Data dump for tabellen `ff_jobs`
+-- Dumping data for table `ff_jobs`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_log`
+-- Table structure for table `ff_log`
 --
 
-DROP TABLE IF EXISTS `ff_log`;
 CREATE TABLE IF NOT EXISTS `ff_log` (
   `creator` int(11) NOT NULL,
   `member` int(11) NOT NULL,
@@ -12646,17 +12633,16 @@ CREATE TABLE IF NOT EXISTS `ff_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_log`
+-- Dumping data for table `ff_log`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_mail_aliases`
+-- Table structure for table `ff_mail_aliases`
 --
 
-DROP TABLE IF EXISTS `ff_mail_aliases`;
 CREATE TABLE IF NOT EXISTS `ff_mail_aliases` (
   `puid` int(10) NOT NULL,
   `master` varchar(200) COLLATE latin1_danish_ci NOT NULL,
@@ -12665,17 +12651,16 @@ CREATE TABLE IF NOT EXISTS `ff_mail_aliases` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_mail_aliases`
+-- Dumping data for table `ff_mail_aliases`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_massmail_log`
+-- Table structure for table `ff_massmail_log`
 --
 
-DROP TABLE IF EXISTS `ff_massmail_log`;
 CREATE TABLE IF NOT EXISTS `ff_massmail_log` (
   `sent` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `subject` varchar(250) COLLATE latin1_danish_ci NOT NULL,
@@ -12690,7 +12675,7 @@ CREATE TABLE IF NOT EXISTS `ff_massmail_log` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci AUTO_INCREMENT=232 ;
 
 --
--- Data dump for tabellen `ff_massmail_log`
+-- Dumping data for table `ff_massmail_log`
 --
 
 INSERT INTO `ff_massmail_log` (`sent`, `subject`, `content`, `sender`, `division`, `group`, `privacy`, `num`, `uid`) VALUES
@@ -12699,10 +12684,9 @@ INSERT INTO `ff_massmail_log` (`sent`, `subject`, `content`, `sender`, `division
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_membernote`
+-- Table structure for table `ff_membernote`
 --
 
-DROP TABLE IF EXISTS `ff_membernote`;
 CREATE TABLE IF NOT EXISTS `ff_membernote` (
   `puid` int(11) NOT NULL,
   `note` varchar(250) COLLATE latin1_danish_ci NOT NULL,
@@ -12713,7 +12697,7 @@ CREATE TABLE IF NOT EXISTS `ff_membernote` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_membernote`
+-- Dumping data for table `ff_membernote`
 --
 
 INSERT INTO `ff_membernote` (`puid`, `note`, `editedby`, `changed`, `created`) VALUES
@@ -12723,10 +12707,9 @@ INSERT INTO `ff_membernote` (`puid`, `note`, `editedby`, `changed`, `created`) V
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_orderhead`
+-- Table structure for table `ff_orderhead`
 --
 
-DROP TABLE IF EXISTS `ff_orderhead`;
 CREATE TABLE IF NOT EXISTS `ff_orderhead` (
   `puid` int(10) unsigned DEFAULT NULL,
   `orderno` int(10) unsigned DEFAULT NULL,
@@ -12748,17 +12731,16 @@ CREATE TABLE IF NOT EXISTS `ff_orderhead` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=1 ;
 
 --
--- Data dump for tabellen `ff_orderhead`
+-- Dumping data for table `ff_orderhead`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_orderlines`
+-- Table structure for table `ff_orderlines`
 --
 
-DROP TABLE IF EXISTS `ff_orderlines`;
 CREATE TABLE IF NOT EXISTS `ff_orderlines` (
   `orderno` int(10) unsigned DEFAULT NULL,
   `orderkey` varchar(150) COLLATE utf8_danish_ci DEFAULT NULL,
@@ -12784,17 +12766,16 @@ CREATE TABLE IF NOT EXISTS `ff_orderlines` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=1 ;
 
 --
--- Data dump for tabellen `ff_orderlines`
+-- Dumping data for table `ff_orderlines`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_persons`
+-- Table structure for table `ff_persons`
 --
 
-DROP TABLE IF EXISTS `ff_persons`;
 CREATE TABLE IF NOT EXISTS `ff_persons` (
   `firstname` varchar(50) COLLATE utf8_danish_ci DEFAULT NULL,
   `middlename` varchar(50) COLLATE utf8_danish_ci NOT NULL,
@@ -12832,24 +12813,23 @@ CREATE TABLE IF NOT EXISTS `ff_persons` (
   KEY `rights` (`rights`),
   KEY `tel` (`tel`),
   KEY `email` (`email`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=2002 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=2001 ;
 
 --
--- Data dump for tabellen `ff_persons`
+-- Dumping data for table `ff_persons`
 --
 
 INSERT INTO `ff_persons` (`firstname`, `middlename`, `lastname`, `sex`, `adr1`, `adr2`, `streetno`, `floor`, `door`, `adr3`, `zip`, `city`, `country`, `languagepref`, `tel`, `tel2`, `email`, `birthday`, `user_activation_key`, `password`, `status1`, `status2`, `status3`, `rights`, `privacy`, `active`, `ownupdate`, `last_login`, `created`, `changed`, `uid`) VALUES
 ('Administrator', '', 'Membersystem', 'M', '', 'Hovedgaden', '10', '5', 'tv.', '', '1700', 'København V', NULL, NULL, '12345678', '', 'administrator@etellerandet.dk', NULL, '', '$2a$10$9jucn3APiVNOlE1qctOwu.wAREnHDboyOAaFX.9j5Fviu3Hr22JE2', '', NULL, NULL, NULL, '0', 'yes', NULL, '2014-05-04 22:44:17', NULL, NULL, 1),
-('Navn på ordre ikke registreret', '', '', NULL, 'Denne person må ikke slettes', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'no', NULL, '0000-00-00 00:00:00', '2012-12-06 22:23:31', NULL, 0),
+('Navn på ordre ikke registreret', '', '', NULL, 'Denne person må ikke slettes', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'no', NULL, '0000-00-00 00:00:00', '2012-12-06 22:23:31', NULL, 2),
 ('Testmedlem', 'Nummer 1', 'Nemlig', 'M', '', 'Hovedgaden', '10', '5', 'tv.', '', '1700', 'København V', NULL, NULL, '12345678', '', 'administrator@etellerandet.dk', NULL, '', '$2a$10$vZn.0mtp1gMvbWw/9Q.Lue/3Z/FgvA4cWjWJt9htkGTe/x0ub9TO6', '', NULL, NULL, NULL, '0', 'yes', NULL, '2014-05-04 22:44:08', NULL, NULL, 2000);
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_persons_info`
+-- Table structure for table `ff_persons_info`
 --
 
-DROP TABLE IF EXISTS `ff_persons_info`;
 CREATE TABLE IF NOT EXISTS `ff_persons_info` (
   `puid` int(11) NOT NULL,
   `membersince` varchar(12) COLLATE latin1_danish_ci NOT NULL,
@@ -12859,7 +12839,7 @@ CREATE TABLE IF NOT EXISTS `ff_persons_info` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_persons_info`
+-- Dumping data for table `ff_persons_info`
 --
 
 INSERT INTO `ff_persons_info` (`puid`, `membersince`, `kollektiv`, `remark`) VALUES
@@ -12869,10 +12849,9 @@ INSERT INTO `ff_persons_info` (`puid`, `membersince`, `kollektiv`, `remark`) VAL
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_pickupdates`
+-- Table structure for table `ff_pickupdates`
 --
 
-DROP TABLE IF EXISTS `ff_pickupdates`;
 CREATE TABLE IF NOT EXISTS `ff_pickupdates` (
   `division` int(11) NOT NULL,
   `pickupdate` date NOT NULL,
@@ -12881,17 +12860,16 @@ CREATE TABLE IF NOT EXISTS `ff_pickupdates` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=1 ;
 
 --
--- Data dump for tabellen `ff_pickupdates`
+-- Dumping data for table `ff_pickupdates`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_producttypes`
+-- Table structure for table `ff_producttypes`
 --
 
-DROP TABLE IF EXISTS `ff_producttypes`;
 CREATE TABLE IF NOT EXISTS `ff_producttypes` (
   `id` mediumint(9) unsigned NOT NULL AUTO_INCREMENT,
   `explained` varchar(100) COLLATE utf8_danish_ci NOT NULL,
@@ -12905,7 +12883,7 @@ CREATE TABLE IF NOT EXISTS `ff_producttypes` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci AUTO_INCREMENT=53 ;
 
 --
--- Data dump for tabellen `ff_producttypes`
+-- Dumping data for table `ff_producttypes`
 --
 
 INSERT INTO `ff_producttypes` (`id`, `explained`, `bag`, `activefrom`, `activeto`, `sortkey`) VALUES
@@ -12965,10 +12943,9 @@ INSERT INTO `ff_producttypes` (`id`, `explained`, `bag`, `activefrom`, `activeto
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_reportfields`
+-- Table structure for table `ff_reportfields`
 --
 
-DROP TABLE IF EXISTS `ff_reportfields`;
 CREATE TABLE IF NOT EXISTS `ff_reportfields` (
   `type` varchar(30) CHARACTER SET utf8 COLLATE utf8_danish_ci NOT NULL,
   `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_danish_ci NOT NULL,
@@ -12981,7 +12958,7 @@ CREATE TABLE IF NOT EXISTS `ff_reportfields` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci AUTO_INCREMENT=43 ;
 
 --
--- Data dump for tabellen `ff_reportfields`
+-- Dumping data for table `ff_reportfields`
 --
 
 INSERT INTO `ff_reportfields` (`type`, `name`, `editable`, `noterequired`, `sort`, `comment`, `uid`) VALUES
@@ -13008,10 +12985,9 @@ INSERT INTO `ff_reportfields` (`type`, `name`, `editable`, `noterequired`, `sort
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_report_data`
+-- Table structure for table `ff_report_data`
 --
 
-DROP TABLE IF EXISTS `ff_report_data`;
 CREATE TABLE IF NOT EXISTS `ff_report_data` (
   `field` int(11) NOT NULL,
   `data` decimal(10,2) NOT NULL,
@@ -13025,17 +13001,16 @@ CREATE TABLE IF NOT EXISTS `ff_report_data` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_report_data`
+-- Dumping data for table `ff_report_data`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_roles`
+-- Table structure for table `ff_roles`
 --
 
-DROP TABLE IF EXISTS `ff_roles`;
 CREATE TABLE IF NOT EXISTS `ff_roles` (
   `role` int(11) NOT NULL,
   `level` int(11) NOT NULL,
@@ -13049,7 +13024,7 @@ CREATE TABLE IF NOT EXISTS `ff_roles` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_roles`
+-- Dumping data for table `ff_roles`
 --
 
 INSERT INTO `ff_roles` (`role`, `level`, `puid`, `department`, `auth_by`, `status`, `valid_from`, `expires`) VALUES
@@ -13066,10 +13041,9 @@ INSERT INTO `ff_roles` (`role`, `level`, `puid`, `department`, `auth_by`, `statu
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_sessions`
+-- Table structure for table `ff_sessions`
 --
 
-DROP TABLE IF EXISTS `ff_sessions`;
 CREATE TABLE IF NOT EXISTS `ff_sessions` (
   `session_id` varchar(40) COLLATE latin1_danish_ci NOT NULL DEFAULT '0',
   `ip_address` varchar(16) COLLATE latin1_danish_ci NOT NULL DEFAULT '0',
@@ -13080,17 +13054,18 @@ CREATE TABLE IF NOT EXISTS `ff_sessions` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_sessions`
+-- Dumping data for table `ff_sessions`
 --
 
+INSERT INTO `ff_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
+('f686577499b1a663f78c6bacc6328a08', '109.57.208.85', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (K', 1399237500, '');
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_statistics_log`
+-- Table structure for table `ff_statistics_log`
 --
 
-DROP TABLE IF EXISTS `ff_statistics_log`;
 CREATE TABLE IF NOT EXISTS `ff_statistics_log` (
   `ary` blob NOT NULL,
   `date` date NOT NULL,
@@ -13098,17 +13073,16 @@ CREATE TABLE IF NOT EXISTS `ff_statistics_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_statistics_log`
+-- Dumping data for table `ff_statistics_log`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_teams`
+-- Table structure for table `ff_teams`
 --
 
-DROP TABLE IF EXISTS `ff_teams`;
 CREATE TABLE IF NOT EXISTS `ff_teams` (
   `name` varchar(20) COLLATE latin1_danish_ci NOT NULL,
   `color` varchar(5) COLLATE latin1_danish_ci NOT NULL,
@@ -13117,7 +13091,7 @@ CREATE TABLE IF NOT EXISTS `ff_teams` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_teams`
+-- Dumping data for table `ff_teams`
 --
 
 INSERT INTO `ff_teams` (`name`, `color`, `id`) VALUES
@@ -13147,10 +13121,9 @@ INSERT INTO `ff_teams` (`name`, `color`, `id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_transactions`
+-- Table structure for table `ff_transactions`
 --
 
-DROP TABLE IF EXISTS `ff_transactions`;
 CREATE TABLE IF NOT EXISTS `ff_transactions` (
   `puid` int(11) NOT NULL,
   `orderno` int(11) NOT NULL,
@@ -13168,17 +13141,16 @@ CREATE TABLE IF NOT EXISTS `ff_transactions` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci AUTO_INCREMENT=1 ;
 
 --
--- Data dump for tabellen `ff_transactions`
+-- Dumping data for table `ff_transactions`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_xfer`
+-- Table structure for table `ff_xfer`
 --
 
-DROP TABLE IF EXISTS `ff_xfer`;
 CREATE TABLE IF NOT EXISTS `ff_xfer` (
   `membersince` varchar(10) COLLATE latin1_danish_ci NOT NULL,
   `email` varchar(150) COLLATE latin1_danish_ci NOT NULL,
@@ -13193,17 +13165,16 @@ CREATE TABLE IF NOT EXISTS `ff_xfer` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `ff_xfer`
+-- Dumping data for table `ff_xfer`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ff_zipcodes`
+-- Table structure for table `ff_zipcodes`
 --
 
-DROP TABLE IF EXISTS `ff_zipcodes`;
 CREATE TABLE IF NOT EXISTS `ff_zipcodes` (
   `zip` varchar(10) COLLATE utf8_danish_ci NOT NULL,
   `city` varchar(50) COLLATE utf8_danish_ci NOT NULL,
@@ -13215,7 +13186,7 @@ CREATE TABLE IF NOT EXISTS `ff_zipcodes` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
 --
--- Data dump for tabellen `ff_zipcodes`
+-- Dumping data for table `ff_zipcodes`
 --
 
 INSERT INTO `ff_zipcodes` (`zip`, `city`, `street`, `firm`, `region`, `country`) VALUES
@@ -14620,10 +14591,9 @@ INSERT INTO `ff_zipcodes` (`zip`, `city`, `street`, `firm`, `region`, `country`)
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `fornavne`
+-- Table structure for table `fornavne`
 --
 
-DROP TABLE IF EXISTS `fornavne`;
 CREATE TABLE IF NOT EXISTS `fornavne` (
   `navn` varchar(20) CHARACTER SET utf8 COLLATE utf8_danish_ci NOT NULL,
   `sex` varchar(1) COLLATE latin1_danish_ci NOT NULL,
@@ -14631,7 +14601,7 @@ CREATE TABLE IF NOT EXISTS `fornavne` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `fornavne`
+-- Dumping data for table `fornavne`
 --
 
 INSERT INTO `fornavne` (`navn`, `sex`) VALUES
@@ -42697,16 +42667,15 @@ INSERT INTO `fornavne` (`navn`, `sex`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `piger`
+-- Table structure for table `piger`
 --
 
-DROP TABLE IF EXISTS `piger`;
 CREATE TABLE IF NOT EXISTS `piger` (
   `navn` varchar(150) COLLATE latin1_danish_ci NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `piger`
+-- Dumping data for table `piger`
 --
 
 INSERT INTO `piger` (`navn`) VALUES
@@ -57906,16 +57875,15 @@ INSERT INTO `piger` (`navn`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `unisex`
+-- Table structure for table `unisex`
 --
 
-DROP TABLE IF EXISTS `unisex`;
 CREATE TABLE IF NOT EXISTS `unisex` (
   `navn` varchar(150) COLLATE latin1_danish_ci NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
--- Data dump for tabellen `unisex`
+-- Dumping data for table `unisex`
 --
 
 INSERT INTO `unisex` (`navn`) VALUES
