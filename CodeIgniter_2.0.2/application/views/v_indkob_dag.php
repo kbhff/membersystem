@@ -115,12 +115,52 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span><b
 		echo getMenu(site_url(), $this->session->userdata('permissions'), $this->session->userdata('uid')); 
 	?>
 
-<?php
+<?
+if (date("Y-m-d") == $pickupdate)
+{
+		echo ('<h2>Ordrer til udlevering ' . $pickupdate .' (i dag)</h2>');
+} else{
+		echo ('<h2>Ordrer til udlevering ' . $pickupdate .'</h2>');
+}
 
-		echo '<h1>' . $heading . '</h1>';
-		echo $totalorder;
+		$classes = Array('even', 'odd');
+		$count = 0;
+		echo('<table>' . "\n");
+		echo ('<tr><td><h1>Afdeling</h1></td>');
+		foreach ($bagdays as $bagday)
+		{
+				echo ('<td><h1>' . $bagday['explained'] . '</h1></td>');
+				$var = 'total' . $bagday['id'];
+				$$var = 0;
+		}
+		echo ('</tr>' . "\n");
+
+		foreach ($divisions as $division)
+		{
+			echo '<tr class="'.$classes[$count%2].'">';
+			echo ('<td>'. $division['name'] . '&nbsp;</td>');
+			foreach ($bagdays as $bagday)
+			{
+				
+				$total   = $divisiondata[$division['uid']][$bagday['id']];
+				$var = 'total' . $bagday['id'];
+				$$var += $total;
+				echo ('<td align="right">' . $total . '</td>');
+			}
+			echo ('</tr>' . "\n");
+			$count++;
+		}
+		echo ('<tr><td><strong>Total</strong></td>');
+		foreach ($bagdays as $bagday)
+		{
+				$var = 'total' . $bagday['id'];
+				echo ('<td align="right"><strong>'.$$var.'</strong></td>');
+		}
+		echo ('</tr>' . "\n");
+		echo('</table>' . "\n");
+		
+		echo ("<br>\nUdskrevet " . date("Y-m-d G:i"). '.');
 ?>
-
 </span>
 <hr align="left" id="bottomhr">
 <?php echo isset($script_head) ? $script_head : ''; ?>

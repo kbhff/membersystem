@@ -1206,7 +1206,7 @@ ORDER BY ff_producttypes.explained');
 			$query = $this->db->query("SELECT distinct
 			ff_pickupdates.pickupdate, ff_pickupdates.uid
 			FROM (ff_pickupdates)
-			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != FF_GROCERYBAG
+			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != ' . FF_GROCERYBAG .'
 			LEFT JOIN ff_itemdays ON ff_itemdays.item = pt.id AND ff_itemdays.pickupday = ff_pickupdates.uid and ff_itemdays.lastorder is null
 			WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate()
 			ORDER BY ff_pickupdates.pickupdate desc");
