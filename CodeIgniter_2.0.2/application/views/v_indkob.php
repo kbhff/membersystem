@@ -38,9 +38,10 @@ F&Oslash;DEVAREF&AElig;LLESSKAB <span id="green">/ MEDLEMSSYSTEM</span></span>
 <h1><?php echo $heading;?></h1>
 <form action="/indkob/dag/" method="post">
 Vis ordreliste: <select name="pickupdate">
-<?= $createsel ?>
+<?= $pickupdates ?>
 </select> <input type="submit" value="Vis" class="form_button"></form>
 <br>
+
 Se afhentningsdage:<br>
 <form action="/admin/liste/" method="post">
 Afdeling: <select name="division">

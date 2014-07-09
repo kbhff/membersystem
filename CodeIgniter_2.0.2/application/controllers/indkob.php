@@ -12,7 +12,7 @@ class Indkob extends CI_Controller {
 		$this->load->model('Memberinfo');
     }
 
-    function index() {
+ function index() {
 		if (! intval($this->session->userdata('uid')) > 0)
 			redirect('/login');		
         $this->jquery->script('/ressources/jquery-1.6.2.min.js', TRUE);
@@ -44,6 +44,18 @@ class Indkob extends CI_Controller {
 			$createfsel .= $this->_getfuturepickupdays($row['uid']);
 		}
 
+		$pickupdates = '';
+		$this->db->select('pickupdates.pickupdate');
+		$this->db->from('pickupdates');
+		$this->db->where('pickupdates.pickupdate >= curdate()'); 
+		$this->db->distinct();
+		$this->db->order_by('pickupdates.pickupdate'); 
+		$query = $this->db->get();
+		foreach ($query->result_array() as $row)
+		{
+			$pickupdates .= '<option value="' . $row['pickupdate'] . '">' . $row['pickupdate'] . "</option>\n";
+		}
+		
 		$bagdays = '';
 		$this->db->select('id, explained');
 		$this->db->from('producttypes');
@@ -55,7 +67,7 @@ class Indkob extends CI_Controller {
 		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" and id != 47');
 		$bagdays = $q2->result_array();
 		$content = '';
-		
+
 		$data = array(
                'title' => 'KBHFF Administrationsside',
                'heading' => 'KBHFF Administrationsside (demo): INDK&Oslash;B',
@@ -63,6 +75,7 @@ class Indkob extends CI_Controller {
 			   'bagdays' => $bagdays,
                'createsel' => $createsel,
                'createfsel' => $createfsel,
+			   'pickupdates' => $pickupdates,
           );
 
 		$this->load->view('v_indkob', $data);
@@ -75,8 +88,25 @@ class Indkob extends CI_Controller {
         $this->javascript->compile();
 
 		$permissions = $this->session->userdata('permissions');
-		if (! $this->Memberinfo->checkgrouppermission($permissions, utf8_encode('Fælles indkøbsgruppe')))
-		redirect('/minside');		
+
+		
+		$bagdays = '';
+		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" order by sortkey');
+		$bagdays = $q2->result_array();
+
+		$createsel = '';
+		$this->db->select('divisions.uid as uid,divisions.name, pickupdates.pickupdate, pickupdates.uid as pickupdateuid');
+		$this->db->from('divisions');
+		$this->db->from('pickupdates');
+		$this->db->where('divisions.uid = ff_pickupdates.division'); 
+		$this->db->where('pickupdates.pickupdate >= curdate()'); 
+		$this->db->order_by('pickupdates.pickupdate'); 
+		$query = $this->db->get();
+
+		foreach ($query->result_array() as $row)
+		{
+			$createsel .= '<option value="' . $row['pickupdateuid'] . '">' . $row['name'] . '-' . $row['pickupdate']. "</option>\n";
+		}
 
 		if ($this->uri->segment(3) > 0)
 		{
@@ -85,43 +115,47 @@ class Indkob extends CI_Controller {
 			$pickupdate = $this->input->post('pickupdate');
 		}
 
-		$bagdays = '';
-		$q2 = $this->db->query('select id, explained from ff_producttypes where bag = "Y" order by sortkey');
-		$bagdays = $q2->result_array();
-
-		$bdsel1 = '';
-		$bdsel2 = '';
-		$res = '<table><tr><td><strong>Afdeling</strong></td>';
-		foreach ($bagdays as $bagday)
+		if ($pickupdate > '')
 		{
-			$res .= '<td><strong>' . $bagday['explained'] . '</strong></td>';
+			$this->db->select('divisions.uid as uid,divisions.name, pickupdates.uid as pd');
+			$this->db->from('divisions');
+			$this->db->from('pickupdates');
+			$this->db->where('type = "aktiv"');
+			$this->db->where('division = ff_divisions.uid');
+			$this->db->where('pickupdate', $pickupdate);
+			$this->db->order_by('divisions.name'); 
+			$query = $this->db->get();
+			$divisions = $query->result_array();
+			
+			$divisiondata = '';
+			foreach ($divisions as $division)
+			{
+				foreach ($bagdays as $bagday)
+				{
+					$divisiondata[$division['uid']][$bagday['id']] = $this->_getcount($division['pd'], 'total', $bagday['id']);
+				}
+			}			
+		} else {
+			// nothing
 		}
-		$res .= '</tr>';
-		$this->db->select('divisions.uid as uid,divisions.name, pickupdates.pickupdate, pickupdates.uid as pickupdateuid');
-		$this->db->from('divisions');
-		$this->db->from('pickupdates');
-		$this->db->where('divisions.uid = ff_pickupdates.division'); 
-		$this->db->where('pickupdates.pickupdate ="' . addslashes($pickupdate) .'"'); 
-		$this->db->order_by('divisions.name'); 
-		$query = $this->db->get();
-		foreach ($query->result_array() as $row)
-		{
-			$res .= $this->_getdiv($pickupdate, $bagdays, $row['uid']);
-		}
-		$res .= '</table>';
 
-
-
-		$data = array(
-               'title' => 'Bestilte poser ' . $pickupdate,
-               'heading' => 'Bestilte poser ' . $pickupdate,
-			   'bagdays' => $bagdays,
-			   'totalorder' => $res,
+		$debug = $this->db->last_query();
+		
+		$viewdata = array(
+               'title' => 'Udlevering af poser',
+               'heading' => 'Udlevering af poser',
                'pickupdate' => $pickupdate,
+			   'sel' => $createsel,
+			   'bagdays' => $bagdays,
+			   'divisions' => $divisions,
+			   'divisiondata' => $divisiondata,
+			   'debug' => $debug,
           );
 
-		$this->load->view('v_indkob_dag', $data);
+
+		$this->load->view('v_indkob_dag', $viewdata);
     }
+	
 	
     function leverandor() {
 		if (! intval($this->session->userdata('uid')) > 0)
@@ -187,8 +221,8 @@ class Indkob extends CI_Controller {
 			$datesel = 'AND ff_pickupdates.pickupdate = "' . addslashes($pickupdate) .'" and ff_pickupdates.division = ' . $division;
 		}
 		
-		$query = $this->db->query('SELECT sum( ff_orderlines.quant ) as sum, ff_orderlines.item, ff_items.units, ff_items.measure, ff_producttypes.explained
-		FROM ff_orderlines, ff_orderhead, ff_items, ff_producttypes, ff_pickupdates, ff_divisions
+		$query = $this->db->query('SELECT sum( ff_orderlines.quant ) as sum
+		FROM ff_orderlines, ff_orderhead, ff_items, ff_pickupdates
 		WHERE ff_orderlines.orderno = ff_orderhead.orderno
 		AND (
 		(
@@ -200,10 +234,7 @@ class Indkob extends CI_Controller {
 		)
 		AND ff_orderlines.item = ff_items.id
 		AND ff_items.producttype_id = ' . (int)$item . '
-		AND ff_items.producttype_id = ff_producttypes.id
 		AND ff_orderlines.iteminfo = ff_pickupdates.uid
-		AND ff_divisions.uid = ff_pickupdates.division
-		AND ff_pickupdates.division = ff_items.division
 		' . $limit . ' ' . $datesel . '
 		GROUP BY ff_orderlines.item
 		ORDER BY ff_orderlines.item');
@@ -255,7 +286,7 @@ class Indkob extends CI_Controller {
 			$query = $this->db->query("SELECT distinct
 			ff_pickupdates.pickupdate, ff_pickupdates.uid
 			FROM (ff_pickupdates) 
-			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != 47
+			LEFT JOIN (ff_producttypes as pt) ON pt.bag = 'Y' and pt.id != ' . FF_GROCERYBAG .'
 			LEFT JOIN ff_itemdays ON ff_itemdays.item = pt.id AND ff_itemdays.pickupday = ff_pickupdates.uid and ff_itemdays.lastorder is null
 			WHERE `ff_pickupdates`.`division` = $division AND ff_pickupdates.pickupdate >= curdate() 
 			ORDER BY ff_pickupdates.pickupdate desc");
