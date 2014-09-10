@@ -132,6 +132,7 @@ class Indkob extends CI_Controller {
 			{
 				foreach ($bagdays as $bagday)
 				{
+//					$divisiondata[$division['uid']][$bagday['id']] = $this->_getcount(0, 'total', $bagday['id'],$pickupdate, $division['uid']);
 					$divisiondata[$division['uid']][$bagday['id']] = $this->_getcount($division['pd'], 'total', $bagday['id']);
 				}
 			}			
@@ -153,7 +154,7 @@ class Indkob extends CI_Controller {
           );
 
 
-		$this->load->view('v_indkob_dag', $viewdata);
+		$this->load->view('v_indkob_dag2', $viewdata);
     }
 	
 	
