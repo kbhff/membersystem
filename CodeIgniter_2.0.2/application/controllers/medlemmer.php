@@ -196,6 +196,10 @@ $this->javascript->compile();
 			$this->db->where('department', $division);
 			$this->db->update('roles');
 		
+			$this->db->set('active', 'yes');  
+			$this->db->where('uid', $puid);
+			$this->db->update('persons');
+
 			// log
 			// creator member type text created 
 			$this->db->set('creator', $this->session->userdata('uid'));
