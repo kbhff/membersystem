@@ -1,5 +1,5 @@
 <?
-require(dirname(__FILE__) . "/../global_config.php");
+require_once(dirname(__FILE__) . "/../global_config.php");
 setlocale(LC_CTYPE, 'da_DK');
 
 if (!$db_conn = @mysql_connect(GLOBAL_DB_HOST, GLOBAL_DB_USER, GLOBAL_DB_PASS))

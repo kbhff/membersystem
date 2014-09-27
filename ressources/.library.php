@@ -215,7 +215,6 @@ if ($country == '')
 	$fields = "firstname, middlename, lastname, sex, adr1, adr2, streetno, floor, adr3, zip, city, country, languagepref, tel, mobil, email, birthday, club, password, status1, status2, status3, rights, privacy, ownupdate, created, changed, uid";
 	$values = "'$firstname', '$middlename', '$lastname', '$sex', '$adr1', '$adr2', '$streetno', '$floor', '$adr3', '$zip', '$city', '$country', '$languagepref', '$tel', '$mobil', '$email', '$birthday', '$club', '$password', '$status1', '$status2', '$status3', '$rights', '$privacy', '$ownupdate', '$created', '$changed', '$uid'";
 	$query = "insert into ff_persons ($fields) values ($values)";
-	$query = mac2ibm($query);
     if(!($result = @mysql_query($query, $db_conn)))
     {
 	    echo("Error : $errstr\n");
@@ -313,7 +312,6 @@ function createuniqueorderno($puid, $status1 = 'new')
 					$fields = "puid, orderno, orderkey, status1";
 					$values = "'$puid', '$orderno', '$orderkey', '$status1'";
 					$query = "insert into ff_orderhead ($fields) values ($values)";
-					$query = mac2ibm($query);
 					$result = doquery($query);
 				}
 			}
